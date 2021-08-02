@@ -27,7 +27,7 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'groovy'
 
-    task wrapper(type: Wrapper){
+    task wrapper(type: Wrapper) {
         gradleVersion = '7.0'
     }
 
@@ -53,6 +53,7 @@ subprojects {
         }
         testImplementation 'org.codehaus.groovy:groovy-all:3.0.8'
         testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
+        testImplementation 'org.testcontainers:spock:1.16.0'
     }
 
     test {

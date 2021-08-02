@@ -11,4 +11,5 @@ rootProject.name = 'protector-initializr-java'
 
 include 'domain'
 include 'web'
+include 'web-test'
 

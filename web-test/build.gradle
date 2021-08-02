@@ -1,0 +1,12 @@
+dependencies {
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'org.testcontainers:spock:1.16.0'
+}
+
+test {
+    onlyIf {
+        project.hasProperty('systemTest')
+    }
+}
