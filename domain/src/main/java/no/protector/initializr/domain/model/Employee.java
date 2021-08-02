@@ -1,4 +1,4 @@
-package no.protector.initalizr.domain.model;
+package no.protector.initializr.domain.model;
 
 public class Employee {
     private int employeeId;

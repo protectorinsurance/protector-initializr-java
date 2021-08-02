@@ -1,6 +1,6 @@
-package no.protector.initalizr.domain.service;
+package no.protector.initializr.domain.service;
 
-import no.protector.initalizr.domain.model.Employee;
+import no.protector.initializr.domain.model.Employee;
 import org.springframework.stereotype.Service;
 
 @Service

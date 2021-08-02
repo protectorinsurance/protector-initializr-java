@@ -1,9 +1,9 @@
-package no.protector.initalizr.domain.service
+package no.protector.initializr.domain.service
 
 import groovy.json.JsonOutput
 import groovy.transform.builder.Builder
 import groovy.transform.builder.ExternalStrategy
-import no.protector.initalizr.domain.model.Employee
+import no.protector.initializr.domain.model.Employee
 import spock.lang.Specification
 
 class EmployeeServiceImpSpec extends Specification {
