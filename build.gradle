@@ -13,10 +13,7 @@ ext {
 
 allprojects {
     repositories {
-        maven {
-            url = 'http://nexus3.protectorforsikring.no/repository/protector-all/'
-            allowInsecureProtocol = true
-        }
+        mavenCentral()
     }
 }
 
