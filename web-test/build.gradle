@@ -6,8 +6,8 @@ dependencies {
 }
 
 
-//test {
-//    onlyIf {
-//        project.hasProperty('systemTest')
-//    }
-//}
+test {
+    onlyIf {
+        project.hasProperty('systemTest')
+    }
+}
