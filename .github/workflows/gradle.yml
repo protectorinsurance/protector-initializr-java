@@ -16,9 +16,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Docker Buildx
-      id: buildx
-      uses: docker/setup-buildx-action@v1
+    - uses: docker/setup-buildx-action@v1
     - name: Set up JDK 11
       uses: actions/setup-java@v2
       with:
@@ -27,6 +25,8 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build
-      run: ./gradlew build
-    - name: System test
+      run: ./gradlew build -x test
+    - name: Run unit tests
+      run: ./gradlew test
+    - name: Run system tests
       run: ./gradlew test -PsystemTest --info
