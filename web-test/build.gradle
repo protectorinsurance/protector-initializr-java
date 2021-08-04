@@ -1,9 +1,9 @@
 dependencies {
-    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-    testImplementation 'org.testcontainers:spock:1.16.0'
+    testImplementation project(':web')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation 'org.testcontainers:spock'
 }
+
 
 test {
     onlyIf {

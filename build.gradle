@@ -1,8 +1,8 @@
 plugins {
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'groovy'
     id 'org.springframework.boot' version '2.5.3'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
 group = 'no.protectorforsikring'
@@ -53,6 +53,7 @@ subprojects {
         }
         testImplementation 'org.codehaus.groovy:groovy-all:3.0.8'
         testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
+        testImplementation "org.spockframework:spock-spring:2.0-M3-groovy-3.0"
         testImplementation 'org.testcontainers:spock:1.16.0'
     }
 

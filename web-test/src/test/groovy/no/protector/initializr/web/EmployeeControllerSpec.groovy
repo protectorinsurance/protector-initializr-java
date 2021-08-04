@@ -1,12 +1,16 @@
 package no.protector.initializr.web
 
+import no.protector.initializr.AbstractSystemSpec
+import org.springframework.beans.factory.annotation.Autowired
+import org.testcontainers.containers.GenericContainer
 
-import spock.lang.Specification
+class EmployeeControllerSpec extends AbstractSystemSpec {
 
-class EmployeeControllerSpec extends Specification {
+    @Autowired
+    GenericContainer protectorInitializrContainer
 
     def "test"() {
         expect:
-        false
+        protectorInitializrContainer != null
     }
 }
