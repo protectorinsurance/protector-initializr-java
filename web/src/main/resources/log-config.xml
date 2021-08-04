@@ -1,12 +1,33 @@
 <configuration debug="true">
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{ISO8601} %highlight(%-5level) %cyan(%logger{15}) %magenta([%thread]) %yellow(requestId=%X{req.requestID}) - %m - requestMethod=%X{req.method} requestURI=%X{req.requestURI} queryString=%X{req.queryString} remoteUrl=%X{req.remoteUrl} username=%X{username}%n</pattern>
+ 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <loggerName>
+                    <shortenedLoggerNameLength>26</shortenedLoggerNameLength>
+                </loggerName>
+                <message/>
+                <timestamp/>
+                <logLevel><fieldName>loglevel</fieldName></logLevel>
+                <logLevelValue/>
+                <globalCustomFields>
+                    <customFields>{"app":"protector-initializr"}</customFields>
+                </globalCustomFields>
+                <arguments>
+                    <includeNonStructuredArguments>false</includeNonStructuredArguments>
+                </arguments>
+                <stackTrace>
+                    <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                        <maxDepthPerThrowable>70</maxDepthPerThrowable>
+                        <maxLength>6144</maxLength>
+                        <shortenedClassNameLength>20</shortenedClassNameLength>
+                        <rootCauseFirst>true</rootCauseFirst>
+                    </throwableConverter>
+                </stackTrace>
+                <mdc/>
+                <threadName/>
+            </providers>
         </encoder>
     </appender>
-
-    <logger name="org.apache.commons" level="INFO"/>
-
 
     <root level="info">
         <appender-ref ref="STDOUT"/>
