@@ -1,7 +1,8 @@
 plugins {
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'groovy'
     id 'org.springframework.boot' version '2.5.3'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
 group = 'no.protectorforsikring'
@@ -24,13 +25,14 @@ allprojects {
 subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'java-library'
+    apply plugin: 'groovy'
 
-    task wrapper(type: Wrapper){
+    task wrapper(type: Wrapper) {
         gradleVersion = '7.0'
     }
 
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
 
     wrapper {
         distributionType = Wrapper.DistributionType.ALL
@@ -44,7 +46,15 @@ subprojects {
 
     dependencies {
         implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-        testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+        implementation "org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}"
+
+        testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+        testImplementation 'org.codehaus.groovy:groovy-all:3.0.8'
+        testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
+        testImplementation "org.spockframework:spock-spring:2.0-M3-groovy-3.0"
+        testImplementation 'org.testcontainers:spock:1.16.0'
     }
 
     test {

@@ -1,0 +1,13 @@
+dependencies {
+    testImplementation project(':web')
+    testImplementation project(':domain')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation 'org.testcontainers:spock'
+}
+
+
+test {
+    onlyIf {
+        project.hasProperty('systemTest')
+    }
+}
