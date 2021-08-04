@@ -1,4 +1,4 @@
-package no.protector.initializr.extensions
+package no.protector.initializr.system.test.extensions
 
 import org.testcontainers.containers.output.BaseConsumer
 import org.testcontainers.containers.output.OutputFrame

@@ -1,7 +1,7 @@
-package no.protector.initializr.extensions
+package no.protector.initializr.system.test.extensions
 
 import groovy.util.logging.Slf4j
-import no.protector.initializr.config.ContainerConfig
+import no.protector.initializr.system.test.config.ContainerConfig
 import org.spockframework.runtime.AbstractRunListener
 import org.spockframework.runtime.model.ErrorInfo
 import org.spockframework.runtime.model.FeatureInfo

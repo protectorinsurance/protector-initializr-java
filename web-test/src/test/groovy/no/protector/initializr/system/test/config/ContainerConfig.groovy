@@ -1,6 +1,7 @@
-package no.protector.initializr.config
+package no.protector.initializr.system.test.config
 
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.Network
@@ -10,6 +11,7 @@ import org.testcontainers.images.builder.ImageFromDockerfile
 import java.nio.file.Path
 
 @Configuration
+@ComponentScan(value = "no.protector.initializr.system.test")
 class ContainerConfig {
 
     private static Network network

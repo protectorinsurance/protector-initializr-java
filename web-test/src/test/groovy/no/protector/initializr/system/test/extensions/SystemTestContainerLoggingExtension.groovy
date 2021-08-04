@@ -1,4 +1,4 @@
-package no.protector.initializr.extensions
+package no.protector.initializr.system.test.extensions
 
 import org.spockframework.runtime.extension.IAnnotationDrivenExtension
 import org.spockframework.runtime.model.SpecInfo
