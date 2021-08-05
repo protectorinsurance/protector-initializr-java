@@ -67,15 +67,21 @@ def create_namespace():
             delete_empty_dirs(base_path)
 
 
+def get_allowed_folders():
+    allowed_folders = get_modules()
+    allowed_folders.append(".github")
+    return allowed_folders
+
+
 def find_and_replace_in_all_files(to_replace_list, replacement):
-    folders_to_ignore = [".git", "gradle", ".gradle", "build", ".idea", "opt"]
+    allowed_folders = get_allowed_folders()
     files_to_ignore = ["init.py"]
     top = os.getcwd()
     for dname, dirs, files in os.walk(top):
         folders = dname.split('\\')
         skip = False
-        for folder_to_ignore in folders_to_ignore:
-            if folder_to_ignore in folders:
+        for folder in allowed_folders:
+            if folder not in folders:
                 skip = True
         if skip:
             continue
