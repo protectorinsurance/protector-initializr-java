@@ -27,16 +27,8 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'groovy'
 
-    task wrapper(type: Wrapper) {
-        gradleVersion = '7.0'
-    }
-
     sourceCompatibility = JavaVersion.VERSION_16
     targetCompatibility = JavaVersion.VERSION_16
-
-    wrapper {
-        distributionType = Wrapper.DistributionType.ALL
-    }
 
     dependencyManagement {
         imports {
@@ -53,7 +45,7 @@ subprojects {
         }
         testImplementation 'org.codehaus.groovy:groovy-all:3.0.8'
         testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
-        testImplementation "org.spockframework:spock-spring:2.0-M3-groovy-3.0"
+        testImplementation "org.spockframework:spock-spring:2.0-groovy-3.0"
         testImplementation 'org.testcontainers:spock:1.16.0'
     }
 
