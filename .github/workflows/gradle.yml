@@ -29,6 +29,7 @@ jobs:
 
   verify_python_script:
     name: Verify init.py
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -41,6 +42,8 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: '3.x'
+      - name: Installing dependencies
+        run: pip install requests
       - name: Execute python script
         run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app"
       - name: Grant execute permission for gradlew
