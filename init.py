@@ -39,10 +39,8 @@ def delete_empty_dirs(path):
 
 def create_namespace():
     modules = get_modules()
-    print(get_modules())
     namespace_folders = namespace.split('.')
     namespace_path = "/".join(namespace_folders)
-    print(namespace_folders)
     for module in modules:
         base_paths = [f"{module}/src/main/java", f"{module}/src/test/groovy"]
         for base_path in base_paths:
