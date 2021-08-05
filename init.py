@@ -81,3 +81,11 @@ update_banner()
 create_namespace()
 find_and_replace_in_all_files(["protector-initializr-java", "protector-initializr"], project_name.lower())
 find_and_replace_in_all_files(["no.protector.initializr"], namespace)
+
+# To Clean up system tests
+titled_project_name = project_name.replace('-', ' ').title().replace(' ', '')
+find_and_replace_in_all_files(["getProtectorInitializrContainer"], f"get{titled_project_name}Container")
+find_and_replace_in_all_files(["createProtectorInitializrContainer"], f"create{titled_project_name}Container")
+find_and_replace_in_all_files(["createBaseProtectorInitializrContainer"], f"createBase{titled_project_name}Container")
+titled_project_name_first_lowercase = titled_project_name[0].lower() + titled_project_name[1:]
+find_and_replace_in_all_files(["protectorInitializrContainer"], f"{titled_project_name_first_lowercase}Container")
