@@ -68,7 +68,7 @@ def create_namespace():
 
 
 def find_and_replace_in_all_files(to_replace_list, replacement):
-    folders_to_ignore = [".git", "gradle", ".gradle", "build", ".idea"]
+    folders_to_ignore = [".git", "gradle", ".gradle", "build", ".idea", "opt"]
     files_to_ignore = ["init.py"]
     top = os.getcwd()
     for dname, dirs, files in os.walk(top):
