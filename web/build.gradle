@@ -7,5 +7,27 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+    implementation "co.elastic.apm:apm-agent-api:${apmVersion}"
+
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
+
+// APM config start
+configurations {
+    dockerExtras
+}
+
+dependencies {
+    dockerExtras "co.elastic.apm:elastic-apm-agent:${apmVersion}"
+}
+
+assemble.dependsOn "copyDockerExtras"
+task copyDockerExtras(type: Copy) {
+    from configurations.dockerExtras {
+        rename {
+            filename -> filename.replaceAll('-[0-9]+\\.[0-9]+\\.[0-9]+', '')
+        }
+    }
+    into "$buildDir/libs"
+}
+// APM config end
