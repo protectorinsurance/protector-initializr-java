@@ -1,6 +1,5 @@
 package no.protector.initializr.web.configuration;
 
-
 public class ThreadLocalRequestId {
     private static final ThreadLocal<String> requestId = new ThreadLocal<>();
 
