@@ -68,13 +68,16 @@ def find_and_replace_in_all_files(to_replace_list, replacement):
         for fname in files:
             if fname in files_to_ignore:
                 continue
-            fpath = os.path.join(dname, fname)
-            with open(fpath, encoding="utf-8") as f:
-                s = f.read()
-            for to_replace in to_replace_list:
-                s = re.sub(to_replace, replacement, s, flags=re.IGNORECASE)
-            with open(fpath, "w", encoding="utf-8") as f:
-                f.write(s)
+            find_and_replace_in_file(to_replace_list, replacement, os.path.join(dname, fname))
+
+
+def find_and_replace_in_file(to_replace_list, replacement, fpath):
+    with open(fpath, encoding="utf-8") as f:
+        s = f.read()
+        for to_replace in to_replace_list:
+            s = re.sub(to_replace, replacement, s, flags=re.IGNORECASE)
+    with open(fpath, "w", encoding="utf-8") as f:
+        f.write(s)
 
 
 update_banner()
@@ -89,3 +92,6 @@ find_and_replace_in_all_files(["createProtectorInitializrContainer"], f"create{t
 find_and_replace_in_all_files(["createBaseProtectorInitializrContainer"], f"createBase{titled_project_name}Container")
 titled_project_name_first_lowercase = titled_project_name[0].lower() + titled_project_name[1:]
 find_and_replace_in_all_files(["protectorInitializrContainer"], f"{titled_project_name_first_lowercase}Container")
+find_and_replace_in_all_files(["initializrBaseUrl"], f"{titled_project_name_first_lowercase}BaseUrl")
+
+find_and_replace_in_file(["initializr"], project_name.lower(), "Web.System.Dockerfile")
