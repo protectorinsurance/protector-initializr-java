@@ -1,11 +1,25 @@
+import argparse
 import os
 import re
 import requests
 import shutil
 from pathlib import Path
 
-project_name = input("What is the name of the project (my-awesome-application)?\n")
-namespace = input("What namespace should the application use? (no.protector.my.application)\n").lower()
+parser = argparse.ArgumentParser()
+
+parser.add_argument('--p', help='Project name (my-awesome-application)', default=None)
+parser.add_argument('--n', help='Namespace (no.protector.my.awesome.application)', default=None)
+
+args = parser.parse_args()
+
+project_name = args.p
+namespace = args.n
+
+if not project_name:
+    project_name = input("What is the name of the project (my-awesome-application)?\n")
+
+if not namespace:
+    namespace = input("What namespace should the application use? (no.protector.my.awesome.application)\n").lower()
 
 
 def update_banner():
@@ -80,12 +94,25 @@ def find_and_replace_in_file(to_replace_list, replacement, fpath):
         f.write(s)
 
 
+def validate():
+    if ' ' in project_name:
+        raise Exception("Project name cannot contain spaces")
+    if ' ' in namespace:
+        raise Exception("Namespace cannot contain spaces")
+
+
+validate()
+
+print("Updating banner...")
 update_banner()
+
+print("Creating new namespace...")
 create_namespace()
+
+print("Replacing references to initializr...")
 find_and_replace_in_all_files(["protector-initializr-java", "protector-initializr"], project_name.lower())
 find_and_replace_in_all_files(["no.protector.initializr"], namespace)
 
-# To Clean up system tests
 titled_project_name = project_name.replace('-', ' ').title().replace(' ', '')
 find_and_replace_in_all_files(["getProtectorInitializrContainer"], f"get{titled_project_name}Container")
 find_and_replace_in_all_files(["createProtectorInitializrContainer"], f"create{titled_project_name}Container")
@@ -94,4 +121,6 @@ titled_project_name_first_lowercase = titled_project_name[0].lower() + titled_pr
 find_and_replace_in_all_files(["protectorInitializrContainer"], f"{titled_project_name_first_lowercase}Container")
 find_and_replace_in_all_files(["initializrBaseUrl"], f"{titled_project_name_first_lowercase}BaseUrl")
 
-find_and_replace_in_file(["initializr"], project_name.lower(), "Web.System.Dockerfile")
+find_and_replace_in_file(["initializr"], project_name.lower(), "Web.SystemTest.Dockerfile")
+
+print("Done! Remember to go through the edits and verify the changes :)")
