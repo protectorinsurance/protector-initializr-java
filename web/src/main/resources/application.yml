@@ -1,6 +1,17 @@
 spring:
   application:
     name: protector-initializr
+  datasource:
+    url: jdbc:sqlserver://${db.host_port};databaseName=${db.database_name};applicationName=${spring.application.name};sendStringParametersAsUnicode=false;lockTimeout=15000
+    username: ${db.username}
+    password: ${db.password}
+  flyway:
+    enabled: true
+    outOfOrder: false
+    validateOnMigrate: true
+    cleanDisabled: true
+    locations: classpath:./migrations
+    baseline-on-migrate: true
 
 management:
   server.port: 8391

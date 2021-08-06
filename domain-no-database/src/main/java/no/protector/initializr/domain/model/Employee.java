@@ -1,18 +1,15 @@
 package no.protector.initializr.domain.model;
 
-import org.springframework.data.annotation.Id;
-
 public class Employee {
-    @Id
-    private Integer id;
+    private int id;
     private String firstName;
     private String lastName;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

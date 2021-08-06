@@ -1,18 +1,15 @@
 package no.protector.initializr.domain.service;
 
 import no.protector.initializr.domain.model.Employee;
+import no.protector.initializr.domain.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService {
+public record EmployeeServiceImpl(EmployeeRepository employeeRepository)
+        implements EmployeeService {
+
     @Override
     public Employee getEmployee(int employeeId) {
-        if (employeeId != 1)
-            throw new IllegalArgumentException("Id must be 1");
-        Employee employee = new Employee();
-        employee.setEmployeeId(1);
-        employee.setFirstName("Colter");
-        employee.setLastName("Wall");
-        return employee;
+        return employeeRepository.findById(employeeId).orElse(null);
     }
 }

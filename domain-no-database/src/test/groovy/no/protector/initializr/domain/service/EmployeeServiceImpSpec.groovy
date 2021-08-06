@@ -1,29 +1,41 @@
 package no.protector.initializr.domain.service
 
-
+import groovy.json.JsonOutput
 import groovy.transform.builder.Builder
 import groovy.transform.builder.ExternalStrategy
 import no.protector.initializr.domain.model.Employee
-import no.protector.initializr.domain.repository.EmployeeRepository
 import spock.lang.Specification
 
 class EmployeeServiceImpSpec extends Specification {
 
-    def repository = Mock(EmployeeRepository)
-    def service = new EmployeeServiceImpl(repository)
+    def service = new EmployeeServiceImpl()
 
     @Builder(builderStrategy = ExternalStrategy, forClass = Employee)
     class EmployeeBuilder {}
 
     def "When calling with id 1 hardcoded customer will be returned"() {
         given:
-        def employee = new EmployeeBuilder()
+        def employee = JsonOutput.toJson(new EmployeeBuilder()
                 .id(1)
                 .firstName("Colter")
                 .lastName("Wall")
-                .build()
-        repository.findById(1) >> Optional.of(employee)
-        expect:
-        service.getEmployee(1) == employee
+                .build())
+        when:
+        def result = JsonOutput.toJson(service.getEmployee(1))
+        then:
+        result == employee
+    }
+
+    def "Calling with id not 1 will result in exception"(int id) {
+        when:
+        service.getEmployee(id)
+        then:
+        thrown IllegalArgumentException
+        where:
+        id  | _
+        0   | _
+        -1  | _
+        3   | _
+        100 | _
     }
 }
