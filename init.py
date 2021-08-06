@@ -79,10 +79,11 @@ def find_and_replace_in_all_files(to_replace_list, replacement):
     top = os.getcwd()
     for dname, dirs, files in os.walk(top):
         folders = dname.split('\\')
-        skip = False
+        skip = True
         for folder in allowed_folders:
-            if folder not in folders:
-                skip = True
+            if folder in folders:
+                skip = False
+                break
         if skip:
             continue
         for fname in files:
@@ -109,11 +110,11 @@ def validate():
 
 validate()
 
-print("Updating banner...")
-update_banner()
+# print("Updating banner...")
+# update_banner()
 
-print("Creating new namespace...")
-create_namespace()
+# print("Creating new namespace...")
+# create_namespace()
 
 print("Replacing references to initializr...")
 find_and_replace_in_all_files(["protector-initializr-java", "protector-initializr"], project_name.lower())
