@@ -1,4 +1,4 @@
-package no.protector.initializr.web.configuration.secret;
+package no.protector.initializr.domain.configuration.secret;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

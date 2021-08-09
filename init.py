@@ -105,7 +105,7 @@ def find_and_replace_in_files(to_replace_list, replacement, fpaths):
             with open(fpath, encoding="utf-8") as f:
                 s = f.read()
         except:
-            return
+            continue
         for to_replace in to_replace_list:
             s = re.sub(to_replace, replacement, s, flags=re.IGNORECASE)
         with open(fpath, "w", encoding="utf-8") as f:
@@ -128,38 +128,18 @@ def delete_dir(dir):
 
 def set_persistence_framework():
     persistence_folders = {
-        "none": {
-            "folder": "domain-no-database",
-            "dependency": None
-        },
-        "jdbc": {
-            "folder": "domain",
-            "dependency": "org.springframework.boot:spring-boot-starter-data-jdbc"
-        },
-        "jpa": {
-            "folder": "domain-jpa",
-            "dependency": "org.springframework.boot:spring-boot-starter-data-jpa"
-        },
+        "none": "domain-no-database",
+        "jdbc": "domain",
+        "jpa": "domain-jpa"
     }
-
-    default_dependency = persistence_folders.get("jdbc").get("dependency")
 
     for k, v in persistence_folders.items():
         if k != persistence_framework:
-            delete_dir(v.get("folder"))
+            delete_dir(v)
 
-    os.rename(persistence_folders.get(persistence_framework).get("folder"), "domain")
+    os.rename(persistence_folders.get(persistence_framework), "domain")
 
-    _files = get_available_files()
-
-    if persistence_framework == 'none':
-        find_and_remove_lines_containing(default_dependency, _files)
-    else:
-        new_dependency = persistence_folders.get(persistence_framework).get("dependency")
-        find_and_replace_in_files([default_dependency], new_dependency, _files)
-
-    for k, v in persistence_folders.items():
-        folder_name = v.get('folder')
+    for folder_name in persistence_folders.values():
         if folder_name == 'domain':
             continue
         find_and_remove_lines_containing(folder_name, ['./settings.gradle'])

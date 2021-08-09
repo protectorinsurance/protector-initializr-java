@@ -3,12 +3,11 @@ plugins {
 }
 
 dependencies {
-    implementation project(':domain')
+    implementation project(':domain-jpa')
 
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
-    implementation "org.springframework.boot:spring-boot-starter-data-jdbc:${springBootVersion}"
     implementation "co.elastic.apm:apm-agent-api:${apmVersion}"
     implementation 'org.flywaydb:flyway-core'
 
