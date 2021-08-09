@@ -99,7 +99,7 @@ def get_available_files():
     return files
 
 
-def find_and_replace_in_file(to_replace_list, replacement, fpaths):
+def find_and_replace_in_files(to_replace_list, replacement, fpaths):
     for fpath in fpaths:
         with open(fpath, encoding="utf-8") as f:
             s = f.read()
@@ -124,39 +124,41 @@ def delete_dir(dir):
     shutil.rmtree(f"./{dir}/")
 
 
-def insert_dependency:
-    print("How do I do this?")
-
-
 def set_persistence_framework():
     persistence_folders = {
         "none": {
             "folder": "domain-no-database",
-            "dependencies": []
+            "dependency" : None
         },
         "jdbc": {
             "folder": "domain",
-            "dependencies": ["org.springframework.boot:spring-boot-starter-data-jdbc"]
+            "dependency": "org.springframework.boot:spring-boot-starter-data-jdbc"
         },
         "jpa": {
             "folder": "domain-jpa",
-            "dependencies": ["org.springframework.boot:spring-boot-starter-data-jdbc"]
+            "dependency": "org.springframework.boot:spring-boot-starter-data-jpa"
         },
     }
 
-    dependencies_to_remove = []
+    default_dependency = persistence_folders.get("jdbc").get("dependency")
 
     for k, v in persistence_folders:
         if k != persistence_framework:
             delete_dir(v.get("folder"))
-            for dependency in v.get("dependencies"):
-                dependencies_to_remove.append(dependency)
 
     os.rename(persistence_folders.get(persistence_framework).get("folder"), "domain")
 
     _files = get_available_files()
-    for dependency in dependencies_to_remove:
-        find_and_remove_lines_containing(dependency, _files)
+
+    if persistence_framework == 'none':
+            find_and_remove_lines_containing(default_dependency, _files)
+    else:
+        new_dependency = persistence_folders.get(persistence_framework).get("dependencies").first()
+        find_and_replace_in_files([default_dependency], new_dependency, _files)
+
+    for k, v in persistence_folders:
+        if k != persistence_framework:
+            find_and_remove_lines_containing(v.get("folder"), ['./settings.gradle'])
 
 
 def validate():
@@ -178,18 +180,18 @@ validate()
 
 files = get_available_files()
 print("Replacing references to initializr...")
-find_and_replace_in_file(["protector-initializr-java", "protector-initializr"], project_name.lower(), files)
-find_and_replace_in_file(["no.protector.initializr"], namespace, files)
+find_and_replace_in_files(["protector-initializr-java", "protector-initializr"], project_name.lower(), files)
+find_and_replace_in_files(["no.protector.initializr"], namespace, files)
 
 titled_project_name = project_name.replace('-', ' ').title().replace(' ', '')
-find_and_replace_in_file(["getProtectorInitializrContainer"], f"get{titled_project_name}Container", files)
-find_and_replace_in_file(["createProtectorInitializrContainer"], f"create{titled_project_name}Container", files)
-find_and_replace_in_file(["createBaseProtectorInitializrContainer"], f"createBase{titled_project_name}Container", files)
+find_and_replace_in_files(["getProtectorInitializrContainer"], f"get{titled_project_name}Container", files)
+find_and_replace_in_files(["createProtectorInitializrContainer"], f"create{titled_project_name}Container", files)
+find_and_replace_in_files(["createBaseProtectorInitializrContainer"], f"createBase{titled_project_name}Container", files)
 titled_project_name_first_lowercase = titled_project_name[0].lower() + titled_project_name[1:]
-find_and_replace_in_file(["protectorInitializrContainer"], f"{titled_project_name_first_lowercase}Container", files)
-find_and_replace_in_file(["initializrBaseUrl"], f"{titled_project_name_first_lowercase}BaseUrl", files)
+find_and_replace_in_files(["protectorInitializrContainer"], f"{titled_project_name_first_lowercase}Container", files)
+find_and_replace_in_files(["initializrBaseUrl"], f"{titled_project_name_first_lowercase}BaseUrl", files)
 
-find_and_replace_in_file(["initializr"], project_name.lower(), ["Web.SystemTest.Dockerfile"])
+find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.SystemTest.Dockerfile"])
 
 set_persistence_framework()
 
