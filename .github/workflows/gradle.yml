@@ -36,16 +36,19 @@ jobs:
           python-version: '3.x'
       - name: Installing dependencies
         run: pip install requests
-      #- name: Execute python script
-      #  run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --pf jpa
-      - name: Verify that all instances of "initializr" is removed
-        run: |
-          tree -d .
-          python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --pf jpa
-          tree -d .
-          grep -r --exclude=README.md --exclude=gradle.yml --exclude=init.py --exclude=\*.xml --exclude-dir=build --exclude-dir=.idea --exclude-dir=.git --exclude-dir=.gradle 'initializr' .
-          grep -q -r --exclude=README.md --exclude=gradle.yml --exclude=init.py --exclude=\*.xml --exclude-dir=build --exclude-dir=.idea --exclude-dir=.git --exclude-dir=.gradle 'initializr' .
-          if [ $? -eq 0 ] ; exit 0 ; exit 1 ; fi
+      - name: Execute python script
+        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --pf jpa
+      ##- name: Verify that all instances of "initializr" is removed
+      ##  run: |
+      ##    tree -d .
+      ##    python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --pf jpa
+      ##    tree -d .
+      ##    grep -r --exclude=README.md --exclude=gradle.yml --exclude=init.py --exclude=\*.xml --exclude-dir=build --exclude-dir=.idea --exclude-dir=.git --exclude-dir=.gradle 'initializr' .
+      ##    grep -q -r --exclude=README.md --exclude=gradle.yml --exclude=init.py --exclude=\*.xml --exclude-dir=build --exclude-dir=.idea --exclude-dir=.git --exclude-dir=.gradle 'initializr' .
+      ##    if [ $? -eq 0 ] ; exit 0 ; exit 1 ; fi
+      - uses: mattsb42/not-grep@master
+
+
 
   verify_persistence_framework_options:
     name: Verify persistence framework
