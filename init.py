@@ -95,7 +95,7 @@ def get_available_files():
         for fname in files:
             if fname in files_to_ignore:
                 continue
-            files.append(fname)
+            files.append(os.path.join(dname, fname))
     return files
 
 
