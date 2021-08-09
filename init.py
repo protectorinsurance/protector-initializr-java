@@ -189,6 +189,4 @@ find_and_replace_in_files(["initializrBaseUrl"], f"{titled_project_name_first_lo
 
 find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.SystemTest.Dockerfile"])
 
-remove_all_tags()
-
 print("Done! Remember to go through the edits and verify the changes :)")
