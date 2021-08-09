@@ -105,11 +105,8 @@ def get_available_files():
 
 def find_and_replace_in_files(to_replace_list, replacement, fpaths):
     for fpath in fpaths:
-        try:
-            with open(fpath, encoding="utf-8") as f:
-                s = f.read()
-        except:
-            continue
+        with open(fpath, encoding="utf-8") as f:
+            s = f.read()
         for to_replace in to_replace_list:
             s = re.sub(to_replace, replacement, s, flags=re.IGNORECASE)
         with open(fpath, "w", encoding="utf-8") as f:
@@ -118,11 +115,8 @@ def find_and_replace_in_files(to_replace_list, replacement, fpaths):
 
 def find_and_remove_lines_containing(search_term, fpaths):
     for fpath in fpaths:
-        try:
-            with open(fpath, encoding="utf-8") as f:
-                lines = f.readlines()
-        except:
-            continue
+        with open(fpath, encoding="utf-8") as f:
+            lines = f.readlines()
         with open(fpath, "w", encoding="utf-8") as f:
             for line in lines:
                 if search_term not in line:
