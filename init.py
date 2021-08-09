@@ -177,7 +177,7 @@ def set_persistence_framework():
         os.remove("./web-test/src/test/groovy/no/protector/initializr/system/test/config/PersistenceConfig.groovy")
         _files = get_available_files()
         find_and_replace_in_files([", PersistenceConfig"], '', _files)
-        remove_tag_content("Database", _files)
+        remove_tag_content("DATABASE", _files)
         database_dependencies = ["com.microsoft.sqlserver:mssql-jdbc", "org.flywaydb:flyway-core", "org.dbunit",
                                  "org.testcontainers:mssqlserver"]
         find_and_remove_lines_containing_list(database_dependencies, _files)
