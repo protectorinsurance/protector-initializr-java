@@ -106,8 +106,11 @@ def get_available_files():
 def remove_tag_content(tag, fpaths):
     comment_tag = f"//INITIALIZER TAG: {tag}"
     for fpath in fpaths:
-        with open(fpath, encoding="utf-8") as f:
-            lines = f.readlines()
+        try:
+            with open(fpath, encoding="utf-8") as f:
+                lines = f.readlines()
+        except:
+            continue
         with open(fpath, "w", encoding="utf-8") as f:
             write = True
             for line in lines:
@@ -132,8 +135,11 @@ def find_and_replace_in_files(to_replace_list, replacement, fpaths):
 
 def find_and_remove_lines_containing(search_term, fpaths):
     for fpath in fpaths:
-        with open(fpath, encoding="utf-8") as f:
-            lines = f.readlines()
+        try:
+            with open(fpath, encoding="utf-8") as f:
+                lines = f.readlines()
+        except:
+            continue
         with open(fpath, "w", encoding="utf-8") as f:
             for line in lines:
                 if search_term not in line:

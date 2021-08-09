@@ -24,7 +24,9 @@ class ContainerConfig {
 
     private static Network network
     private static GenericContainer protectorInitializrContainer
+    //INITIALIZER TAG: DATABASE
     private static MSSQLServerContainer mssqlServerContainer
+    //INITIALIZER TAG: DATABASE
 
     @Bean
     GenericContainer protectorInitializrContainer() { protectorInitializrContainer }

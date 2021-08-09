@@ -2,18 +2,22 @@ package no.protector.initializr.system.test
 
 import no.protector.initializr.system.test.config.ContainerConfig
 import no.protector.initializr.system.test.config.EndpointConfig
+//INITIALIZER TAG: DATABASE
 import no.protector.initializr.system.test.config.PersistenceConfig
 import org.dbunit.JdbcDatabaseTester
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder
 import org.dbunit.ext.mssql.InsertIdentityOperation
 import org.dbunit.operation.CompositeOperation
 import org.springframework.beans.factory.annotation.Autowired
+//INITIALIZER TAG: DATABASE
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import org.testcontainers.spock.Testcontainers
 import spock.lang.Specification
 
+//INITIALIZER TAG: DATABASE
 import java.sql.Connection
+//INITIALIZER TAG: DATABASE
 
 @Testcontainers
 @SpringBootTest
