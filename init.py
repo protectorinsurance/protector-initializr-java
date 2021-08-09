@@ -9,17 +9,22 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--p', help='Project name (my-awesome-application)', default=None)
 parser.add_argument('--n', help='Namespace (no.protector.my.awesome.application)', default=None)
+parser.add_argument('--pf', help='Persistence framework (none, jpa, jdbc)', default=None)
 
 args = parser.parse_args()
 
 project_name = args.p
 namespace = args.n
+persistence_framework = args.pf
 
 if not project_name:
     project_name = input("What is the name of the project (my-awesome-application)?\n")
 
 if not namespace:
     namespace = input("What namespace should the application use? (no.protector.my.awesome.application)\n").lower()
+
+if not persistence_framework:
+    persistence_framework = input("What persistence framework do you want? (none, jpa, jdbc)")
 
 
 def update_banner():
@@ -73,10 +78,11 @@ def get_allowed_folders():
     return allowed_folders
 
 
-def find_and_replace_in_all_files(to_replace_list, replacement):
+def get_available_files():
     allowed_folders = get_allowed_folders()
     files_to_ignore = ["init.py"]
     top = os.getcwd()
+    files = []
     for dname, dirs, files in os.walk(top):
         folders = dname.split('\\')
         skip = True
@@ -89,16 +95,68 @@ def find_and_replace_in_all_files(to_replace_list, replacement):
         for fname in files:
             if fname in files_to_ignore:
                 continue
-            find_and_replace_in_file(to_replace_list, replacement, os.path.join(dname, fname))
+            files.append(fname)
+    return files
 
 
-def find_and_replace_in_file(to_replace_list, replacement, fpath):
-    with open(fpath, encoding="utf-8") as f:
-        s = f.read()
-        for to_replace in to_replace_list:
-            s = re.sub(to_replace, replacement, s, flags=re.IGNORECASE)
-    with open(fpath, "w", encoding="utf-8") as f:
-        f.write(s)
+def find_and_replace_in_file(to_replace_list, replacement, fpaths):
+    for fpath in fpaths:
+        with open(fpath, encoding="utf-8") as f:
+            s = f.read()
+            for to_replace in to_replace_list:
+                s = re.sub(to_replace, replacement, s, flags=re.IGNORECASE)
+        with open(fpath, "w", encoding="utf-8") as f:
+            f.write(s)
+
+
+def find_and_remove_lines_containing(search_term, fpaths):
+    for fpath in fpaths:
+        with open(fpath, encoding="utf-8") as f:
+            lines = f.readlines()
+        with open(fpath, "w", encoding="utf-8") as f:
+            for line in lines:
+                if search(search_term):
+                    continue
+                f.write(line)
+
+
+def delete_dir(dir):
+    shutil.rmtree(f"./{dir}/")
+
+
+def insert_dependency:
+    print("How do I do this?")
+
+
+def set_persistence_framework():
+    persistence_folders = {
+        "none": {
+            "folder": "domain-no-database",
+            "dependencies": []
+        },
+        "jdbc": {
+            "folder": "domain",
+            "dependencies": ["org.springframework.boot:spring-boot-starter-data-jdbc"]
+        },
+        "jpa": {
+            "folder": "domain-jpa",
+            "dependencies": ["org.springframework.boot:spring-boot-starter-data-jdbc"]
+        },
+    }
+
+    dependencies_to_remove = []
+
+    for k, v in persistence_folders:
+        if k != persistence_framework:
+            delete_dir(v.get("folder"))
+            for dependency in v.get("dependencies"):
+                dependencies_to_remove.append(dependency)
+
+    os.rename(persistence_folders.get(persistence_framework).get("folder"), "domain")
+
+    _files = get_available_files()
+    for dependency in dependencies_to_remove:
+        find_and_remove_lines_containing(dependency, _files)
 
 
 def validate():
@@ -106,6 +164,8 @@ def validate():
         raise Exception("Project name cannot contain spaces")
     if ' ' in namespace:
         raise Exception("Namespace cannot contain spaces")
+    if persistence_framework not in ["none", "jdbc", "jpa"]:
+        raise Exception("You can only pick between none, jdbc and jpa")
 
 
 validate()
@@ -116,18 +176,21 @@ validate()
 # print("Creating new namespace...")
 # create_namespace()
 
+files = get_available_files()
 print("Replacing references to initializr...")
-find_and_replace_in_all_files(["protector-initializr-java", "protector-initializr"], project_name.lower())
-find_and_replace_in_all_files(["no.protector.initializr"], namespace)
+find_and_replace_in_file(["protector-initializr-java", "protector-initializr"], project_name.lower(), files)
+find_and_replace_in_file(["no.protector.initializr"], namespace, files)
 
 titled_project_name = project_name.replace('-', ' ').title().replace(' ', '')
-find_and_replace_in_all_files(["getProtectorInitializrContainer"], f"get{titled_project_name}Container")
-find_and_replace_in_all_files(["createProtectorInitializrContainer"], f"create{titled_project_name}Container")
-find_and_replace_in_all_files(["createBaseProtectorInitializrContainer"], f"createBase{titled_project_name}Container")
+find_and_replace_in_file(["getProtectorInitializrContainer"], f"get{titled_project_name}Container", files)
+find_and_replace_in_file(["createProtectorInitializrContainer"], f"create{titled_project_name}Container", files)
+find_and_replace_in_file(["createBaseProtectorInitializrContainer"], f"createBase{titled_project_name}Container", files)
 titled_project_name_first_lowercase = titled_project_name[0].lower() + titled_project_name[1:]
-find_and_replace_in_all_files(["protectorInitializrContainer"], f"{titled_project_name_first_lowercase}Container")
-find_and_replace_in_all_files(["initializrBaseUrl"], f"{titled_project_name_first_lowercase}BaseUrl")
+find_and_replace_in_file(["protectorInitializrContainer"], f"{titled_project_name_first_lowercase}Container", files)
+find_and_replace_in_file(["initializrBaseUrl"], f"{titled_project_name_first_lowercase}BaseUrl", files)
 
-find_and_replace_in_file(["initializr"], project_name.lower(), "Web.SystemTest.Dockerfile")
+find_and_replace_in_file(["initializr"], project_name.lower(), ["Web.SystemTest.Dockerfile"])
+
+set_persistence_framework()
 
 print("Done! Remember to go through the edits and verify the changes :)")
