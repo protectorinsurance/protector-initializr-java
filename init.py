@@ -172,11 +172,11 @@ def validate():
 
 validate()
 
-# print("Updating banner...")
-# update_banner()
+print("Updating banner...")
+update_banner()
 
-# print("Creating new namespace...")
-# create_namespace()
+print("Creating new namespace...")
+create_namespace()
 
 files = get_available_files()
 print("Replacing references to initializr...")
