@@ -78,19 +78,23 @@ def get_allowed_folders():
     return allowed_folders
 
 
+def skip_folder(dname, top_folder, allowed_folders):
+    if dname == top_folder:
+        return True
+    folders = dname.split('\\')
+    for allowed_folder in allowed_folders:
+        if allowed_folder in folders:
+            return False
+    return True
+
+
 def get_available_files():
     allowed_folders = get_allowed_folders()
     files_to_ignore = ["init.py"]
     top = os.getcwd()
     available_files = []
     for dname, dirs, files in os.walk(top):
-        folders = dname.split('\\')
-        skip = True
-        for folder in allowed_folders:
-            if folder in folders:
-                skip = False
-                break
-        if skip:
+        if skip_folder(dname, top, allowed_folders):
             continue
         for fname in files:
             if fname in files_to_ignore:
