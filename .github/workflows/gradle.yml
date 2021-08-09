@@ -40,17 +40,17 @@ jobs:
         run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --pf jpa
       - name: Verify that all instances of "initializr" has been removed
         run: |
-          grep -r --exclude=init.py 'initializr' .
-          grep -q -r --exclude=init.py 'initializr' .
+          grep -r --exclude=README.md --exclude=gradle.yml --exclude=init.py --exclude=\*.xml --exclude-dir=build --exclude-dir=.idea --exclude-dir=.git --exclude-dir=.gradle 'initializr' .
+          grep -q -r --exclude=README.md --exclude=gradle.yml --exclude=init.py --exclude=\*.xml --exclude-dir=build --exclude-dir=.idea --exclude-dir=.git --exclude-dir=.gradle 'initializr' .
           if [ $? -eq 0 ] ; exit 0 ; exit 1 ; fi
 
   verify_persistence_framework_options:
     name: Verify persistence framework
-    needs: [build, init_script_sanity_checks]
+    needs: [ build, init_script_sanity_checks ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        run: ['none', 'jdbc', 'jpa']
+        run: [ 'none', 'jdbc', 'jpa' ]
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-buildx-action@v1

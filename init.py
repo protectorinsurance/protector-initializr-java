@@ -80,7 +80,7 @@ def get_allowed_folders():
 
 def skip_folder(dname, top_folder, allowed_folders):
     if dname == top_folder:
-        return True
+        return False
     folders = dname.split('\\')
     for allowed_folder in allowed_folders:
         if allowed_folder in folders:
