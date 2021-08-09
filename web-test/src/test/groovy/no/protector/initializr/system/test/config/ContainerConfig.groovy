@@ -1,11 +1,15 @@
 package no.protector.initializr.system.test.config
 
+//INITIALIZER TAG: DATABASE
 import no.protector.initializr.system.test.provider.FlywayProvider
+//INITIALIZER TAG: DATABASE
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.testcontainers.containers.GenericContainer
+//INITIALIZER TAG: DATABASE
 import org.testcontainers.containers.MSSQLServerContainer
+//INITIALIZER TAG: DATABASE
 import org.testcontainers.containers.Network
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.images.builder.ImageFromDockerfile
@@ -25,24 +29,31 @@ class ContainerConfig {
     @Bean
     GenericContainer protectorInitializrContainer() { protectorInitializrContainer }
 
+    //INITIALIZER TAG: DATABASE
     @Bean
     MSSQLServerContainer mssqlServerContainer() { mssqlServerContainer }
+    //INITIALIZER TAG: DATABASE
 
     static {
         network = Network.newNetwork()
         protectorInitializrContainer = createProtectorInitializrContainer(network)
+        //INITIALIZER TAG: DATABASE
         mssqlServerContainer = createMSSQLServerContainer(network)
+        //INITIALIZER TAG: DATABASE
         startContainers()
     }
 
     private static startContainers() {
+        //INITIALIZER TAG: DATABASE
         mssqlServerContainer.start()
         def flyway = FlywayProvider.build(mssqlServerContainer)
         flyway.clean()
         flyway.migrate()
+        //INITIALIZER TAG: DATABASE
         protectorInitializrContainer.start()
     }
 
+    //INITIALIZER TAG: DATABASE
     private static MSSQLServerContainer createMSSQLServerContainer(Network network) {
         new MSSQLServerContainer(databaseImageName())
                 .acceptLicense()
@@ -56,6 +67,7 @@ class ContainerConfig {
                 .parse("mcr.microsoft.com/mssql/server")
                 .withTag("2019-latest")
     }
+    //INITIALIZER TAG: DATABASE
 
     private static GenericContainer createProtectorInitializrContainer(Network network) {
         createBaseProtectorInitializrContainer()

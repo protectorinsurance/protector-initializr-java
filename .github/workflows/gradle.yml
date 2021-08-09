@@ -52,6 +52,23 @@ jobs:
       - name: Verify that applicaton still builds
         run: gradle clean build -PsystemTest
 
+  init_script_sanity_checks:
+    name: Init script sanity checks
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/setup-buildx-action@v1
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Installing dependencies
+        run: pip install requests
+      - name: Execute python script
+        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --pf ${{ matrix.run }}
+      - name: Verify that all instances of "initializr" has been removed
+        run: grep -q -r 'initializr' .
+
   deploy:
     name: Deploy to test
     runs-on: ubuntu-latest

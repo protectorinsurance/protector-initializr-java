@@ -20,6 +20,7 @@ import java.sql.Connection
 @ContextConfiguration(classes = [ContainerConfig, EndpointConfig, PersistenceConfig])
 abstract class AbstractSystemSpec extends Specification {
 
+    //INITIALIZER TAG: DATABASE
     @Autowired
     JdbcDatabaseTester databaseTester
 
@@ -58,4 +59,5 @@ abstract class AbstractSystemSpec extends Specification {
     def enableConstraints() {
         connection.createStatement().execute('EXEC sp_msforeachtable "ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all"')
     }
+    //INITIALIZER TAG: DATABASE
 }

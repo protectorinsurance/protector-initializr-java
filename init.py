@@ -103,6 +103,20 @@ def get_available_files():
     return available_files
 
 
+def remove_tag_content(tag, fpaths):
+    comment_tag = f"//INITIALIZER TAG: {tag}"
+    for fpath in fpaths:
+        with open(fpath, encoding="utf-8") as f:
+            lines = f.readlines()
+        with open(fpath, "w", encoding="utf-8") as f:
+            write = True
+            for line in lines:
+                if comment_tag in line:
+                    write = not write
+                if write:
+                    f.write(line)
+
+
 def find_and_replace_in_files(to_replace_list, replacement, fpaths):
     for fpath in fpaths:
         try:
@@ -126,6 +140,15 @@ def find_and_remove_lines_containing(search_term, fpaths):
                     f.write(line)
 
 
+def find_and_remove_lines_containing_list(search_terms, fpaths):
+    for search_term in search_terms:
+        find_and_remove_lines_containing(search_term, fpaths)
+
+
+def remove_all_tags():
+    find_and_remove_lines_containing("//INITIALIZER TAG:", get_available_files())
+
+
 def delete_dir(dir):
     shutil.rmtree(f"./{dir}/")
 
@@ -147,6 +170,17 @@ def set_persistence_framework():
         if folder_name == 'domain':
             continue
         find_and_remove_lines_containing(folder_name, ['./settings.gradle'])
+
+    if persistence_framework == "none":
+        delete_dir("flyway")
+        os.remove("./web-test/src/test/groovy/no/protector/initializr/system/test/provider/FlywayProvider.groovy")
+        os.remove("./web-test/src/test/groovy/no/protector/initializr/system/test/config/PersistenceConfig.groovy")
+        _files = get_available_files()
+        find_and_replace_in_files([", PersistenceConfig"], '', _files)
+        remove_tag_content("Database", _files)
+        database_dependencies = ["com.microsoft.sqlserver:mssql-jdbc", "org.flywaydb:flyway-core", "org.dbunit",
+                                 "org.testcontainers:mssqlserver"]
+        find_and_remove_lines_containing_list(database_dependencies, _files)
 
 
 def validate():
@@ -185,5 +219,7 @@ find_and_replace_in_files(["protectorInitializrContainer"], f"{titled_project_na
 find_and_replace_in_files(["initializrBaseUrl"], f"{titled_project_name_first_lowercase}BaseUrl", files)
 
 find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.SystemTest.Dockerfile"])
+
+remove_all_tags()
 
 print("Done! Remember to go through the edits and verify the changes :)")
