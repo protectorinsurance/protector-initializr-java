@@ -82,7 +82,7 @@ def get_available_files():
     allowed_folders = get_allowed_folders()
     files_to_ignore = ["init.py"]
     top = os.getcwd()
-    files = []
+    available_files = []
     for dname, dirs, files in os.walk(top):
         folders = dname.split('\\')
         skip = True
@@ -95,16 +95,19 @@ def get_available_files():
         for fname in files:
             if fname in files_to_ignore:
                 continue
-            files.append(os.path.join(dname, fname))
-    return files
+            available_files.append(os.path.join(dname, fname))
+    return available_files
 
 
 def find_and_replace_in_files(to_replace_list, replacement, fpaths):
     for fpath in fpaths:
-        with open(fpath, encoding="utf-8") as f:
-            s = f.read()
-            for to_replace in to_replace_list:
-                s = re.sub(to_replace, replacement, s, flags=re.IGNORECASE)
+        try:
+            with open(fpath, encoding="utf-8") as f:
+                s = f.read()
+        except:
+            return
+        for to_replace in to_replace_list:
+            s = re.sub(to_replace, replacement, s, flags=re.IGNORECASE)
         with open(fpath, "w", encoding="utf-8") as f:
             f.write(s)
 
@@ -115,9 +118,8 @@ def find_and_remove_lines_containing(search_term, fpaths):
             lines = f.readlines()
         with open(fpath, "w", encoding="utf-8") as f:
             for line in lines:
-                if search(search_term):
-                    continue
-                f.write(line)
+                if search_term not in line:
+                    f.write(line)
 
 
 def delete_dir(dir):
@@ -128,7 +130,7 @@ def set_persistence_framework():
     persistence_folders = {
         "none": {
             "folder": "domain-no-database",
-            "dependency" : None
+            "dependency": None
         },
         "jdbc": {
             "folder": "domain",
@@ -142,7 +144,7 @@ def set_persistence_framework():
 
     default_dependency = persistence_folders.get("jdbc").get("dependency")
 
-    for k, v in persistence_folders:
+    for k, v in persistence_folders.items():
         if k != persistence_framework:
             delete_dir(v.get("folder"))
 
@@ -151,14 +153,16 @@ def set_persistence_framework():
     _files = get_available_files()
 
     if persistence_framework == 'none':
-            find_and_remove_lines_containing(default_dependency, _files)
+        find_and_remove_lines_containing(default_dependency, _files)
     else:
-        new_dependency = persistence_folders.get(persistence_framework).get("dependencies").first()
+        new_dependency = persistence_folders.get(persistence_framework).get("dependency")
         find_and_replace_in_files([default_dependency], new_dependency, _files)
 
-    for k, v in persistence_folders:
-        if k != persistence_framework:
-            find_and_remove_lines_containing(v.get("folder"), ['./settings.gradle'])
+    for k, v in persistence_folders.items():
+        folder_name = v.get('folder')
+        if folder_name == 'domain':
+            continue
+        find_and_remove_lines_containing(folder_name, ['./settings.gradle'])
 
 
 def validate():
@@ -175,6 +179,9 @@ validate()
 print("Updating banner...")
 update_banner()
 
+print("Setting persistence framework...")
+set_persistence_framework()
+
 print("Creating new namespace...")
 create_namespace()
 
@@ -186,13 +193,13 @@ find_and_replace_in_files(["no.protector.initializr"], namespace, files)
 titled_project_name = project_name.replace('-', ' ').title().replace(' ', '')
 find_and_replace_in_files(["getProtectorInitializrContainer"], f"get{titled_project_name}Container", files)
 find_and_replace_in_files(["createProtectorInitializrContainer"], f"create{titled_project_name}Container", files)
-find_and_replace_in_files(["createBaseProtectorInitializrContainer"], f"createBase{titled_project_name}Container", files)
+find_and_replace_in_files(["createBaseProtectorInitializrContainer"], f"createBase{titled_project_name}Container",
+                          files)
+
 titled_project_name_first_lowercase = titled_project_name[0].lower() + titled_project_name[1:]
 find_and_replace_in_files(["protectorInitializrContainer"], f"{titled_project_name_first_lowercase}Container", files)
 find_and_replace_in_files(["initializrBaseUrl"], f"{titled_project_name_first_lowercase}BaseUrl", files)
 
 find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.SystemTest.Dockerfile"])
-
-set_persistence_framework()
 
 print("Done! Remember to go through the edits and verify the changes :)")
