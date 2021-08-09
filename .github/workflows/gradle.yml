@@ -39,7 +39,9 @@ jobs:
       - name: Execute python script
         run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --pf jpa
       - name: Verify that all instances of "initializr" has been removed
-        run: grep -q -r 'initializr' .
+        run: |
+          grep -q -r 'initializr' .
+          if [ $? -eq 0 ] ; exit 0 ; exit 1 ; fi
 
   verify_persistence_framework_options:
     name: Verify persistence framework
