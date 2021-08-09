@@ -26,7 +26,7 @@ jobs:
         run: ./gradlew :web-test:test -PsystemTest --info
 
   verify_persistence_framework_options:
-    name: Verify the various persistence framework options
+    name: Verify persistence framework
     needs: build
     runs-on: ubuntu-latest
     strategy:

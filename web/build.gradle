@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation project(':domain-jpa')
+    implementation project(':domain')
 
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}"
