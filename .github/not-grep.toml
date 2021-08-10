@@ -1,4 +1,5 @@
 [exclude]
-"*.java" = "initializr"
-"*.gradle" = "initializr"
-"*.yml" = "initializr"
+"**/*.java" = "initializr"
+"**/*.gradle" = "initializr"
+"**/*.yml" = "initializr"
+"**/*.pproperties" = "initializr"
