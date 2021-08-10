@@ -36,19 +36,10 @@ jobs:
       - name: Installing dependencies
         run: pip install requests
 
-      - run: cat domain-jpa/src/main/java/no/protector/initializr/domain/configuration/DatabaseConfiguration.java
       - name: Execute python script
         run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --pf jpa
-      - run: cat domain/src/main/java/no/protector/my/awesome/app/domain/configuration/DatabaseConfiguration.java
-      ##- name: Verify that all instances of "initializr" is removed
-      ##  run: |
-      ##    tree -d .
-      ##    python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --pf jpa
-      ##    tree -d .
-      ##    grep -r --exclude=README.md --exclude=gradle.yml --exclude=init.py --exclude=\*.xml --exclude-dir=build --exclude-dir=.idea --exclude-dir=.git --exclude-dir=.gradle 'initializr' .
-      ##    grep -q -r --exclude=README.md --exclude=gradle.yml --exclude=init.py --exclude=\*.xml --exclude-dir=build --exclude-dir=.idea --exclude-dir=.git --exclude-dir=.gradle 'initializr' .
-      ##    if [ $? -eq 0 ] ; exit 0 ; exit 1 ; fi
-      - uses: mattsb42/not-grep@master
+      - name: Verifying that initializr related words has been remove
+        uses: mattsb42/not-grep@master
 
 
 

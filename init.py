@@ -83,7 +83,6 @@ def skip_folder(dname, top_folder, allowed_folders):
         return False
     folders = dname.split(os.sep)
     for allowed_folder in allowed_folders:
-        print(f"Testing if {allowed_folder} is found in {folders}")
         if allowed_folder in folders:
             return False
     return True
@@ -93,18 +92,13 @@ def get_available_files():
     allowed_folders = get_allowed_folders()
     files_to_ignore = ["init.py"]
     top = os.getcwd()
-    print(f"cwd: {top}")
-    print(f"Allowed folders: {allowed_folders}")
     available_files = []
     for dname, dirs, _files in os.walk(top):
         if skip_folder(dname, top, allowed_folders):
-            print(f"skipping folder: {dname}")
             continue
         for fname in _files:
             if fname in files_to_ignore:
-                print(f"skipping file: {fname}")
                 continue
-            print(f"adding file: {fname}")
             available_files.append(os.path.join(dname, fname))
     return available_files
 
@@ -174,7 +168,6 @@ create_namespace()
 
 files = get_available_files()
 print("Replacing references to initializr...")
-print(f"available files: {files}")
 find_and_replace_in_files(["protector-initializr-java", "protector-initializr"], project_name.lower(), files)
 find_and_replace_in_files(["no.protector.initializr"], namespace, files)
 
