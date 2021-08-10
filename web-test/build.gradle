@@ -3,10 +3,12 @@ dependencies {
     testImplementation project(':domain')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     testImplementation 'org.testcontainers:spock'
+    //INITIALIZR:DATABASE
     testImplementation 'org.testcontainers:mssqlserver'
     testImplementation 'org.dbunit:dbunit'
     implementation 'org.flywaydb:flyway-core'
     runtimeOnly "com.microsoft.sqlserver:mssql-jdbc:${mssqlJdbcVersion}"
+    //INITIALIZR:DATABASE
 }
 
 test {

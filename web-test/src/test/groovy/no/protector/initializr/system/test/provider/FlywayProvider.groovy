@@ -1,3 +1,4 @@
+//INITIALIZR:DATABASE
 package no.protector.initializr.system.test.provider
 
 import org.flywaydb.core.Flyway
@@ -15,3 +16,4 @@ abstract class FlywayProvider {
                 .load()
     }
 }
+//INITIALIZR:DATABASE

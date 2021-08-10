@@ -1,3 +1,4 @@
+//INITIALIZR:DATABASE
 package no.protector.initializr.system.test.config
 
 import org.dbunit.JdbcDatabaseTester
@@ -36,3 +37,4 @@ class PersistenceConfig {
 
     }
 }
+//INITIALIZR:DATABASE

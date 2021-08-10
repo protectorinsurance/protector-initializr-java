@@ -123,6 +123,14 @@ def find_and_remove_lines_containing(search_term, fpaths):
                     f.write(line)
 
 
+def delete_empty_files():
+    _files = get_available_files()
+    for _file in _files:
+        if os.stat(_file) != 0:
+            continue
+        os.remove(_file)
+
+
 def delete_dir(dir):
     shutil.rmtree(f"./{dir}/")
 
@@ -144,6 +152,43 @@ def set_persistence_framework():
         if folder_name == 'domain':
             continue
         find_and_remove_lines_containing(folder_name, ['./settings.gradle'])
+
+    clean_tag_content("DATABASE")
+
+
+def remove_unused_imports():
+    _files = get_available_files()
+    for fpath in _files:
+        with open(fpath, encoding="utf-8") as f:
+            lines = f.readlines()
+        with open(fpath, "w", encoding="utf-8") as f:
+            write = True
+            for line in lines:
+                if re.match(r'^import .*\.[A-Za-z]+$', line):
+                    import_type = line.split('.')[-1]
+                    write = len([i for i in lines if import_type in i]) > 1
+                if write:
+                    f.write(line)
+
+
+def clean_tag_content(tag):
+    full_tag = f"//INITIALIZR:{tag}"
+    _files = get_available_files()
+    for fpath in _files:
+        with open(fpath, encoding="utf-8") as f:
+            lines = f.readlines()
+        with open(fpath, "w", encoding="utf-8") as f:
+            write = True
+            for line in lines:
+                if full_tag in line:
+                    write = not write
+                if write:
+                    f.write(line)
+
+
+def clean_initializr_tags():
+    _files = get_available_files()
+    find_and_remove_lines_containing('//INITIALIZR:', _files)
 
 
 def validate():
@@ -182,5 +227,9 @@ find_and_replace_in_files(["protectorInitializrContainer"], f"{titled_project_na
 find_and_replace_in_files(["initializrBaseUrl"], f"{titled_project_name_first_lowercase}BaseUrl", files)
 
 find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.SystemTest.Dockerfile"])
+
+remove_unused_imports()
+clean_initializr_tags()
+delete_empty_files()
 
 print("Done! Remember to go through the edits and verify the changes :)")

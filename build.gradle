@@ -11,7 +11,9 @@ description = 'protector-initializr-java'
 ext {
     set('springBootVersion', "2.5.3")
     set('apmVersion', "1.25.0")
+    //INITIALIZR:DATABASE
     set('mssqlJdbcVersion', "9.4.0.jre16")
+    //INITIALIZR:DATABASE
 }
 
 bootJar {
@@ -50,9 +52,11 @@ subprojects {
         testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
         testImplementation "org.spockframework:spock-spring:2.0-groovy-3.0"
         testImplementation 'org.testcontainers:spock:1.16.0'
+        //INITIALIZR:DATABASE
         testImplementation 'org.testcontainers:mssqlserver:1.16.0'
         testImplementation 'org.dbunit:dbunit:2.7.2'
         implementation 'org.flywaydb:flyway-core:7.12.1'
+        //INITIALIZR:DATABASE
     }
 
     test {

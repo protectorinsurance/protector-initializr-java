@@ -20,14 +20,16 @@ class ContainerConfig {
 
     private static Network network
     private static GenericContainer protectorInitializrContainer
+    //INITIALIZR:DATABASE
     private static MSSQLServerContainer mssqlServerContainer
+    //INITIALIZR:DATABASE
 
     @Bean
     GenericContainer protectorInitializrContainer() { protectorInitializrContainer }
-
+    //INITIALIZR:DATABASE
     @Bean
     MSSQLServerContainer mssqlServerContainer() { mssqlServerContainer }
-
+    //INITIALIZR:DATABASE
     static {
         network = Network.newNetwork()
         protectorInitializrContainer = createProtectorInitializrContainer(network)
@@ -36,14 +38,16 @@ class ContainerConfig {
     }
 
     private static startContainers() {
+        //INITIALIZR:DATABASE
         mssqlServerContainer.start()
         def flyway = FlywayProvider.build(mssqlServerContainer)
         flyway.clean()
         flyway.migrate()
+        //INITIALIZR:DATABASE
         protectorInitializrContainer.start()
     }
 
-//11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+    //INITIALIZR:DATABASE
     private static MSSQLServerContainer createMSSQLServerContainer(Network network) {
         new MSSQLServerContainer(databaseImageName())
                 .acceptLicense()
@@ -52,11 +56,13 @@ class ContainerConfig {
                 .withExposedPorts(1433) as MSSQLServerContainer
     }
 
+
     private static DockerImageName databaseImageName() {
         DockerImageName
                 .parse("mcr.microsoft.com/mssql/server")
                 .withTag("2019-latest")
     }
+    //INITIALIZR:DATABASE
 
     private static GenericContainer createProtectorInitializrContainer(Network network) {
         createBaseProtectorInitializrContainer()
