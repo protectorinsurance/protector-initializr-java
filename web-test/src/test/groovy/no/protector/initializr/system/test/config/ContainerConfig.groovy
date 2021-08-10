@@ -43,6 +43,7 @@ class ContainerConfig {
         protectorInitializrContainer.start()
     }
 
+//11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
     private static MSSQLServerContainer createMSSQLServerContainer(Network network) {
         new MSSQLServerContainer(databaseImageName())
                 .acceptLicense()
