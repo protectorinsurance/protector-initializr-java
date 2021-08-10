@@ -163,8 +163,8 @@ def remove_unused_imports():
         with open(fpath, encoding="utf-8") as f:
             lines = f.readlines()
         with open(fpath, "w", encoding="utf-8") as f:
-            write = True
             for line in lines:
+                write = True
                 if re.match(r'^import .*\.[A-Za-z]+$', line):
                     import_type = line.split('.')[-1]
                     write = len([i for i in lines if import_type in i]) > 1
