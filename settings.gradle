@@ -14,4 +14,3 @@ include 'domain-jpa'
 include 'domain-no-database'
 include 'web'
 include 'web-test'
-

@@ -168,6 +168,7 @@ create_namespace()
 
 files = get_available_files()
 print("Replacing references to initializr...")
+print(f"available files: {files}")
 find_and_replace_in_files(["protector-initializr-java", "protector-initializr"], project_name.lower(), files)
 find_and_replace_in_files(["no.protector.initializr"], namespace, files)
 
