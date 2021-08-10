@@ -1,5 +1,4 @@
 [exclude]
 "*.java" = "initializr"
 "*.gradle" = "initializr"
-"*.py" = "initializr"
 "*.yml" = "initializr"
