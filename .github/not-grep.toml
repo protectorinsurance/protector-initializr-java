@@ -1,5 +1,16 @@
 [exclude]
+# Check for the word "initializr
 "**/*.java" = "initializr"
 "**/*.gradle" = "initializr"
 "**/*.yml" = "initializr"
-"**/*.pproperties" = "initializr"
+"**/*.properties" = "initializr"
+"**/*.groovy" = "initializr"
+"**/*.Dockerfile" = "initializr"
+
+# Check for the misspelling initalizr
+"**/*.java" = "initalizr"
+"**/*.gradle" = "initalizr"
+"**/*.yml" = "initalizr"
+"**/*.properties" = "initalizr"
+"**/*.groovy" = "initalizr"
+"**/*.Dockerfile" = "initalizr"
