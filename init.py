@@ -125,11 +125,12 @@ def find_and_remove_lines_containing(search_term, fpaths):
 
 def delete_empty_files():
     _files = get_available_files()
+    files_to_delete = []
     for _file in _files:
-        if os.stat(_file) != 0:
-            continue
-        os.remove(_file)
-
+        with open(fpath, encoding="utf-8") as f:
+            if len(f.read()) == 0:
+                files_to_delete.append(_file)
+    [os.remove(f) for f in files_to_delete]
 
 def delete_dir(dir):
     shutil.rmtree(f"./{dir}/")
@@ -155,6 +156,18 @@ def set_persistence_framework():
 
     if persistence_framework == "none":
         clean_tag_content("DATABASE")
+        find_and_replace_in_files([", PersistenceConfig"], '', get_available_files())
+
+
+def is_not_import_line(line):
+    return not re.match(r'^import .*\.[A-Za-z]+$', line)
+
+
+def can_write(current_line, lines):
+    if is_not_import_line(current_line):
+        return True
+    import_type = current_line.split('.')[-1].strip()
+    return [line for line in lines if import_type in line and line != current_line]
 
 
 def remove_unused_imports():
@@ -164,11 +177,7 @@ def remove_unused_imports():
             lines = f.readlines()
         with open(fpath, "w", encoding="utf-8") as f:
             for line in lines:
-                write = True
-                if re.match(r'^import .*\.[A-Za-z]+$', line):
-                    import_type = line.split('.')[-1]
-                    write = len([i for i in lines if import_type in i]) > 1
-                if write:
+                if can_write(line, lines):
                     f.write(line)
 
 
