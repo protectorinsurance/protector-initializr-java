@@ -83,6 +83,7 @@ def skip_folder(dname, top_folder, allowed_folders):
         return False
     folders = dname.split('\\')
     for allowed_folder in allowed_folders:
+        print(f"Testing if {allowed_folder} is found in {folders}")
         if allowed_folder in folders:
             return False
     return True
