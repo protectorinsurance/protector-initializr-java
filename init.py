@@ -153,7 +153,8 @@ def set_persistence_framework():
             continue
         find_and_remove_lines_containing(folder_name, ['./settings.gradle'])
 
-    clean_tag_content("DATABASE")
+    if persistence_framework == "none":
+        clean_tag_content("DATABASE")
 
 
 def remove_unused_imports():
