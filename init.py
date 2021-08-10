@@ -127,7 +127,7 @@ def delete_empty_files():
     _files = get_available_files()
     files_to_delete = []
     for _file in _files:
-        with open(fpath, encoding="utf-8") as f:
+        with open(_file, encoding="utf-8") as f:
             if len(f.read()) == 0:
                 files_to_delete.append(_file)
     [os.remove(f) for f in files_to_delete]
