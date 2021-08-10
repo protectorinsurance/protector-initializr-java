@@ -81,7 +81,7 @@ def get_allowed_folders():
 def skip_folder(dname, top_folder, allowed_folders):
     if dname == top_folder:
         return False
-    folders = os.path.split(dname)
+    folders = dname.split(os.sep)
     for allowed_folder in allowed_folders:
         print(f"Testing if {allowed_folder} is found in {folders}")
         if allowed_folder in folders:
