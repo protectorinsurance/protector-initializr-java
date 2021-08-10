@@ -92,13 +92,17 @@ def get_available_files():
     allowed_folders = get_allowed_folders()
     files_to_ignore = ["init.py"]
     top = os.getcwd()
+    print(f"cwd: {top}")
     available_files = []
     for dname, dirs, files in os.walk(top):
         if skip_folder(dname, top, allowed_folders):
+            print(f"skipping folder: {dname}")
             continue
         for fname in files:
             if fname in files_to_ignore:
+                print(f"skipping file: {fname}")
                 continue
+            print(f"adding file: {fname}")
             available_files.append(os.path.join(dname, fname))
     return available_files
 
