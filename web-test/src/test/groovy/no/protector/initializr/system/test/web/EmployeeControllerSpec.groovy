@@ -21,8 +21,10 @@ class EmployeeControllerSpec extends AbstractSystemSpec {
     }
 
     def "Verify that user with ID 1 can be retrieved from service"() {
+        //INITIALIZR:DATABASE
         given:
         cleanAndInsertDataset("EmployeeDataset.xml")
+        //INITIALIZR:DATABASE
         when:
         def employee = requestService.exchange(new URI("$employeeUri/1"), HttpMethod.GET, Employee).body
         then:
