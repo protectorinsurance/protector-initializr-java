@@ -1,3 +1,4 @@
+<!-- INITIALIZR:DATABASE -->
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
     <Employee
@@ -5,3 +6,4 @@
             First_Name="Colter"
             Last_Name="Wall"/>
 </dataset>
+<!-- INITIALIZR:DATABASE -->
