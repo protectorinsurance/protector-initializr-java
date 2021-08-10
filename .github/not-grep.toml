@@ -1,5 +1,5 @@
 [exclude]
-"*.java" = ["initializr", "initalizr"]
+"*.java" = "initializr"
 "*.gradle" = "initializr"
-"*.py" = ["initializr", "initalizr"]
-"*.yml" = ["initializr", "initalizr"]
+"*.py" = "initializr"
+"*.yml" = "initializr"
