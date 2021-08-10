@@ -95,11 +95,11 @@ def get_available_files():
     print(f"cwd: {top}")
     print(f"Allowed folders: {allowed_folders}")
     available_files = []
-    for dname, dirs, files in os.walk(top):
+    for dname, dirs, _files in os.walk(top):
         if skip_folder(dname, top, allowed_folders):
             print(f"skipping folder: {dname}")
             continue
-        for fname in files:
+        for fname in _files:
             if fname in files_to_ignore:
                 print(f"skipping file: {fname}")
                 continue
