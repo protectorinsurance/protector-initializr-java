@@ -34,7 +34,9 @@ class ContainerConfig {
     static {
         network = Network.newNetwork()
         protectorInitializrContainer = createProtectorInitializrContainer(network)
+        //INITIALIZR:DATABASE
         mssqlServerContainer = createMSSQLServerContainer(network)
+        //INITIALIZR:DATABASE
         startContainers()
     }
 
