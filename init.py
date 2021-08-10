@@ -171,8 +171,13 @@ def remove_unused_imports():
                     f.write(line)
 
 
+def generate_initializr_tags(tag):
+    comment_prefixes = ["//", "-- ", "<!-- ", "# "]
+    return [f"{prefix}INITIALIZR:{tag}" for prefix in comment_prefixes]
+
+
 def clean_tag_content(tag):
-    full_tag = f"//INITIALIZR:{tag}"
+    tags = generate_initializr_tags(tag)
     _files = get_available_files()
     for fpath in _files:
         with open(fpath, encoding="utf-8") as f:
@@ -180,7 +185,7 @@ def clean_tag_content(tag):
         with open(fpath, "w", encoding="utf-8") as f:
             write = True
             for line in lines:
-                if full_tag in line:
+                if len([i for i in tags if i in line]) > 0:
                     write = not write
                 if write:
                     f.write(line)

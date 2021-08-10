@@ -10,7 +10,9 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
     implementation "co.elastic.apm:apm-agent-api:${apmVersion}"
 
+    //INITIALIZR:DATABASE
     runtimeOnly "com.microsoft.sqlserver:mssql-jdbc:${mssqlJdbcVersion}"
+    //INITIALIZR:DATABASE
 
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
