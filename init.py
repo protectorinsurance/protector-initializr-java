@@ -217,26 +217,29 @@ def get_initializer_prefix():
     return [f"{prefix}INITIALIZR:" for prefix in get_comment_prefixes()]
 
 
-def generate_initializr_tags(tags):
-    prefixes = get_initializer_prefix()
-    return [f"{prefix}{tag}" for prefix in prefixes for tag in tags]
+def is_one_of_tags_in_initializr_comment(tags, line):
+    initializer_prefixes = get_initializer_prefix()
+    if not line_is_initializr_comment(initializer_prefixes, line):
+        return False
+    for prefix in initializer_prefixes:
+        line = line.replace(prefix, "").replace("-->", "")
+    for tag in tags:
+        if tag in line:
+            return True
+    return False
 
 
-def should_delete_tag(tags, line):
-    for prefix in get_initializer_prefix():
-        line = line.strip(prefix).replace("-->", "")
-    options = [tag.strip() for tag in line.split(",")]
-    if len(options) == 1:
-        return True
-    return all(option in options for option in tags)
+def line_is_initializr_comment(initializer_prefixes, line):
+    return len([i for i in initializer_prefixes if i in line]) > 0
 
 
-def line_has_tag(initializer_tags, line):
-    return len([i for i in initializer_tags if i in line]) > 0
+def should_write_xml(lines_to_write):
+    lines_that_are_not_initializr_comments = [
+        line for line in lines_to_write if not line_is_initializr_comment(get_initializer_prefix(), line)]
+    return len(lines_that_are_not_initializr_comments) > 1
 
 
 def clean_tag_content(tags):
-    initializer_tags = generate_initializr_tags(tags)
     _files = get_available_files()
     for fpath in _files:
         with open(fpath, encoding="utf-8") as f:
@@ -246,12 +249,12 @@ def clean_tag_content(tags):
             write = True
             lines_to_write = []
             for line in lines:
-                if line_has_tag(initializer_tags, line) and should_delete_tag(tags, line):
+                if is_one_of_tags_in_initializr_comment(tags, line):
                     write = not write
                     continue
                 if write:
                     lines_to_write.append(line)
-            if is_xml and len(lines_to_write) <= 2:
+            if is_xml and not should_write_xml(lines_to_write):
                 f.truncate(0)
                 return
             [f.write(line) for line in lines_to_write]
