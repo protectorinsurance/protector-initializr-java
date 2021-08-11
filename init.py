@@ -24,7 +24,7 @@ if not namespace:
     namespace = input("What namespace should the application use? (no.protector.my.awesome.application)\n").lower()
 
 if not persistence_framework:
-    persistence_framework = input("What persistence framework do you want? (none, jpa, jdbc)")
+    persistence_framework = input("What persistence framework do you want? (none, jpa, jdbc)\n")
 
 
 def update_banner():
@@ -51,9 +51,13 @@ def move_all(source_dir, target_dir):
 
 
 def delete_empty_dirs(path):
-    for root, dirs, files in os.walk(path, topdown=False):
-        if not files and not dirs:
-            os.rmdir(root)
+    has_deleted_directories = True
+    while has_deleted_directories:
+        has_deleted_directories = False
+        for root, dirs, files in os.walk(path, topdown=False):
+            if not files and not dirs:
+                os.rmdir(root)
+                has_deleted_directories = True
 
 
 def create_namespace():
