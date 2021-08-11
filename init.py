@@ -208,13 +208,8 @@ def clean_tag_content(tag):
                     continue
                 if write:
                     lines_to_write.append(line)
-            if is_xml:
-                print(f"File: {fpath}")
-                print(f"IS XML and len is {len(''.join(lines_to_write).strip())}")
-                print(f"IS XML and len of list is is {len(lines_to_write)}")
-                print(f"lines to write content: {lines_to_write}")
-            if is_xml and len(''.join(lines_to_write).strip()) <= 2:
-                f.write('')
+            if is_xml and len(lines_to_write) <= 2:
+                f.truncate(0)
                 return
             [f.write(line) for line in lines_to_write]
 
