@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- INITIALIZR:DATABASE -->
+<!-- INITIALIZR:DATABASE, INITIALIZR-DEMO -->
 <dataset>
     <Employee
             Id="1"
             First_Name="Colter"
             Last_Name="Wall"/>
 </dataset>
-        <!-- INITIALIZR:DATABASE -->
+        <!-- INITIALIZR:DATABASE, INITIALIZR-DEMO -->

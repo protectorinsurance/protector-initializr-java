@@ -1,3 +1,4 @@
+//INITIALIZR:INITIALIZR-DEMO
 package no.protector.initializr.domain.service;
 
 import no.protector.initializr.domain.model.Employee;
@@ -16,3 +17,4 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 }
+//INITIALIZR:INITIALIZR-DEMO

@@ -1,3 +1,4 @@
+//INITIALIZR:INITIALIZR-DEMO
 package no.protector.initializr.domain.model;
 
 public class Employee {
@@ -29,3 +30,4 @@ public class Employee {
         this.lastName = lastName;
     }
 }
+//INITIALIZR:INITIALIZR-DEMO

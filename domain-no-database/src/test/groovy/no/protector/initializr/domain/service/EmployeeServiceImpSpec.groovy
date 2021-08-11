@@ -1,3 +1,4 @@
+//INITIALIZR:INITIALIZR-DEMO
 package no.protector.initializr.domain.service
 
 import groovy.json.JsonOutput
@@ -39,3 +40,4 @@ class EmployeeServiceImpSpec extends Specification {
         100 | _
     }
 }
+//INITIALIZR:INITIALIZR-DEMO

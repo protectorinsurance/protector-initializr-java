@@ -1,5 +1,5 @@
+//INITIALIZR:INITIALIZR-DEMO
 package no.protector.initializr.domain.service
-
 
 import groovy.transform.builder.Builder
 import groovy.transform.builder.ExternalStrategy
@@ -27,3 +27,4 @@ class EmployeeServiceImpSpec extends Specification {
         service.getEmployee(1) == employee
     }
 }
+//INITIALIZR:INITIALIZR-DEMO

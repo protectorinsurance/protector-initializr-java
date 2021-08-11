@@ -1,3 +1,4 @@
+//INITIALIZR:INITIALIZR-DEMO
 package no.protector.initializr.domain.model;
 
 import org.springframework.data.annotation.Id;
@@ -32,3 +33,4 @@ public class Employee {
         this.lastName = lastName;
     }
 }
+//INITIALIZR:INITIALIZR-DEMO

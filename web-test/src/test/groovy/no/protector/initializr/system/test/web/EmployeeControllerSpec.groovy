@@ -1,3 +1,4 @@
+//INITIALIZR:INITIALIZR-DEMO
 package no.protector.initializr.system.test.web
 
 import no.protector.initializr.domain.model.Employee
@@ -33,3 +34,4 @@ class EmployeeControllerSpec extends AbstractSystemSpec {
         employee.lastName == "Wall"
     }
 }
+//INITIALIZR:INITIALIZR-DEMO

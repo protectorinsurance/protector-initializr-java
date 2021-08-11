@@ -1,3 +1,4 @@
+//INITIALIZR:INITIALIZR-DEMO
 package no.protector.initializr.domain.service;
 
 import no.protector.initializr.domain.model.Employee;
@@ -13,3 +14,4 @@ public record EmployeeServiceImpl(EmployeeRepository employeeRepository)
         return employeeRepository.findById(employeeId).orElse(null);
     }
 }
+//INITIALIZR:INITIALIZR-DEMO

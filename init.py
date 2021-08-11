@@ -17,6 +17,7 @@ args = parser.parse_args()
 project_name = args.p
 namespace = args.n
 persistence_framework = args.pf
+protected_paths = []
 
 if not project_name:
     project_name = input("What is the name of the project (my-awesome-application)?\n")
@@ -71,7 +72,10 @@ def delete_empty_dirs(path):
     while has_deleted_directories:
         has_deleted_directories = False
         for root, dirs, files in os.walk(path, topdown=False):
-            if not files and not dirs:
+            can_delete = True
+            for protected_path in protected_paths:
+                can_delete = root.endswith(protected_path)
+            if can_delete and not files and not dirs:
                 os.rmdir(root)
                 has_deleted_directories = True
 

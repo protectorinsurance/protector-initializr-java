@@ -1,3 +1,4 @@
+//INITIALIZR:INITIALIZR-DEMO
 package no.protector.initializr.domain.model;
 
 import javax.persistence.Entity;
@@ -34,3 +35,4 @@ public class Employee {
         this.lastName = lastName;
     }
 }
+//INITIALIZR:INITIALIZR-DEMO
