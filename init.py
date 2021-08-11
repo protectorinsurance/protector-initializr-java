@@ -224,7 +224,7 @@ def generate_initializr_tags(tags):
 
 def should_delete_tag(tags, line):
     for prefix in get_initializer_prefix():
-        line = line.strip(prefix).strip("-->")
+        line = line.strip(prefix).replace("-->", "")
     options = [tag.strip() for tag in line.split(",")]
     if len(options) == 1:
         return True
