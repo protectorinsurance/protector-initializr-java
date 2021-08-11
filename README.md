@@ -26,9 +26,7 @@ _(Note: You need Python installed)_
 3. In the root folder of this project execute `python init.py`. This script will essentially rename the application,
    namespaces, packages and so forth. It will change the initializr to a usable general project.
 4. Delete init.py - it is no longer necessary.
-5. In `.github/workflows/gradle.yml` delete the `verify_python_script` job.
-6. Verify the application builds with `gradle clean build -PsystemTest`.
-7. Delete "Initializr" section from this readme file :)
+5. Verify the application builds with `gradle clean build -PsystemTest`.
 
 ## Project Overview
 
