@@ -208,7 +208,7 @@ def clean_tag_content(tag):
                     continue
                 if write:
                     lines_to_write.append(line)
-            if is_xml and len(lines_to_write) == 2:
+            if is_xml and len(''.join(lines_to_write).strip()) <= 2:
                 f.write('')
                 return
             [f.write(line) for line in lines_to_write]
