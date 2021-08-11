@@ -199,13 +199,19 @@ def clean_tag_content(tag):
         with open(fpath, encoding="utf-8") as f:
             lines = f.readlines()
         with open(fpath, "w", encoding="utf-8") as f:
+            is_xml = fpath.endswith(".xml")
             write = True
+            lines_to_write = []
             for line in lines:
                 if len([i for i in tags if i in line]) > 0:
                     write = not write
                     continue
                 if write:
-                    f.write(line)
+                    lines_to_write.append(line)
+            if is_xml and len(lines_to_write) == 2:
+                f.write('')
+                return
+            [f.write(line) for line in lines_to_write]
 
 
 def clean_initializr_tags():
@@ -221,6 +227,7 @@ def clean_all_double_empty_lines():
         content = re.sub(r'\n\s*\n', '\n\n', content)
         with open(fpath, "w", encoding="utf-8") as f:
             f.write(content)
+
 
 def validate():
     if ' ' in project_name:
