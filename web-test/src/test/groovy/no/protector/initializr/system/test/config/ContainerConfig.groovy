@@ -30,7 +30,6 @@ class ContainerConfig {
     @Bean
     MSSQLServerContainer mssqlServerContainer() { mssqlServerContainer }
     //INITIALIZR:DATABASE
-
     static {
         network = Network.newNetwork()
         protectorInitializrContainer = createProtectorInitializrContainer(network)

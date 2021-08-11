@@ -12,7 +12,6 @@ dependencies {
 
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
-
 //INITIALIZR:DATABASE
 sourceSets {
     main {
@@ -22,7 +21,6 @@ sourceSets {
     }
 }
 //INITIALIZR:DATABASE
-
 // APM config start
 configurations {
     dockerExtras

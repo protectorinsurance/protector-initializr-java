@@ -69,12 +69,12 @@ def create_namespace():
             create_folders(destination)
             source = f"{base_path}/no/protector/initializr"
             move_all(source, destination)
-            delete_empty_dirs(base_path)
 
 
 def get_allowed_folders():
     allowed_folders = get_modules()
     allowed_folders.append(".github")
+    allowed_folders.append("flyway")
     return allowed_folders
 
 
@@ -131,6 +131,7 @@ def delete_empty_files():
             if len(f.read()) == 0:
                 files_to_delete.append(_file)
     [os.remove(f) for f in files_to_delete]
+
 
 def delete_dir(dir):
     shutil.rmtree(f"./{dir}/")
@@ -189,6 +190,7 @@ def generate_initializr_tags(tag):
 def clean_tag_content(tag):
     tags = generate_initializr_tags(tag)
     _files = get_available_files()
+    # TODO: Deal with XML and comment lists
     for fpath in _files:
         with open(fpath, encoding="utf-8") as f:
             lines = f.readlines()
@@ -246,5 +248,8 @@ find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.SystemTest
 remove_unused_imports()
 clean_initializr_tags()
 delete_empty_files()
+# TODO: Clean double empty lines
+# TODO: Clean _all_ empty folders
+delete_empty_dirs('./')
 
 print("Done! Remember to go through the edits and verify the changes :)")
