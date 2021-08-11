@@ -1,3 +1,4 @@
+# INITIALIZR:INITIALIZR-DEMO
 [exclude]
 # Check for the word "initializr
 "**/*.java" = "initializr"
@@ -6,3 +7,4 @@
 "**/*.properties" = "initializr"
 "**/*.groovy" = "initializr"
 "**/*.Dockerfile" = "initializr"
+# INITIALIZR:INITIALIZR-DEMO
