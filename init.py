@@ -208,6 +208,8 @@ def clean_tag_content(tag):
                     continue
                 if write:
                     lines_to_write.append(line)
+            if is_xml:
+                print(f"IS XML and len is {len(''.join(lines_to_write).strip())}")
             if is_xml and len(''.join(lines_to_write).strip()) <= 2:
                 f.write('')
                 return
