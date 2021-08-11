@@ -1,6 +1,7 @@
 spring:
   application:
     name: protector-initializr
+  # INITIALIZR:DATABASE
   datasource:
     url: jdbc:sqlserver://${db.host_port};databaseName=${db.database_name};applicationName=${spring.application.name};sendStringParametersAsUnicode=false;lockTimeout=15000
     username: ${db.username}
@@ -12,6 +13,7 @@ spring:
     cleanDisabled: true
     locations: classpath:./migrations
     baseline-on-migrate: true
+    # INITIALIZR:DATABASE
 
 management:
   server.port: 8391
