@@ -74,7 +74,7 @@ def delete_empty_dirs(path):
         for root, dirs, files in os.walk(path, topdown=False):
             can_delete = True
             for protected_path in protected_paths:
-                can_delete = root.endswith(protected_path)
+                can_delete = not root.endswith(protected_path)
             if can_delete and not files and not dirs:
                 os.rmdir(root)
                 has_deleted_directories = True
@@ -83,11 +83,11 @@ def delete_empty_dirs(path):
 def create_namespace():
     modules = get_modules()
     namespace_folders = namespace.split('.')
+    protected_paths.append(os.sep.joing(namespace_folders))
     namespace_path = "/".join(namespace_folders)
     for module in modules:
         base_paths = [f"{module}/src/main/java", f"{module}/src/test/groovy"]
         for base_path in base_paths:
-            protected_paths.append(base_path)
             if not os.path.isdir(base_path):
                 continue
             destination = f"{base_path}/{namespace_path}"
