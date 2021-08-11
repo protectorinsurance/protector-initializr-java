@@ -186,6 +186,7 @@ def set_persistence_framework():
     if persistence_framework == "none":
         tags_to_clean.append("DATABASE")
         find_and_replace_in_files([", PersistenceConfig"], '', get_available_files())
+        os.rmdir("flyway")
     else:
         protected_paths.append(f"flyway{os.sep}migrations")
 
