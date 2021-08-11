@@ -256,7 +256,7 @@ def clean_tag_content(tags):
             for line in lines:
                 if is_one_of_tags_in_initializr_comment(tags, line):
                     is_same = last_initializr_comment_line.strip() == line.strip()
-                    if is_same:
+                    if not is_same:
                         continue
                     write = not write
                     continue
