@@ -87,6 +87,7 @@ def create_namespace():
     for module in modules:
         base_paths = [f"{module}/src/main/java", f"{module}/src/test/groovy"]
         for base_path in base_paths:
+            protected_paths.append(base_path)
             if not os.path.isdir(base_path):
                 continue
             destination = f"{base_path}/{namespace_path}"
@@ -182,6 +183,8 @@ def set_persistence_framework():
     if persistence_framework == "none":
         tags_to_clean.append("DATABASE")
         find_and_replace_in_files([", PersistenceConfig"], '', get_available_files())
+    else:
+        protected_paths.append("flyway")
 
 
 def is_not_import_line(line):
