@@ -1,4 +1,4 @@
--- INITIALIZR-DEMO
+-- INITIALIZR:INITIALIZR-DEMO
 -- INITIALIZR:DATABASE
 create table Employee
 (
@@ -7,4 +7,4 @@ create table Employee
     Last_Name  varchar(128) not null
 )
 -- INITIALIZR:DATABASE
--- INITIALIZR-DEMO
+-- INITIALIZR:INITIALIZR-DEMO
