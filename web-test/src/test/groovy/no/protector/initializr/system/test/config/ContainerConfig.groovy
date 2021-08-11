@@ -72,9 +72,11 @@ class ContainerConfig {
                 .withNetwork(network)
                 .withNetworkAliases("protector-initializr")
                 .waitingFor(Wait.forHttp("/actuator/health").forPort(8391).forStatusCode(200))
+        //INITIALIZR:DATABASE
                 .withCopyFileToContainer(
                         MountableFile.forClasspathResource("db_write.properties"),
                         "/var/run/secrets/db_write")
+        //INITIALIZR:DATABASE
     }
 
     private static GenericContainer createBaseProtectorInitializrContainer() {
