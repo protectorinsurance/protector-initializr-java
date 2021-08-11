@@ -1,13 +1,20 @@
 dependencies {
     testImplementation project(':web')
     testImplementation project(':domain')
+
+    // Managed by spring-dependencies
+    testImplementation "org.springframework.boot:spring-boot-starter-web"
     testImplementation('org.springframework.boot:spring-boot-starter-test')
-    testImplementation 'org.testcontainers:spock'
     //INITIALIZR:DATABASE
-    testImplementation 'org.testcontainers:mssqlserver'
-    testImplementation 'org.dbunit:dbunit'
-    implementation 'org.flywaydb:flyway-core'
-    runtimeOnly "com.microsoft.sqlserver:mssql-jdbc:${mssqlJdbcVersion}"
+    testImplementation 'org.flywaydb:flyway-core'
+    runtimeOnly "com.microsoft.sqlserver:mssql-jdbc"
+    //INITIALIZR:DATABASE
+
+    // Sef-managed dependencies
+    testImplementation 'org.testcontainers:spock:1.16.0'
+    //INITIALIZR:DATABASE
+    testImplementation 'org.testcontainers:mssqlserver:1.16.0'
+    testImplementation 'org.dbunit:dbunit:2.7.2'
     //INITIALIZR:DATABASE
 }
 

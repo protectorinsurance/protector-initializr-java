@@ -1,4 +1,5 @@
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-data-jdbc:${springBootVersion}"
-    runtimeOnly "com.microsoft.sqlserver:mssql-jdbc:${mssqlJdbcVersion}"
+    // Managed by spring-dependencies
+    implementation "org.springframework.boot:spring-boot-starter-data-jdbc"
+    runtimeOnly "com.microsoft.sqlserver:mssql-jdbc"
 }

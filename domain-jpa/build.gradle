@@ -1,5 +1,6 @@
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
-    runtimeOnly "com.microsoft.sqlserver:mssql-jdbc:${mssqlJdbcVersion}"
+    // Managed by spring-dependencies
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    runtimeOnly "com.microsoft.sqlserver:mssql-jdbc"
     implementation 'org.flywaydb:flyway-core'
 }
