@@ -74,7 +74,10 @@ def delete_empty_dirs(path):
         for root, dirs, files in os.walk(path, topdown=False):
             can_delete = True
             for protected_path in protected_paths:
-                can_delete = not root.endswith(protected_path)
+                if not root.endswith(protected_path):
+                    continue
+                can_delete = False
+                break
             if can_delete and not files and not dirs:
                 os.rmdir(root)
                 has_deleted_directories = True
@@ -184,7 +187,7 @@ def set_persistence_framework():
         tags_to_clean.append("DATABASE")
         find_and_replace_in_files([", PersistenceConfig"], '', get_available_files())
     else:
-        protected_paths.append("flyway")
+        protected_paths.append(f"flyway{os.sep}migrations")
 
 
 def is_not_import_line(line):
