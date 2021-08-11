@@ -203,14 +203,24 @@ def clean_tag_content(tag):
             for line in lines:
                 if len([i for i in tags if i in line]) > 0:
                     write = not write
+                    continue
                 if write:
                     f.write(line)
 
 
 def clean_initializr_tags():
     _files = get_available_files()
-    find_and_remove_lines_containing('//INITIALIZR:', _files)
+    [find_and_remove_lines_containing(tag, _files) for tag in generate_initializr_tags('')]
 
+
+def clean_all_double_empty_lines():
+    _files = get_available_files()
+    for fpath in _files:
+        with open(fpath, encoding="utf-8") as f:
+            content = f.read()
+        content = re.sub(r'\n\s*\n', '\n\n', content)
+        with open(fpath, "w", encoding="utf-8") as f:
+            f.write(content)
 
 def validate():
     if ' ' in project_name:
@@ -249,11 +259,11 @@ find_and_replace_in_files(["initializrBaseUrl"], f"{titled_project_name_first_lo
 
 find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.SystemTest.Dockerfile"])
 
+print("Doing some house cleaning...")
 remove_unused_imports()
 clean_initializr_tags()
 delete_empty_files()
-# TODO: Clean double empty lines
-# TODO: Clean _all_ empty folders
 delete_empty_dirs('./')
+clean_all_double_empty_lines()
 
 print("Done! Remember to go through the edits and verify the changes :)")
