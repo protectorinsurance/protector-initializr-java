@@ -29,7 +29,7 @@ if not persistence_framework:
     persistence_framework = input("What persistence framework do you want? (none, jpa, jdbc)\n")
 
 if not args.clean:
-    args.clean = input("Do you want to remove demo/initializr files?(y/n)\n")
+    args.clean = input("Do you want to remove demo/initializr files?(y/n - y recommended)\n")
 
 tags_to_clean = []
 
@@ -213,7 +213,7 @@ def remove_unused_imports():
 
 
 def get_comment_prefixes():
-    return ["//", "-- ", "<!-- ", "# "]
+    return ["//", "-- ", "<!-- ", "# ", "[comment]: # ("]
 
 
 def get_initializer_prefix():
@@ -225,7 +225,7 @@ def is_one_of_tags_in_initializr_comment(tags, line):
     if not line_is_initializr_comment(initializer_prefixes, line):
         return False
     for prefix in initializer_prefixes:
-        line = line.replace(prefix, "").replace("-->", "")
+        line = line.replace(prefix, "").replace("-->", "").replace(")", "")
     for tag in tags:
         if tag in line:
             return True

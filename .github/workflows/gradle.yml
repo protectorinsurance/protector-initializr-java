@@ -25,6 +25,7 @@ jobs:
       - name: System tests
         run: ./gradlew :web-test:test -PsystemTest --info
 
+# INITIALIZR:INITIALIZR-DEMO
   init_script_sanity_checks:
     name: Init script sanity checks
     runs-on: ubuntu-latest
@@ -40,8 +41,6 @@ jobs:
         run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf jpa
       - name: Verifying that initializr related words has been remove
         uses: mattsb42/not-grep@master
-
-
 
   verify_persistence_framework_options:
     name: Verify persistence framework
@@ -69,3 +68,4 @@ jobs:
         run: chmod +x gradlew
       - name: Verify that applicaton still builds
         run: gradle clean build -PsystemTest
+# INITIALIZR:INITIALIZR-DEMO

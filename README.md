@@ -13,6 +13,8 @@ _Note: systems tests do not execute without the `systemTest` parameter. This is 
 
 Go to Application and run the main method. Intellij should pick it up.
 
+[comment]: # (INITIALIZR:INITIALIZR-DEMO)
+
 # Initializr
 
 ## Adapt this project
@@ -58,3 +60,5 @@ People can pick which persistence framework they want when executing the `init.p
 Flyway holds the SQL files when migrating. The reason it is a separate folder is in the scenario that people want to
 write applications that consume both kafka and hosts web services. These applications will share a database, and
 therefore both should have access to SQL files.
+
+[comment]: # (INITIALIZR:INITIALIZR-DEMO)
