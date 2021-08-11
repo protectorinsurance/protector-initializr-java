@@ -213,14 +213,18 @@ def get_comment_prefixes():
     return ["//", "-- ", "<!-- ", "# "]
 
 
+def get_initializer_prefix():
+    return [f"{prefix}INITIALIZR:" for prefix in get_comment_prefixes()]
+
+
 def generate_initializr_tags(tags):
-    comment_prefixes = get_comment_prefixes()
-    return [f"{prefix}INITIALIZR:{tag}" for prefix in comment_prefixes for tag in tags]
+    prefixes = get_initializer_prefix()
+    return [f"{prefix}{tag}" for prefix in prefixes for tag in tags]
 
 
 def should_delete_tag(tags, line):
-    for prefix in get_comment_prefixes():
-        line = line.strip(prefix)
+    for prefix in get_initializer_prefix():
+        line = line.strip(prefix).strip("-->")
     options = [tag.strip() for tag in line.split(",")]
     if len(options) == 1:
         return True
@@ -255,7 +259,7 @@ def clean_tag_content(tags):
 
 def clean_initializr_tags():
     _files = get_available_files()
-    [find_and_remove_lines_containing(tag, _files) for tag in generate_initializr_tags('')]
+    [find_and_remove_lines_containing(tag, _files) for tag in get_initializer_prefix()]
 
 
 def clean_all_double_empty_lines():
