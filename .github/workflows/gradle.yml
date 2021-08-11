@@ -37,7 +37,7 @@ jobs:
         run: pip install requests
 
       - name: Execute python script
-        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --pf jpa
+        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf jpa
       - name: Verifying that initializr related words has been remove
         uses: mattsb42/not-grep@master
 
@@ -64,7 +64,7 @@ jobs:
       - name: Installing dependencies
         run: pip install requests
       - name: Execute python script
-        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --pf ${{ matrix.run }}
+        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf ${{ matrix.run }}
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Verify that applicaton still builds

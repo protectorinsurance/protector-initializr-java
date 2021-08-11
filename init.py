@@ -10,6 +10,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--p', help='Project name (my-awesome-application)', default=None)
 parser.add_argument('--n', help='Namespace (no.protector.my.awesome.application)', default=None)
 parser.add_argument('--pf', help='Persistence framework (none, jpa, jdbc)', default=None)
+parser.add_argument('--clean', help='Removes all initializr demo implementations', default=None)
 
 args = parser.parse_args()
 
@@ -25,6 +26,21 @@ if not namespace:
 
 if not persistence_framework:
     persistence_framework = input("What persistence framework do you want? (none, jpa, jdbc)\n")
+
+if not args.clean:
+    args.clean = input("Do you want to remove demo/initializr files?(y/n)\n")
+
+tags_to_clean = []
+
+
+def parse_boolean_response(response):
+    if isinstance(response, bool):
+        return response
+    if response.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    if response.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    raise argparse.ArgumentTypeError('Boolean value expected.')
 
 
 def update_banner():
@@ -160,7 +176,7 @@ def set_persistence_framework():
         find_and_remove_lines_containing(folder_name, ['./settings.gradle'])
 
     if persistence_framework == "none":
-        clean_tag_content("DATABASE")
+        tags_to_clean.append("DATABASE")
         find_and_replace_in_files([", PersistenceConfig"], '', get_available_files())
 
 
@@ -186,15 +202,31 @@ def remove_unused_imports():
                     f.write(line)
 
 
-def generate_initializr_tags(tag):
-    comment_prefixes = ["//", "-- ", "<!-- ", "# "]
-    return [f"{prefix}INITIALIZR:{tag}" for prefix in comment_prefixes]
+def get_comment_prefixes():
+    return ["//", "-- ", "<!-- ", "# "]
 
 
-def clean_tag_content(tag):
-    tags = generate_initializr_tags(tag)
+def generate_initializr_tags(tags):
+    comment_prefixes = get_comment_prefixes()
+    return [f"{prefix}INITIALIZR:{tag}" for prefix in comment_prefixes for tag in tags]
+
+
+def should_delete_tag(tags, line):
+    for prefix in get_comment_prefixes():
+        line = line.strip(prefix)
+    options = [tag.strip() for tag in line.split(",")]
+    if len(options) == 1:
+        return True
+    return all(option in options for option in tags)
+
+
+def line_has_tag(initializer_tags, line):
+    return len([i for i in initializer_tags if i in line]) > 0
+
+
+def clean_tag_content(tags):
+    initializer_tags = generate_initializr_tags(tags)
     _files = get_available_files()
-    # TODO: Deal with XML and comment lists
     for fpath in _files:
         with open(fpath, encoding="utf-8") as f:
             lines = f.readlines()
@@ -203,7 +235,7 @@ def clean_tag_content(tag):
             write = True
             lines_to_write = []
             for line in lines:
-                if len([i for i in tags if i in line]) > 0:
+                if line_has_tag(initializer_tags, line) and should_delete_tag(tags, line):
                     write = not write
                     continue
                 if write:
@@ -239,6 +271,10 @@ def validate():
 
 
 validate()
+clean_initializr = parse_boolean_response(args.clean)
+
+if clean_initializr:
+    tags_to_clean.append("INITIALIZR-DEMO")
 
 print("Updating banner...")
 update_banner()
@@ -248,6 +284,8 @@ set_persistence_framework()
 
 print("Creating new namespace...")
 create_namespace()
+
+clean_tag_content(tags_to_clean)
 
 files = get_available_files()
 print("Replacing references to initializr...")
