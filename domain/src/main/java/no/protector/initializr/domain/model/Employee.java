@@ -1,16 +1,20 @@
+//INITIALIZR:INITIALIZR-DEMO
 package no.protector.initializr.domain.model;
 
+import org.springframework.data.annotation.Id;
+
 public class Employee {
-    private int employeeId;
+    @Id
+    private Integer id;
     private String firstName;
     private String lastName;
 
-    public int getEmployeeId() {
-        return employeeId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -29,3 +33,4 @@ public class Employee {
         this.lastName = lastName;
     }
 }
+//INITIALIZR:INITIALIZR-DEMO

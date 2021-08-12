@@ -5,8 +5,6 @@ name: Java CI with Gradle
 
 on:
   push:
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
@@ -27,10 +25,30 @@ jobs:
       - name: System tests
         run: ./gradlew :web-test:test -PsystemTest --info
 
-  verify_python_script:
-    name: Verify init.py
-    needs: build
+# INITIALIZR:INITIALIZR-DEMO
+  init_script_sanity_checks:
+    name: Init script sanity checks
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Installing dependencies
+        run: pip install requests
+
+      - name: Execute python script
+        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf jpa
+      - name: Verifying that initializr related words has been remove
+        uses: mattsb42/not-grep@master
+
+  verify_persistence_framework_options:
+    name: Verify persistence framework
+    needs: [ build, init_script_sanity_checks ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        run: [ 'none', 'jdbc', 'jpa' ]
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-buildx-action@v1
@@ -45,17 +63,9 @@ jobs:
       - name: Installing dependencies
         run: pip install requests
       - name: Execute python script
-        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app"
+        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf ${{ matrix.run }}
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Verify that applicaton still builds
         run: gradle clean build -PsystemTest
-
-  deploy:
-    name: Deploy to test
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Deploy
-        run: echo "hello world"
+# INITIALIZR:INITIALIZR-DEMO

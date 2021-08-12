@@ -4,13 +4,27 @@ plugins {
 
 dependencies {
     implementation project(':domain')
-    implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-    implementation "org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}"
-    implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
-    implementation "co.elastic.apm:apm-agent-api:${apmVersion}"
 
-    testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    // Managed by spring-dependencies
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-autoconfigure"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation 'org.apache.commons:commons-lang3'
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+
+    // Sef-managed dependencies
+    implementation "co.elastic.apm:apm-agent-api:${apmVersion}"
 }
+
+//INITIALIZR:DATABASE
+sourceSets {
+    main {
+        resources {
+            srcDirs += ["$rootDir/flyway"]
+        }
+    }
+}
+//INITIALIZR:DATABASE
 
 // APM config start
 configurations {

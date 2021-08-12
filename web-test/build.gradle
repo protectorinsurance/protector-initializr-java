@@ -1,13 +1,26 @@
 dependencies {
     testImplementation project(':web')
     testImplementation project(':domain')
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
-    testImplementation 'org.testcontainers:spock'
-}
 
+    // Managed by spring-dependencies
+    testImplementation "org.springframework.boot:spring-boot-starter-web"
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    //INITIALIZR:DATABASE
+    testImplementation 'org.flywaydb:flyway-core'
+    runtimeOnly "com.microsoft.sqlserver:mssql-jdbc"
+    //INITIALIZR:DATABASE
+
+    // Sef-managed dependencies
+    testImplementation 'org.testcontainers:spock:1.16.0'
+    //INITIALIZR:DATABASE
+    testImplementation 'org.testcontainers:mssqlserver:1.16.0'
+    testImplementation 'org.dbunit:dbunit:2.7.2'
+    //INITIALIZR:DATABASE
+}
 
 test {
     onlyIf {
         project.hasProperty('systemTest')
     }
 }
+

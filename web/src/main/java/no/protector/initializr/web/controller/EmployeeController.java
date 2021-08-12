@@ -1,3 +1,4 @@
+//INITIALIZR:INITIALIZR-DEMO
 package no.protector.initializr.web.controller;
 
 import no.protector.initializr.domain.model.Employee;
@@ -22,3 +23,4 @@ public class EmployeeController {
         return employeeService.getEmployee(id);
     }
 }
+//INITIALIZR:INITIALIZR-DEMO
