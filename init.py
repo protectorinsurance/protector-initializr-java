@@ -133,8 +133,9 @@ def get_available_files():
 
 def find_and_replace_in_files(to_replace_list, replacement, fpaths):
     for fpath in fpaths:
-        with open(fpath, encoding="utf-8") as f:
-            s = f.read()
+        s = read(fpath)
+        if not s:
+            continue
         for to_replace in to_replace_list:
             s = re.sub(to_replace, replacement, s, flags=re.IGNORECASE)
         with open(fpath, "w", encoding="utf-8") as f:
@@ -143,8 +144,9 @@ def find_and_replace_in_files(to_replace_list, replacement, fpaths):
 
 def find_and_remove_lines_containing(search_term, fpaths):
     for fpath in fpaths:
-        with open(fpath, encoding="utf-8") as f:
-            lines = f.readlines()
+        lines = read_lines(fpath)
+        if not lines:
+            continue
         with open(fpath, "w", encoding="utf-8") as f:
             for line in lines:
                 if search_term not in line:
@@ -155,9 +157,9 @@ def delete_empty_files():
     _files = get_available_files()
     files_to_delete = []
     for _file in _files:
-        with open(_file, encoding="utf-8") as f:
-            if len(f.read()) == 0:
-                files_to_delete.append(_file)
+        content = read(_file)
+        if content and len(content) == 0:
+            files_to_delete.append(_file)
     [os.remove(f) for f in files_to_delete]
 
 
@@ -202,11 +204,28 @@ def can_write(current_line, lines):
     return [line for line in lines if import_type in line and line != current_line]
 
 
+def read_lines(fpath):
+    try:
+        with open(fpath, encoding="utf-8") as f:
+            return f.readlines()
+    except:
+        return None
+
+
+def read(fpath):
+    try:
+        with open(fpath, encoding="utf-8") as f:
+            return f.read()
+    except:
+        return None
+
+
 def remove_unused_imports():
     _files = get_available_files()
     for fpath in _files:
-        with open(fpath, encoding="utf-8") as f:
-            lines = f.readlines()
+        lines = read_lines(fpath)
+        if not lines:
+            continue
         with open(fpath, "w", encoding="utf-8") as f:
             for line in lines:
                 if can_write(line, lines):
@@ -246,8 +265,9 @@ def should_write_xml(lines_to_write):
 def clean_tag_content(tags):
     _files = get_available_files()
     for fpath in _files:
-        with open(fpath, encoding="utf-8") as f:
-            lines = f.readlines()
+        lines = read_lines(fpath)
+        if not lines:
+            continue
         with open(fpath, "w", encoding="utf-8") as f:
             is_xml = fpath.endswith(".xml")
             write = True
@@ -279,8 +299,9 @@ def clean_initializr_tags():
 def clean_all_double_empty_lines():
     _files = get_available_files()
     for fpath in _files:
-        with open(fpath, encoding="utf-8") as f:
-            content = f.read()
+        content = read(fpath)
+        if not content:
+            continue
         content = re.sub(r'\n\s*\n', '\n\n', content)
         with open(fpath, "w", encoding="utf-8") as f:
             f.write(content)
