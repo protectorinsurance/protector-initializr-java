@@ -18,5 +18,7 @@ spring:
 management:
   server.port: 8391
 
+userServiceUrl: https://logintest.protectorforsikring.no
+
 server:
   port: 8080

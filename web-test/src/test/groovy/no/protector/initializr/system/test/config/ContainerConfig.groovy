@@ -1,11 +1,13 @@
 package no.protector.initializr.system.test.config
 
 import no.protector.initializr.system.test.provider.FlywayProvider
+import org.mockserver.client.MockServerClient
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.MSSQLServerContainer
+import org.testcontainers.containers.MockServerContainer
 import org.testcontainers.containers.Network
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.images.builder.ImageFromDockerfile
@@ -20,12 +22,19 @@ class ContainerConfig {
 
     private static Network network
     private static GenericContainer protectorInitializrContainer
+    private static MockServerContainer mockServer
     //INITIALIZR:DATABASE
     private static MSSQLServerContainer mssqlServerContainer
     //INITIALIZR:DATABASE
 
     @Bean
     GenericContainer protectorInitializrContainer() { protectorInitializrContainer }
+
+    @Bean
+    MockServerClient mockServerClient() {
+        new MockServerClient(mockServer.host, mockServer.serverPort)
+    }
+
     //INITIALIZR:DATABASE
     @Bean
     MSSQLServerContainer mssqlServerContainer() { mssqlServerContainer }
@@ -36,10 +45,12 @@ class ContainerConfig {
         //INITIALIZR:DATABASE
         mssqlServerContainer = createMSSQLServerContainer(network)
         //INITIALIZR:DATABASE
+        mockServer = createMockServer(network)
         startContainers()
     }
 
     private static startContainers() {
+        mockServer.start()
         //INITIALIZR:DATABASE
         mssqlServerContainer.start()
         def flyway = FlywayProvider.build(mssqlServerContainer)
@@ -66,11 +77,19 @@ class ContainerConfig {
     }
     //INITIALIZR:DATABASE
 
+    private static MockServerContainer createMockServer(Network network) {
+        new MockServerContainer(DockerImageName.parse("jamesdbloom/mockserver")
+                .withTag("mockserver-5.11.2"))
+                .withNetwork(network)
+                .withNetworkAliases("mockserver")
+    }
+
     private static GenericContainer createProtectorInitializrContainer(Network network) {
         createBaseProtectorInitializrContainer()
                 .withExposedPorts(8080, 8391)
                 .withNetwork(network)
                 .withNetworkAliases("protector-initializr")
+                .withEnv("spring_profiles_active", "system-test")
                 .waitingFor(Wait.forHttp("/actuator/health").forPort(8391).forStatusCode(200))
         //INITIALIZR:DATABASE
                 .withCopyFileToContainer(

@@ -4,6 +4,14 @@ updates:
   - package-ecosystem: "gradle"
     directory: "/"
     target-branch: "main"
+    reviewers:
+      - "atomfinger"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    reviewers:
+      - "atomfinger"
     schedule:
       interval: "daily"
 # INITIALIZR:INITIALIZR-DEMO
