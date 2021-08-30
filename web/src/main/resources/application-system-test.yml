@@ -1,2 +1,2 @@
-userservice:
-  url: http://mockserver:1080
+integration:
+  userServiceUrl: http://mockserver:1080

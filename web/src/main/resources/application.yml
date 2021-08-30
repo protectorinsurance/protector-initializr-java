@@ -18,8 +18,8 @@ spring:
 management:
   server.port: 8391
 
-userservice:
-  url: http://userservice:5002
+integration:
+  userServiceUrl: http://userservice:5002
 
 server:
   port: 8080

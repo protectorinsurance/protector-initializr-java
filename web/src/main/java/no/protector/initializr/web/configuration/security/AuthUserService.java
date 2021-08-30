@@ -1,5 +1,6 @@
 package no.protector.initializr.web.configuration.security;
 
+import no.protector.initializr.web.configuration.IntegrationEndpoints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -22,8 +23,8 @@ public class AuthUserService {
     private final String userServiceBaseUrl;
     private final RestTemplate restTemplate;
 
-    public AuthUserService(String userServiceBaseUrl) {
-        this.userServiceBaseUrl = userServiceBaseUrl + "/api/users";
+    public AuthUserService(IntegrationEndpoints integrationEndpoints) {
+        this.userServiceBaseUrl = integrationEndpoints.getUserServiceUrl() + "/api/users";
         this.restTemplate = new RestTemplate();
         this.restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
     }
