@@ -12,6 +12,8 @@ dependencies {
 
     // Sef-managed dependencies
     testImplementation 'org.testcontainers:spock:1.16.0'
+    testImplementation "org.testcontainers:mockserver:1.16.0"
+    testImplementation 'org.mock-server:mockserver-client-java:5.11.2'
     //INITIALIZR:DATABASE
     testImplementation 'org.testcontainers:mssqlserver:1.16.0'
     testImplementation 'org.dbunit:dbunit:2.7.2'

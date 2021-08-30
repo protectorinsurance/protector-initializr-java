@@ -9,11 +9,14 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-autoconfigure"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.apache.commons:commons-lang3'
+
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 
     // Sef-managed dependencies
     implementation "co.elastic.apm:apm-agent-api:${apmVersion}"
+    implementation 'net.logstash.logback:logstash-logback-encoder:6.6'
 }
 
 //INITIALIZR:DATABASE
