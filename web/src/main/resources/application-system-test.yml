@@ -1,1 +1,2 @@
-userServiceUrl: http://mockserver:1080
+userservice:
+  url: http://mockserver:1080

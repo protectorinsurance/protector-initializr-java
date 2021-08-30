@@ -52,12 +52,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         setSecurityContext(authUser, permissions, jwtToken);
     }
 
-    private Set<GrantedAuthority> getUserAuthorities(final AuthUser user) {
+    private static Set<GrantedAuthority> getUserAuthorities(final AuthUser user) {
         return user.applications()
                 .stream()
                 .map(AuthUserApplication::roles)
                 .flatMap(Collection::stream)
-                .flatMap(SecurityRoles::expandRoles)
                 .map(r -> "ROLE_" + r)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
