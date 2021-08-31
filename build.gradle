@@ -19,6 +19,9 @@ bootJar {
 allprojects {
     repositories {
         mavenCentral()
+        //INITIALIZR:KAFKA
+        maven { url "https://packages.confluent.io/maven/" }
+        //INITIALIZR:KAFKA
     }
 }
 

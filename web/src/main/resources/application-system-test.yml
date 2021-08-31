@@ -1,2 +1,6 @@
 integration:
   userServiceUrl: http://mockserver:1080
+
+spring:
+  kafka:
+    bootstrap-servers: "kafka:9092"

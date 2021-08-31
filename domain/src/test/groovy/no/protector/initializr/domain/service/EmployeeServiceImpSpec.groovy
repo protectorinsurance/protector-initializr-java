@@ -4,13 +4,15 @@ package no.protector.initializr.domain.service
 import groovy.transform.builder.Builder
 import groovy.transform.builder.ExternalStrategy
 import no.protector.initializr.domain.model.Employee
+import no.protector.initializr.domain.producer.EmployeeKafkaProducer
 import no.protector.initializr.domain.repository.EmployeeRepository
 import spock.lang.Specification
 
 class EmployeeServiceImpSpec extends Specification {
 
     def repository = Mock(EmployeeRepository)
-    def service = new EmployeeServiceImpl(repository)
+    def producer = Mock(EmployeeKafkaProducer)
+    def service = new EmployeeServiceImpl(repository, producer)
 
     @Builder(builderStrategy = ExternalStrategy, forClass = Employee)
     class EmployeeBuilder {}

@@ -18,6 +18,11 @@ dependencies {
     testImplementation 'org.testcontainers:mssqlserver:1.16.0'
     testImplementation 'org.dbunit:dbunit:2.7.2'
     //INITIALIZR:DATABASE
+    //INITIALIZR:KAFKA
+    testImplementation "org.testcontainers:kafka:1.16.0"
+    testImplementation 'org.springframework.kafka:spring-kafka:2.7.6'
+    testImplementation 'org.springframework.kafka:spring-kafka-test:2.7.6'
+    //INITIALIZR:KAFKA
 }
 
 test {

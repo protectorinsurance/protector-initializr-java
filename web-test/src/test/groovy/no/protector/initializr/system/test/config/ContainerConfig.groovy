@@ -1,14 +1,18 @@
 package no.protector.initializr.system.test.config
 
+
 import no.protector.initializr.system.test.provider.FlywayProvider
+import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.common.serialization.StringDeserializer
 import org.mockserver.client.MockServerClient
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
-import org.testcontainers.containers.GenericContainer
-import org.testcontainers.containers.MSSQLServerContainer
-import org.testcontainers.containers.MockServerContainer
-import org.testcontainers.containers.Network
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
+import org.springframework.kafka.core.ConsumerFactory
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory
+import org.springframework.kafka.support.serializer.JsonDeserializer
+import org.testcontainers.containers.*
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.images.builder.ImageFromDockerfile
 import org.testcontainers.utility.DockerImageName
@@ -26,6 +30,9 @@ class ContainerConfig {
     //INITIALIZR:DATABASE
     private static MSSQLServerContainer mssqlServerContainer
     //INITIALIZR:DATABASE
+    //INITIALIZR:KAFKA
+    private static KafkaContainer kafkaContainer
+    //INITIALIZR:KAFKA
 
     @Bean
     GenericContainer protectorInitializrContainer() { protectorInitializrContainer }
@@ -45,20 +52,37 @@ class ContainerConfig {
         //INITIALIZR:DATABASE
         mssqlServerContainer = createMSSQLServerContainer(network)
         //INITIALIZR:DATABASE
+        //INITIALIZR:KAFKA
+        kafkaContainer = createKafkaContainer(network)
+        //INITIALIZR:KAFKA
         mockServer = createMockServer(network)
         startContainers()
     }
 
     private static startContainers() {
         mockServer.start()
+
+        //INITIALIZR:KAFKA
+        kafkaContainer.start()
+        //INITIALIZR:KAFKA
+
         //INITIALIZR:DATABASE
         mssqlServerContainer.start()
         def flyway = FlywayProvider.build(mssqlServerContainer)
         flyway.clean()
         flyway.migrate()
         //INITIALIZR:DATABASE
+
         protectorInitializrContainer.start()
     }
+
+    //INITIALIZR:KAFKA
+    private static KafkaContainer createKafkaContainer(Network network) {
+        new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:5.4.3"))
+                .withNetwork(network)
+                .withNetworkAliases("kafka")
+    }
+    //INITIALIZR:KAFKA
 
     //INITIALIZR:DATABASE
     private static MSSQLServerContainer createMSSQLServerContainer(Network network) {
@@ -103,7 +127,27 @@ class ContainerConfig {
                 .withDockerfile(Path.of("../Web.SystemTest.Dockerfile")))
     }
 
-    static GenericContainer getProtectorInitializerContainer() {
-        protectorInitializrContainer
+    @Bean
+    ConcurrentKafkaListenerContainerFactory<Integer, String> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<Integer, String> factory = new ConcurrentKafkaListenerContainerFactory<>()
+        factory.setConsumerFactory(kafkaConsumer())
+        factory
+    }
+
+
+    @Bean
+    ConsumerFactory<Integer, String> kafkaConsumer() {
+        new DefaultKafkaConsumerFactory<Integer, String>(consumerConfigs())
+    }
+
+    @Bean
+    Map<String, Object> consumerConfigs() {
+        Map.of(
+                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaContainer.getBootstrapServers(),
+                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest",
+                ConsumerConfig.GROUP_ID_CONFIG, "initializr",
+                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
+                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class
+        )
     }
 }
