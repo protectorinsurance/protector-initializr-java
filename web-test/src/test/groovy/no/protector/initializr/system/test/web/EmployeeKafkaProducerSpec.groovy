@@ -2,7 +2,6 @@
 //INITIALIZR:KAFKA
 package no.protector.initializr.system.test.web
 
-import groovy.json.JsonSlurper
 import no.protector.initializr.domain.model.Employee
 import no.protector.initializr.system.test.AbstractSystemSpec
 import no.protector.initializr.system.test.RequestService
@@ -37,11 +36,9 @@ class EmployeeKafkaProducerSpec extends AbstractSystemSpec {
         when:
         requestService.exchange(new URI("$employeeUri/1"), HttpMethod.GET, Employee)
         consumer.latch.await(1000, TimeUnit.MILLISECONDS)
-        def employee = new JsonSlurper().parseText(consumer.value)
         then:
-        employee.id == 1
-        employee.firstName == "Colter"
-        employee.lastName == "Wall"
+        //.replaceAll("[^a-zA-Z0-9 ]+","")
+        consumer.value == 'Wall'
     }
 }
 //INITIALIZR:KAFKA

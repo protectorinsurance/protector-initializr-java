@@ -4,3 +4,11 @@ integration:
 spring:
   kafka:
     bootstrap-servers: "kafka:9092"
+    properties:
+      schema.registry.url: http://schema-registry:8081
+      # schema.registry.url: http://mockserver:1080/schema-registry
+      sasl:
+        mechanism:
+        jaas.config:
+      security:
+        protocol: PLAINTEXT

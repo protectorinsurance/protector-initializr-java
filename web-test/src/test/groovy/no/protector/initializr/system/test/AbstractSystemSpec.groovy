@@ -7,11 +7,14 @@ import org.dbunit.JdbcDatabaseTester
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder
 import org.dbunit.ext.mssql.InsertIdentityOperation
 import org.dbunit.operation.CompositeOperation
+import org.mockserver.client.MockServerClient
+import org.spockframework.spring.EnableSharedInjection
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.test.context.ContextConfiguration
 import org.testcontainers.spock.Testcontainers
+import spock.lang.Shared
 import spock.lang.Specification
 
 import java.sql.Connection
@@ -19,15 +22,27 @@ import java.sql.Connection
 @EnableKafka
 @Testcontainers
 @SpringBootTest
+@EnableSharedInjection
 @ContextConfiguration(classes = [ContainerConfig, EndpointConfig, PersistenceConfig])
 abstract class AbstractSystemSpec extends Specification {
-//INITIALIZR:DATABASE
+
+    //INITIALIZR:DATABASE
     @Autowired
     JdbcDatabaseTester databaseTester
 
     @Autowired
     Connection connection
+    //INITIALIZR:DATABASE
 
+    @Shared
+    @Autowired
+    private MockServerClient mockServerClient
+
+    def setupSpec() {
+        mockServerClient.reset()
+    }
+
+//INITIALIZR:DATABASE
     def cleanAndInsertDataset(String dataset) {
         cleanAndInsertDatasets(dataset)
     }

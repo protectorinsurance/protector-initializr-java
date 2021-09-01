@@ -13,15 +13,16 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class EmployeeKafkaProducer {
     private static final Logger LOG = LoggerFactory.getLogger(EmployeeKafkaProducer.class);
-    private final KafkaTemplate<String, Employee> employeeKafkaTemplate;
+    private final KafkaTemplate<Integer, String> employeeKafkaTemplate;
 
-    public EmployeeKafkaProducer(KafkaTemplate<String, Employee> employeeKafkaTemplate) {
+    public EmployeeKafkaProducer(KafkaTemplate<Integer, String> employeeKafkaTemplate) {
         this.employeeKafkaTemplate = employeeKafkaTemplate;
     }
 
     public void employeeRead(Employee employee) {
         try {
-            employeeKafkaTemplate.send("initializr-topic", employee).get();
+            employeeKafkaTemplate.send("employee-read", employee.getId(), employee.getLastName()).get();
+
         } catch (ExecutionException e) {
             LOG.error("Could not send message", e);
         } catch (InterruptedException e) {

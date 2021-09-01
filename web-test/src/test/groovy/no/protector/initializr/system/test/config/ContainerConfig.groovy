@@ -1,17 +1,10 @@
 package no.protector.initializr.system.test.config
 
-
 import no.protector.initializr.system.test.provider.FlywayProvider
-import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.kafka.common.serialization.StringDeserializer
 import org.mockserver.client.MockServerClient
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
-import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
-import org.springframework.kafka.core.ConsumerFactory
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory
-import org.springframework.kafka.support.serializer.JsonDeserializer
 import org.testcontainers.containers.*
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.images.builder.ImageFromDockerfile
@@ -32,10 +25,19 @@ class ContainerConfig {
     //INITIALIZR:DATABASE
     //INITIALIZR:KAFKA
     private static KafkaContainer kafkaContainer
+    private static GenericContainer schemaRegistryContainer
     //INITIALIZR:KAFKA
 
-    @Bean
+    @Bean(name = "protectorInitializrContainer")
     GenericContainer protectorInitializrContainer() { protectorInitializrContainer }
+
+    //INITIALIZR:KAFKA
+    @Bean("schemaRegistryContainer")
+    GenericContainer schemaRegistryContainer() { schemaRegistryContainer }
+
+    @Bean("kafkaContainer")
+    KafkaContainer kafkaContainer() { kafkaContainer }
+    //INITIALIZR:KAFKA
 
     @Bean
     MockServerClient mockServerClient() {
@@ -46,6 +48,7 @@ class ContainerConfig {
     @Bean
     MSSQLServerContainer mssqlServerContainer() { mssqlServerContainer }
     //INITIALIZR:DATABASE
+
     static {
         network = Network.newNetwork()
         protectorInitializrContainer = createProtectorInitializrContainer(network)
@@ -54,6 +57,7 @@ class ContainerConfig {
         //INITIALIZR:DATABASE
         //INITIALIZR:KAFKA
         kafkaContainer = createKafkaContainer(network)
+        schemaRegistryContainer = createSchemaRegistryContainer(network)
         //INITIALIZR:KAFKA
         mockServer = createMockServer(network)
         startContainers()
@@ -61,26 +65,35 @@ class ContainerConfig {
 
     private static startContainers() {
         mockServer.start()
-
         //INITIALIZR:KAFKA
         kafkaContainer.start()
+        schemaRegistryContainer.start()
         //INITIALIZR:KAFKA
-
         //INITIALIZR:DATABASE
         mssqlServerContainer.start()
         def flyway = FlywayProvider.build(mssqlServerContainer)
         flyway.clean()
         flyway.migrate()
         //INITIALIZR:DATABASE
-
         protectorInitializrContainer.start()
     }
 
     //INITIALIZR:KAFKA
     private static KafkaContainer createKafkaContainer(Network network) {
-        new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:5.4.3"))
+        new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"))
                 .withNetwork(network)
                 .withNetworkAliases("kafka")
+    }
+
+    private static GenericContainer createSchemaRegistryContainer(Network network) {
+        new GenericContainer(DockerImageName.parse("confluentinc/cp-schema-registry:latest"))
+                .withNetwork(network)
+                .withNetworkAliases("schema-registry")
+                .withEnv("SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS", "kafka:9092")
+                .withEnv("SCHEMA_REGISTRY_HOST_NAME", "localhost")
+                .withEnv("SCHEMA_REGISTRY_DEBUG", "true")
+                .waitingFor(Wait.forHttp("/subjects").forPort(8081).forStatusCode(200))
+                .withExposedPorts(8081)
     }
     //INITIALIZR:KAFKA
 
@@ -125,29 +138,5 @@ class ContainerConfig {
     private static GenericContainer createBaseProtectorInitializrContainer() {
         new GenericContainer(new ImageFromDockerfile()
                 .withDockerfile(Path.of("../Web.SystemTest.Dockerfile")))
-    }
-
-    @Bean
-    ConcurrentKafkaListenerContainerFactory<Integer, String> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<Integer, String> factory = new ConcurrentKafkaListenerContainerFactory<>()
-        factory.setConsumerFactory(kafkaConsumer())
-        factory
-    }
-
-
-    @Bean
-    ConsumerFactory<Integer, String> kafkaConsumer() {
-        new DefaultKafkaConsumerFactory<Integer, String>(consumerConfigs())
-    }
-
-    @Bean
-    Map<String, Object> consumerConfigs() {
-        Map.of(
-                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaContainer.getBootstrapServers(),
-                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest",
-                ConsumerConfig.GROUP_ID_CONFIG, "initializr",
-                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
-                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class
-        )
     }
 }

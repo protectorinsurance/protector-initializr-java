@@ -3,6 +3,7 @@ package no.protector.initializr.system.test.config
 
 import org.dbunit.JdbcDatabaseTester
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.testcontainers.containers.MSSQLServerContainer
@@ -14,6 +15,7 @@ import java.sql.DriverManager
 class PersistenceConfig {
 
     @Autowired
+    @Qualifier("mssqlServerContainer")
     MSSQLServerContainer mssqlServerContainer
 
     private mssqlDriver = "com.microsoft.sqlserver.jdbc.SQLServerDriver"

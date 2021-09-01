@@ -1,4 +1,11 @@
 dependencies {
     // Managed by spring-dependencies
     implementation 'org.springframework.boot:spring-boot-starter'
+    //INITIALIZR:KAFKA
+    implementation 'org.springframework.kafka:spring-kafka'
+
+    // Sef-managed dependencies
+    implementation 'org.apache.avro:avro:1.10.2'
+    implementation 'io.confluent:kafka-avro-serializer:6.2.0'
+    //INITIALIZR:KAFKA
 }

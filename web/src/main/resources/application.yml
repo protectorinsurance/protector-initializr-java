@@ -15,39 +15,6 @@ spring:
     baseline-on-migrate: true
     # INITIALIZR:DATABASE
   # INITIALIZR:KAFKA
-  cloud:
-    stream:
-      default:
-        producer:
-          useNativeEncoding: true
-      bindings:
-        output:
-          # TODO: HOW TO EDIT CONFIG? WHAT ARE SENSIBLE DEFAULTS?
-          destination: employee-saved
-          content-type: application/*+avro
-      kafka:
-        binder:
-          brokers: ${broker-urls}
-          producer-properties:
-            key.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-            value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-            schema.registry.url: ${schema-registry-urls}
-            basic.auth.credentials.source: USER_INFO
-            basic.auth.user.info: ${kafka.username}:${kafka.password}
-          configuration:
-            security.protocol: SASL_PLAINTEXT
-            sasl.mechanism: OAUTHBEARER
-            sasl.login.callback.handler.class: io.confluent.kafka.clients.plugins.auth.token.TokenUserLoginCallbackHandler
-            sasl.jaas.config: org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required username=${kafka.username} password=${kafka.password} metadataServerUrls="${metadata-server-urls}";
-        streams:
-          binder:
-            configuration:
-              security.protocol: SASL_PLAINTEXT
-              sasl.mechanism: OAUTHBEARER
-              sasl.login.callback.handler.class: io.confluent.kafka.clients.plugins.auth.token.TokenUserLoginCallbackHandler
-              sasl.jaas.config: org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required username=${kafka.username} password=${kafka.password} metadataServerUrls="${metadata-server-urls}";
-        schema-registry-client:
-          cached: false
   kafka:
     bootstrap-servers: pfsvnocont01:9095,pfsvnocont02:9095,pfsvnocont03:9095
     streams:
@@ -64,14 +31,6 @@ spring:
       security:
         protocol: SASL_PLAINTEXT
   # INITIALIZR:KAFKA
-
-# INITIALIZR:KAFKA
-schema-registry-urls: http://pfsvnocont01:8081,http://pfsvnocont02:8081,http://pfsvnocont03:8081
-metadata-server-urls: http://pfsvnocont01:8090,http://pfsvnocont02:8090,http://pfsvnocont03:8090
-broker-urls: pfsvnocont01:9094,pfsvnocont02:9094,pfsvnocont03:9094
-topic-name: ${user.name}-employee_saved
-application-id: ${user.name}-initializr-dev
-# INITIALIZR:KAFKA
 
 management:
   server.port: 8391
