@@ -44,7 +44,7 @@ jobs:
         run: pip install requests
 
       - name: Execute python script
-        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf jpa --kafka_producer "false"
+        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf jpa --kafka_producer "true"
 
   verify_persistence_framework_options:
     name: Verify persistence framework
@@ -99,7 +99,13 @@ jobs:
       - name: Installing dependencies
         run: pip install requests
       - name: Execute python script
-        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "${{ matrix.clean }}" --pf "${{ matrix.database }}" --kafka_producer "${{ matrix.kafka }}"
+        run: >
+        python init.py
+        --p "my-awesome-app"
+        --n "no.protector.my.awesome.app"
+        --clean "${{ matrix.clean }}"
+        --pf "${{ matrix.database }}"
+        --kafka_producer "${{ matrix.kafka }}"
       - name: Verify that applicaton still builds
         run: gradle build ${{ matrix.systemTestArgument }}
 # INITIALIZR:INITIALIZR-DEMO
