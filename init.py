@@ -327,7 +327,7 @@ kafka_producer = parse_boolean_response(args.kafka_producer)
 if clean_initializr:
     tags_to_clean.append("INITIALIZR-DEMO")
 
-if kafka_producer:
+if not kafka_producer:
     tags_to_clean.append("KAFKA-PRODUCER")
 
 print("Updating banner...")
