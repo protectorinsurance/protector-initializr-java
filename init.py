@@ -318,11 +318,14 @@ def validate():
         raise Exception("Namespace cannot contain spaces")
     if persistence_framework not in ["none", "jdbc", "jpa"]:
         raise Exception("You can only pick between none, jdbc and jpa")
+    if not kafka_producer and not clean_initializr:
+        raise Exception("Having demo code without kafka is currently too finicky. Not supported")
 
 
-validate()
 clean_initializr = parse_boolean_response(args.clean)
 kafka_producer = parse_boolean_response(args.kafka_producer)
+
+validate()
 
 if clean_initializr:
     tags_to_clean.append("INITIALIZR-DEMO")
