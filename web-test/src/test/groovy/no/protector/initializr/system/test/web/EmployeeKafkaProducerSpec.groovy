@@ -1,5 +1,5 @@
 //INITIALIZR:INITIALIZR-DEMO
-//INITIALIZR:KAFKA
+//INITIALIZR:KAFKA-PRODUCER
 package no.protector.initializr.system.test.web
 
 import no.protector.initializr.domain.model.Employee
@@ -41,5 +41,5 @@ class EmployeeKafkaProducerSpec extends AbstractSystemSpec {
         consumer.value == 'Wall'
     }
 }
-//INITIALIZR:KAFKA
+//INITIALIZR:KAFKA-PRODUCER
 //INITIALIZR:INITIALIZR-DEMO

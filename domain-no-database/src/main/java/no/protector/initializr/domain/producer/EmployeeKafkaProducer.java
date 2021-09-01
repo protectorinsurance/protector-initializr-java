@@ -1,5 +1,5 @@
 //INITIALIZR:INITIALIZR-DEMO
-//INITIALIZR:KAFKA
+//INITIALIZR:KAFKA-PRODUCER
 package no.protector.initializr.domain.producer;
 
 import no.protector.initializr.domain.model.Employee;
@@ -31,5 +31,5 @@ public class EmployeeKafkaProducer {
         }
     }
 }
-//INITIALIZR:KAFKA
+//INITIALIZR:KAFKA-PRODUCER
 //INITIALIZR:INITIALIZR-DEMO

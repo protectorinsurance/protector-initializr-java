@@ -11,6 +11,7 @@ parser.add_argument('--p', help='Project name (my-awesome-application)', default
 parser.add_argument('--n', help='Namespace (no.protector.my.awesome.application)', default=None)
 parser.add_argument('--pf', help='Persistence framework (none, jpa, jdbc)', default=None)
 parser.add_argument('--clean', help='Removes all initializr demo implementations', default=None)
+parser.add_argument('--kafka_producer', help='Do you want Kafka Producer?', default=None)
 
 args = parser.parse_args()
 
@@ -27,6 +28,9 @@ if not namespace:
 
 if not persistence_framework:
     persistence_framework = input("What persistence framework do you want? (none, jpa, jdbc)\n")
+
+if not args.kafka_producer:
+    args.kafka_producer = input("Do you want Kafka producers? (y/n)\n")
 
 if not args.clean:
     args.clean = input("Do you want to remove demo/initializr files?(y/n - y recommended)\n")
@@ -318,9 +322,13 @@ def validate():
 
 validate()
 clean_initializr = parse_boolean_response(args.clean)
+kafka_producer = parse_boolean_response(args.kafka_producer)
 
 if clean_initializr:
     tags_to_clean.append("INITIALIZR-DEMO")
+
+if kafka_producer:
+    tags_to_clean.append("KAFKA-PRODUCER")
 
 print("Updating banner...")
 update_banner()

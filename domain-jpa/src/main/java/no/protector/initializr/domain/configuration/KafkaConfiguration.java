@@ -1,4 +1,4 @@
-//INITIALIZR:KAFKA
+//INITIALIZR:KAFKA-PRODUCER
 package no.protector.initializr.domain.configuration;
 
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
@@ -68,4 +68,4 @@ public class KafkaConfiguration {
     }
     //INITIALIZR:INITIALIZR-DEMO
 }
-//INITIALIZR:KAFKA
+//INITIALIZR:KAFKA-PRODUCER

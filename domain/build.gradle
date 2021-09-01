@@ -1,15 +1,15 @@
 dependencies {
     // Managed by spring-dependencies
     implementation "org.springframework.boot:spring-boot-starter-data-jdbc"
-    //INITIALIZR:KAFKA
+    //INITIALIZR:KAFKA-PRODUCER
     implementation 'org.springframework.kafka:spring-kafka'
-    //INITIALIZR:KAFKA
+    //INITIALIZR:KAFKA-PRODUCER
 
     runtimeOnly "com.microsoft.sqlserver:mssql-jdbc"
 
-    //INITIALIZR:KAFKA
+    //INITIALIZR:KAFKA-PRODUCER
     // Sef-managed dependencies
     implementation 'org.apache.avro:avro:1.10.2'
     implementation 'io.confluent:kafka-avro-serializer:6.2.0'
-    //INITIALIZR:KAFKA
+    //INITIALIZR:KAFKA-PRODUCER
 }

@@ -1,4 +1,4 @@
-//INITIALIZR:KAFKA
+//INITIALIZR:KAFKA-PRODUCER
 package no.protector.initializr.system.test.config
 
 import io.confluent.kafka.serializers.KafkaAvroDeserializer
@@ -59,4 +59,4 @@ class KafkaConfig {
         )
     }
 }
-//INITIALIZR:KAFKA
+//INITIALIZR:KAFKA-PRODUCER

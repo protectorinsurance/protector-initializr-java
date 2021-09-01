@@ -1,4 +1,4 @@
-//INITIALIZR:KAFKA
+//INITIALIZR:KAFKA-PRODUCER
 package no.protector.initializr.system.test.kafka
 
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -53,4 +53,4 @@ class KafkaTestConsumer {
         latch.countDown()
     }
 }
-//INITIALIZR:KAFKA
+//INITIALIZR:KAFKA-PRODUCER

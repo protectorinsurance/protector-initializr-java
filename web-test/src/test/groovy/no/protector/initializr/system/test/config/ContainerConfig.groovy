@@ -23,21 +23,21 @@ class ContainerConfig {
     //INITIALIZR:DATABASE
     private static MSSQLServerContainer mssqlServerContainer
     //INITIALIZR:DATABASE
-    //INITIALIZR:KAFKA
+    //INITIALIZR:KAFKA-PRODUCER
     private static KafkaContainer kafkaContainer
     private static GenericContainer schemaRegistryContainer
-    //INITIALIZR:KAFKA
+    //INITIALIZR:KAFKA-PRODUCER
 
     @Bean(name = "protectorInitializrContainer")
     GenericContainer protectorInitializrContainer() { protectorInitializrContainer }
 
-    //INITIALIZR:KAFKA
+    //INITIALIZR:KAFKA-PRODUCER
     @Bean("schemaRegistryContainer")
     GenericContainer schemaRegistryContainer() { schemaRegistryContainer }
 
     @Bean("kafkaContainer")
     KafkaContainer kafkaContainer() { kafkaContainer }
-    //INITIALIZR:KAFKA
+    //INITIALIZR:KAFKA-PRODUCER
 
     @Bean
     MockServerClient mockServerClient() {
@@ -55,20 +55,20 @@ class ContainerConfig {
         //INITIALIZR:DATABASE
         mssqlServerContainer = createMSSQLServerContainer(network)
         //INITIALIZR:DATABASE
-        //INITIALIZR:KAFKA
+        //INITIALIZR:KAFKA-PRODUCER
         kafkaContainer = createKafkaContainer(network)
         schemaRegistryContainer = createSchemaRegistryContainer(network)
-        //INITIALIZR:KAFKA
+        //INITIALIZR:KAFKA-PRODUCER
         mockServer = createMockServer(network)
         startContainers()
     }
 
     private static startContainers() {
         mockServer.start()
-        //INITIALIZR:KAFKA
+        //INITIALIZR:KAFKA-PRODUCER
         kafkaContainer.start()
         schemaRegistryContainer.start()
-        //INITIALIZR:KAFKA
+        //INITIALIZR:KAFKA-PRODUCER
         //INITIALIZR:DATABASE
         mssqlServerContainer.start()
         def flyway = FlywayProvider.build(mssqlServerContainer)
@@ -78,7 +78,7 @@ class ContainerConfig {
         protectorInitializrContainer.start()
     }
 
-    //INITIALIZR:KAFKA
+    //INITIALIZR:KAFKA-PRODUCER
     private static KafkaContainer createKafkaContainer(Network network) {
         new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"))
                 .withNetwork(network)
@@ -95,7 +95,7 @@ class ContainerConfig {
                 .waitingFor(Wait.forHttp("/subjects").forPort(8081).forStatusCode(200))
                 .withExposedPorts(8081)
     }
-    //INITIALIZR:KAFKA
+    //INITIALIZR:KAFKA-PRODUCER
 
     //INITIALIZR:DATABASE
     private static MSSQLServerContainer createMSSQLServerContainer(Network network) {
