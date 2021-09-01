@@ -61,7 +61,7 @@ jobs:
       - name: Installing dependencies
         run: pip install requests
       - name: Execute python script
-        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf ${{ matrix.run }}
+        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf ${{ matrix.run }} --kafka_producer "true"
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Verify that applicaton still builds
