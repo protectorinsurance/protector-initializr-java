@@ -335,8 +335,9 @@ def get_files_that_contain_word(word, _files):
 def run_sanity_checks():
     _files = get_available_files()
     files_with_word = get_files_that_contain_word('initializr', _files)
+    name_of_files_with_words = '\n'.join(files_with_word)
     if files_with_word:
-        raise Exception(f"Files contain the word 'Initializr': {files_with_word}")
+        raise Exception(f"Files contain the word 'Initializr': \n{name_of_files_with_words}")
 
 
 def validate():
