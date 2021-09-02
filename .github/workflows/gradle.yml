@@ -29,9 +29,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build & Unit tests
-        run: gradlew build
+        run: ./gradlew build
       - name: System tests
-        run: gradlew :web-test:test -PsystemTest --info
+        run: ./gradlew :web-test:test -PsystemTest --info
 
   # INITIALIZR:INITIALIZR-DEMO
   init_script_sanity_checks:
@@ -105,5 +105,5 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Verify that applicaton still builds
-        run: gradlew build ${{ matrix.systemTestArgument }}
+        run: ./gradlew build ${{ matrix.systemTestArgument }}
 # INITIALIZR:INITIALIZR-DEMO
