@@ -311,6 +311,34 @@ def clean_all_double_empty_lines():
             f.write(content)
 
 
+def is_comment_line(line):
+    comment_symbols = ['*', "#", '//', '/*']
+    return any(comment_symbol in line for comment_symbol in comment_symbols)
+
+
+def get_files_that_contain_word(word, _files):
+    files_that_contain_word = []
+    for fpath in _files:
+        content = read(fpath)
+        if not content:
+            continue
+        if word not in content:
+            continue
+        lines = content.splitlines()
+        for line in lines:
+            if word not in line or is_comment_line(line):
+                continue
+            files_that_contain_word.add(fpath)
+    return files_that_contain_word
+
+
+def run_sanity_checks():
+    _files = get_available_files()
+    files_with_word = get_files_that_contain_word('initializr', _files)
+    if files_with_word:
+        raise Exception(f"Files contain the word 'Initializr': {files_with_word}")
+
+
 def validate():
     if ' ' in project_name:
         raise Exception("Project name cannot contain spaces")
@@ -367,5 +395,7 @@ clean_initializr_tags()
 delete_empty_files()
 delete_empty_dirs('./')
 clean_all_double_empty_lines()
+
+run_sanity_checks()
 
 print("Done! Remember to go through the edits and verify the changes :)")
