@@ -19,7 +19,9 @@ import spock.lang.Specification
 
 import java.sql.Connection
 
+//INITIALIZR:KAFKA-PRODUCER
 @EnableKafka
+//INITIALIZR:KAFKA-PRODUCER
 @Testcontainers
 @SpringBootTest
 @EnableSharedInjection

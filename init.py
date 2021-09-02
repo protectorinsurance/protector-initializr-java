@@ -342,6 +342,10 @@ def run_sanity_checks():
     name_of_files_with_words = '\n'.join(files_with_word)
     if files_with_word:
         raise Exception(f"Files contain the word 'Initializr': \n{name_of_files_with_words}")
+    if not kafka_producer:
+        files_with_word = get_files_that_contain_word('kafka', _files)
+        if files_with_word:
+            raise Exception(f"Files contain the word 'kafka': \n{name_of_files_with_words}")
 
 
 def validate():
