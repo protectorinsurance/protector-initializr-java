@@ -162,8 +162,9 @@ def delete_empty_files():
     files_to_delete = []
     for _file in _files:
         content = read(_file)
-        if content and len(content) == 0:
-            files_to_delete.append(_file)
+        if re.search('[a-zA-Z]', content):
+            continue
+        files_to_delete.append(_file)
     [os.remove(f) for f in files_to_delete]
 
 
