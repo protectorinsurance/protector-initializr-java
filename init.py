@@ -318,7 +318,10 @@ def is_comment_line(line):
 
 def get_files_that_contain_word(word, _files):
     files_that_contain_word = []
+    files_to_ignore = ["README.md"]
     for fpath in _files:
+        if any(file_to_ignore in fpath for file_to_ignore in files_to_ignore):
+            continue
         content = read(fpath)
         if not content:
             continue

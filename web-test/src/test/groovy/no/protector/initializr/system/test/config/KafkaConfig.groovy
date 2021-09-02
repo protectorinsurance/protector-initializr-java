@@ -50,7 +50,7 @@ class KafkaConfig {
         Map.of(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaContainer.getBootstrapServers(),
                 ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest",
-                ConsumerConfig.GROUP_ID_CONFIG, "initializr",
+                ConsumerConfig.GROUP_ID_CONFIG, "group-id",
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class,
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class,
                 "key.converter.schema.registry.url", schemaRegistryUrl,
