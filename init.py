@@ -328,7 +328,7 @@ def get_files_that_contain_word(word, _files):
         for line in lines:
             if word not in line or is_comment_line(line):
                 continue
-            files_that_contain_word.add(fpath)
+            files_that_contain_word.append(fpath)
     return files_that_contain_word
 
 
