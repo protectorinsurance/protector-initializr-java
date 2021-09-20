@@ -14,7 +14,7 @@ dependencies {
     runtimeOnly "com.microsoft.sqlserver:mssql-jdbc"
     //INITIALIZR:DATABASE
 
-    // Sef-managed dependencies
+    // Self-managed dependencies
     testImplementation 'org.testcontainers:spock:1.16.0'
     testImplementation "org.testcontainers:mockserver:1.16.0"
     testImplementation 'org.mock-server:mockserver-client-java:5.11.2'
