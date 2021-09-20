@@ -105,5 +105,5 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Verify that applicaton still builds
-        run: ./gradlew build ${{ matrix.systemTestArgument }}
+        run: ./gradlew clean build ${{ matrix.systemTestArgument }}
 # INITIALIZR:INITIALIZR-DEMO
