@@ -310,13 +310,13 @@ def clean_tag_content(tags):
             print_if_my_file(fpath, f"Is XML? {is_xml}")
             if is_xml and not should_write_xml(lines_to_write):
                 f.truncate(0)
-                return
+                continue
             string_form = '\n'.join(lines_to_write)
             print_if_my_file(fpath, f"Lines to write: {string_form}")
             if len(lines_to_write) > 0:
                 [f.write(line) for line in lines_to_write]
             else:
-                f.write('')
+                f.truncate(0)
 
 
 def clean_initializr_tags():
