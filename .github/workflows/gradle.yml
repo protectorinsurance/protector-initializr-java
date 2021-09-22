@@ -67,10 +67,10 @@ jobs:
             clean: 'false'
             kafka: 'true'
             systemTestArgument: -PsystemTest
-         # - database: 'none'
-         #   clean: 'true'
-         #   kafka: 'true'
-         #   systemTestArgument: ''
+          - database: 'none'
+            clean: 'true'
+            kafka: 'true'
+            systemTestArgument: ''
          # - database: 'jdbc'
          #   clean: 'true'
          #   kafka: 'true'
@@ -102,6 +102,11 @@ jobs:
         run: pip install requests
       - name: Execute python script
         run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "${{ matrix.clean }}" --pf "${{ matrix.database }}" --kafka_producer "${{ matrix.kafka }}"
+      - name: Generate artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Artifact-${{ matrix.database}}-${{ matrix.clean }}-${{ matrix.kafka }}-source
+          path: output
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Verify that applicaton still builds
