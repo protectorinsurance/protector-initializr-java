@@ -288,7 +288,7 @@ def clean_tag_content(tags):
             last_initializr_comment_line = None
             for line in lines:
                 if is_one_of_tags_in_initializr_comment(tags, line):
-                    print_if_my_file(fpath, "Found tag...")
+                    print_if_my_file(fpath, f"Found tag: {line}")
                     if not last_initializr_comment_line:
                         last_initializr_comment_line = line
                     is_same = last_initializr_comment_line.strip() == line.strip()
@@ -305,6 +305,7 @@ def clean_tag_content(tags):
                 if write:
                     print_if_my_file(fpath, "Writing")
                     lines_to_write.append(line)
+            print_if_my_file(fpath, f"Is XML? {is_xml}")
             if is_xml and not should_write_xml(lines_to_write):
                 f.truncate(0)
                 return
