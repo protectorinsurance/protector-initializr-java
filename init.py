@@ -268,7 +268,7 @@ def should_write_xml(lines_to_write):
 
 
 def print_if_my_file(fpath, message):
-    if fpath.contains("EmployeeController"):
+    if "EmployeeController" in fpath:
         print(message)
 
 
