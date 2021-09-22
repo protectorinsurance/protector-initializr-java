@@ -71,14 +71,14 @@ jobs:
             clean: 'true'
             kafka: 'true'
             systemTestArgument: ''
-         # - database: 'jdbc'
-         #   clean: 'true'
-         #   kafka: 'true'
-         #   systemTestArgument: ''
-         # - database: 'jpa'
-         #   clean: 'true'
-         #   kafka: 'true'
-         #   systemTestArgument: ''
+          - database: 'jdbc'
+            clean: 'true'
+            kafka: 'true'
+            systemTestArgument: ''
+          - database: 'jpa'
+            clean: 'true'
+            kafka: 'true'
+            systemTestArgument: ''
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-buildx-action@v1
