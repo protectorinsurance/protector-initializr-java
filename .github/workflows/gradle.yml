@@ -87,6 +87,14 @@ jobs:
         with:
           java-version: '16'
           distribution: 'zulu'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - uses: actions/setup-python@v2
         with:
           python-version: '3.x'
