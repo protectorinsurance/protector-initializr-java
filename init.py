@@ -267,12 +267,19 @@ def should_write_xml(lines_to_write):
     return len(lines_that_are_not_initializr_comments) > 1
 
 
+def print_if_my_file(fpath, message):
+    if fpath.contains("EmployeeController"):
+        print(message)
+
+
 def clean_tag_content(tags):
     _files = get_available_files()
     for fpath in _files:
+        print_if_my_file(fpath, "Processing EmployeeController...")
         lines = read_lines(fpath)
         if not lines:
             continue
+        print_if_my_file(fpath, "Found lines...")
         with open(fpath, "w", encoding="utf-8") as f:
             is_xml = fpath.endswith(".xml")
             write = True
@@ -280,6 +287,7 @@ def clean_tag_content(tags):
             last_initializr_comment_line = None
             for line in lines:
                 if is_one_of_tags_in_initializr_comment(tags, line):
+                    print_if_my_file(fpath, "Found tag...")
                     if not last_initializr_comment_line:
                         last_initializr_comment_line = line
                     is_same = last_initializr_comment_line.strip() == line.strip()
@@ -287,12 +295,16 @@ def clean_tag_content(tags):
                         continue
                     last_initializr_comment_line = line
                     write = not write
+                    print_if_my_file(fpath, "Skip writing...")
                     continue
                 if write:
+                    print_if_my_file(fpath, "Writing")
                     lines_to_write.append(line)
             if is_xml and not should_write_xml(lines_to_write):
                 f.truncate(0)
                 return
+            string_form = '\n'.join(lines_to_write)
+            print_if_my_file(fpath, f"Lines to write: {string_form}")
             [f.write(line) for line in lines_to_write]
 
 
