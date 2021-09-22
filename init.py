@@ -400,7 +400,7 @@ find_and_replace_in_files(["protectorInitializrContainer"], f"{titled_project_na
 find_and_replace_in_files(["initializrBaseUrl"], f"{titled_project_name_first_lowercase}BaseUrl", files)
 
 underscore_project_name = project_name.replace('-', '_')
-find_and_replace_in_files(["initializr_kafka_client"], f"{underscore_project_name}_kafka_client")
+find_and_replace_in_files(["initializr_kafka_client"], f"{underscore_project_name}_kafka_client", files)
 
 find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.SystemTest.Dockerfile"])
 
