@@ -17,9 +17,6 @@ spring:
   # INITIALIZR:KAFKA-PRODUCER
   kafka:
     bootstrap-servers: pfsvnocont01:9095,pfsvnocont02:9095,pfsvnocont03:9095
-    streams:
-      application-id: ${spring.application.name}
-      state-dir: /tmp/kafka-streams
     admin:
       fail-fast: true
     client-id: ${spring.application.name}
