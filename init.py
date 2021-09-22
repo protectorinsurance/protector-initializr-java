@@ -274,6 +274,8 @@ def print_if_my_file(fpath, message):
 
 def clean_tag_content(tags):
     _files = get_available_files()
+    files_in_string_form = '\n'.join(_files)
+    print(f"All files: {files_in_string_form}")
     for fpath in _files:
         print_if_my_file(fpath, "Processing EmployeeController...")
         lines = read_lines(fpath)
