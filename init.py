@@ -279,7 +279,8 @@ def clean_tag_content(tags):
         lines = read_lines(fpath)
         if not lines:
             continue
-        print_if_my_file(fpath, "Found lines...")
+        lines_in_string_form = '\n'.join(lines)
+        print_if_my_file(fpath, f"Found lines: {lines_in_string_form}")
         with open(fpath, "w", encoding="utf-8") as f:
             is_xml = fpath.endswith(".xml")
             write = True
@@ -292,10 +293,14 @@ def clean_tag_content(tags):
                         last_initializr_comment_line = line
                     is_same = last_initializr_comment_line.strip() == line.strip()
                     if not is_same:
+                        print_if_my_file(fpath, "Found different tag?")
                         continue
                     last_initializr_comment_line = line
                     write = not write
-                    print_if_my_file(fpath, "Skip writing...")
+                    if write:
+                        print_if_my_file(fpath, "No skip write?")
+                    else:
+                        print_if_my_file(fpath, "Skip writing...")
                     continue
                 if write:
                     print_if_my_file(fpath, "Writing")
@@ -305,7 +310,10 @@ def clean_tag_content(tags):
                 return
             string_form = '\n'.join(lines_to_write)
             print_if_my_file(fpath, f"Lines to write: {string_form}")
-            [f.write(line) for line in lines_to_write]
+            if len(lines_to_write) > 0:
+                [f.write(line) for line in lines_to_write]
+            else:
+                f.write('')
 
 
 def clean_initializr_tags():
