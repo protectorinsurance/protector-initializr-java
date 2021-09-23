@@ -3,25 +3,29 @@
 package no.protector.initializr.domain.producer;
 
 import no.protector.initializr.domain.model.Employee;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 @Service
 public class EmployeeKafkaProducer {
     private static final Logger LOG = LoggerFactory.getLogger(EmployeeKafkaProducer.class);
-    private final KafkaTemplate<Integer, String> employeeKafkaTemplate;
+    private final KafkaProducer<Integer, String> producer;
 
-    public EmployeeKafkaProducer(KafkaTemplate<Integer, String> employeeKafkaTemplate) {
-        this.employeeKafkaTemplate = employeeKafkaTemplate;
+    public EmployeeKafkaProducer(Properties producerProperties) {
+        this.producer = new KafkaProducer<>(producerProperties);
     }
 
     public void employeeRead(Employee employee) {
         try {
-            employeeKafkaTemplate.send("employee-read", employee.getId(), employee.getLastName()).get();
+            ProducerRecord<Integer, String> record =
+                    new ProducerRecord<>("employee-read", employee.getId(), employee.getLastName());
+            producer.send(record).get();
 
         } catch (ExecutionException e) {
             LOG.error("Could not send message", e);

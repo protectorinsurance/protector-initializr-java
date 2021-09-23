@@ -2,16 +2,11 @@ integration:
   userServiceUrl: http://mockserver:1080
 
 # INITIALIZR:KAFKA-PRODUCER
-spring:
-  kafka:
-    properties:
-      sasl:
-        mechanism:
-        jaas.config:
-      security:
-        protocol: PLAINTEXT
-
 kafka:
-  bootstrap-servers: "kafka:9092"
-  schema-registry-url: http://schema-registry:8081
+  producer:
+    bootstrap.servers: "kafka:9092"
+    schema.registry.url: http://schema-registry:8081
+    sasl.mechanism:
+    sasl.jaas.config:
+    security.protocol: PLAINTEXT
 # INITIALIZR:KAFKA-PRODUCER

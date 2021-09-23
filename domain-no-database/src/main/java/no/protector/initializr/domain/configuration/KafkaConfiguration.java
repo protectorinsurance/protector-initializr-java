@@ -1,36 +1,27 @@
 //INITIALIZR:KAFKA-PRODUCER
 package no.protector.initializr.domain.configuration;
 
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
+
+import java.util.Map;
+import java.util.Properties;
 
 @Configuration
 public class KafkaConfiguration {
 
-    /**
-     * TODO: Implement producer templates and factories
-     * Examples can be found here:
-     * https://github.com/protectorinsurance/protector-initializr-java/blob/main/domain/src/main/java/no/protector/initializr/domain/configuration/KafkaConfiguration.java
-     * <p>
-     * An examples of an implemented producer can be found here:
-     * https://github.com/protectorinsurance/protector-initializr-java/tree/main/domain/src/main/java/no/protector/initializr/domain/producer/EmployeeKafkaProducer.java
-     */
-
-    //INITIALIZR:INITIALIZR-DEMO
     @Bean
-    public ProducerFactory<Integer, String> employeeProducerFactory(
-            KafkaConfigurationProperties kafkaConfigurationProperties) {
-        return new DefaultKafkaProducerFactory<>(kafkaConfigurationProperties.toProducerConfig());
+    @ConfigurationProperties(prefix = "kafka.producer")
+    public Properties producerProperties() {
+        Properties props = new Properties();
+        props.putAll(Map.of(
+                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class,
+                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class
+        ));
+        return props;
     }
-
-    @Bean
-    public KafkaTemplate<Integer, String> employeeKafkaTemplate(
-            ProducerFactory<Integer, String> employeeProducerFactory) {
-        return new KafkaTemplate<>(employeeProducerFactory);
-    }
-    //INITIALIZR:INITIALIZR-DEMO
 }
 //INITIALIZR:KAFKA-PRODUCER

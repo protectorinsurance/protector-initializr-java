@@ -14,23 +14,15 @@ spring:
     locations: classpath:./migrations
     baseline-on-migrate: true
     # INITIALIZR:DATABASE
-    # INITIALIZR:KAFKA-PRODUCER
-  kafka:
-    admin:
-      fail-fast: true
-    properties:
-      sasl:
-        mechanism: PLAIN
-        jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username=${kafka.username} password=${kafka.password};
-      security:
-        protocol: SASL_PLAINTEXT
-  # INITIALIZR:KAFKA-PRODUCER
 
 kafka:
-  bootstrap-servers: pfsvnocont01:9095,pfsvnocont02:9095,pfsvnocont03:9095
-  client-id: ${spring.application.name}
-  schema-registry-url: http://pfsvnocont01:8081,http://pfsvnocont02:8081,http://pfsvnocont03:8081
-  acks-config: all
+  producer:
+    bootstrap.servers: pfsvnocont01:9095,pfsvnocont02:9095,pfsvnocont03:9095
+    client.id: ${spring.application.name}
+    schema.registry.url: http://pfsvnocont01:8081,http://pfsvnocont02:8081,http://pfsvnocont03:8081
+    sasl.mechanism: PLAIN
+    sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username=${kafka.username} password=${kafka.password};
+    security.protocol: SASL_PLAINTEXT
 
 management:
   server.port: 8391
