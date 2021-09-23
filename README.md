@@ -29,6 +29,7 @@ Go to Application and run the main method. Intellij should pick it up.
 - [x] Logging & APM
 - [x] System tests
 - [ ] Kafka consumer
+- [ ] SonarCloud integration
 - [ ] Contract-first development (with OpenApi/Swagger)
 
 ### Getting started
