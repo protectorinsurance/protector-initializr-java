@@ -4,12 +4,14 @@ integration:
 # INITIALIZR:KAFKA-PRODUCER
 spring:
   kafka:
-    bootstrap-servers: "kafka:9092"
     properties:
-      schema.registry.url: http://schema-registry:8081
       sasl:
         mechanism:
         jaas.config:
       security:
         protocol: PLAINTEXT
+
+kafka:
+  bootstrap-servers: "kafka:9092"
+  schema-registry-url: http://schema-registry:8081
 # INITIALIZR:KAFKA-PRODUCER
