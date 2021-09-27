@@ -5,11 +5,13 @@ import groovy.json.JsonOutput
 import groovy.transform.builder.Builder
 import groovy.transform.builder.ExternalStrategy
 import no.protector.initializr.domain.model.Employee
+import no.protector.initializr.domain.producer.EmployeeKafkaProducer
 import spock.lang.Specification
 
 class EmployeeServiceImpSpec extends Specification {
 
-    def service = new EmployeeServiceImpl()
+    def producer = Mock(EmployeeKafkaProducer)
+    def service = new EmployeeServiceImpl(producer)
 
     @Builder(builderStrategy = ExternalStrategy, forClass = Employee)
     class EmployeeBuilder {}

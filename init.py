@@ -11,6 +11,7 @@ parser.add_argument('--p', help='Project name (my-awesome-application)', default
 parser.add_argument('--n', help='Namespace (no.protector.my.awesome.application)', default=None)
 parser.add_argument('--pf', help='Persistence framework (none, jpa, jdbc)', default=None)
 parser.add_argument('--clean', help='Removes all initializr demo implementations', default=None)
+parser.add_argument('--kafka_producer', help='Do you want Kafka Producer?', default=None)
 
 args = parser.parse_args()
 
@@ -27,6 +28,9 @@ if not namespace:
 
 if not persistence_framework:
     persistence_framework = input("What persistence framework do you want? (none, jpa, jdbc)\n")
+
+if not args.kafka_producer:
+    args.kafka_producer = input("Do you want Kafka producers? (y/n)\n")
 
 if not args.clean:
     args.clean = input("Do you want to remove demo/initializr files?(y/n - y recommended)\n")
@@ -158,8 +162,9 @@ def delete_empty_files():
     files_to_delete = []
     for _file in _files:
         content = read(_file)
-        if content and len(content) == 0:
-            files_to_delete.append(_file)
+        if re.search('[a-zA-Z]', content):
+            continue
+        files_to_delete.append(_file)
     [os.remove(f) for f in files_to_delete]
 
 
@@ -287,8 +292,11 @@ def clean_tag_content(tags):
                     lines_to_write.append(line)
             if is_xml and not should_write_xml(lines_to_write):
                 f.truncate(0)
-                return
-            [f.write(line) for line in lines_to_write]
+                continue
+            if len(lines_to_write) > 0:
+                [f.write(line) for line in lines_to_write]
+            else:
+                f.truncate(0)
 
 
 def clean_initializr_tags():
@@ -307,6 +315,42 @@ def clean_all_double_empty_lines():
             f.write(content)
 
 
+def is_comment_line(line):
+    comment_symbols = ['*', "#", '//', '/*']
+    return any(comment_symbol in line for comment_symbol in comment_symbols)
+
+
+def get_files_that_contain_word(word, _files):
+    files_that_contain_word = []
+    files_to_ignore = ["README.md"]
+    for fpath in _files:
+        if any(file_to_ignore in fpath for file_to_ignore in files_to_ignore):
+            continue
+        content = read(fpath)
+        if not content:
+            continue
+        if word not in content:
+            continue
+        lines = content.splitlines()
+        for line in lines:
+            if word not in line or is_comment_line(line):
+                continue
+            files_that_contain_word.append(fpath)
+    return files_that_contain_word
+
+
+def run_sanity_checks():
+    _files = get_available_files()
+    files_with_word = get_files_that_contain_word('initializr', _files)
+    name_of_files_with_words = '\n'.join(files_with_word)
+    if files_with_word:
+        raise Exception(f"Files contain the word 'Initializr': \n{name_of_files_with_words}")
+    if not kafka_producer:
+        files_with_word = get_files_that_contain_word('kafka', _files)
+        if files_with_word:
+            raise Exception(f"Files contain the word 'kafka': \n{name_of_files_with_words}")
+
+
 def validate():
     if ' ' in project_name:
         raise Exception("Project name cannot contain spaces")
@@ -314,13 +358,20 @@ def validate():
         raise Exception("Namespace cannot contain spaces")
     if persistence_framework not in ["none", "jdbc", "jpa"]:
         raise Exception("You can only pick between none, jdbc and jpa")
+    if not kafka_producer and not clean_initializr:
+        raise Exception("Having demo code without kafka is currently too finicky. Not supported")
 
+
+clean_initializr = parse_boolean_response(args.clean)
+kafka_producer = parse_boolean_response(args.kafka_producer)
 
 validate()
-clean_initializr = parse_boolean_response(args.clean)
 
 if clean_initializr:
     tags_to_clean.append("INITIALIZR-DEMO")
+
+if not kafka_producer:
+    tags_to_clean.append("KAFKA-PRODUCER")
 
 print("Updating banner...")
 update_banner()
@@ -348,6 +399,9 @@ titled_project_name_first_lowercase = titled_project_name[0].lower() + titled_pr
 find_and_replace_in_files(["protectorInitializrContainer"], f"{titled_project_name_first_lowercase}Container", files)
 find_and_replace_in_files(["initializrBaseUrl"], f"{titled_project_name_first_lowercase}BaseUrl", files)
 
+underscore_project_name = project_name.replace('-', '_')
+find_and_replace_in_files(["initializr_kafka_client"], f"{underscore_project_name}_kafka_client", files)
+
 find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.SystemTest.Dockerfile"])
 
 print("Doing some house cleaning...")
@@ -356,5 +410,7 @@ clean_initializr_tags()
 delete_empty_files()
 delete_empty_dirs('./')
 clean_all_double_empty_lines()
+
+run_sanity_checks()
 
 print("Done! Remember to go through the edits and verify the changes :)")

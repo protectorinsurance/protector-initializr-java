@@ -1,6 +1,8 @@
+[![Java CI with Gradle](https://github.com/protectorinsurance/protector-initializr-java/actions/workflows/gradle.yml/badge.svg)](https://github.com/protectorinsurance/protector-initializr-java/actions/workflows/gradle.yml)
+
 # protector-initializr-java
 
-## Build
+### Build
 
 **Normal Build**:  
 `gradle clean build`
@@ -9,7 +11,7 @@
 `gradle clean build -PsystemTest`  
 _Note: systems tests do not execute without the `systemTest` parameter. This is done to cut down on build time_
 
-## Run
+### Run
 
 Go to Application and run the main method. Intellij should pick it up.
 
@@ -17,46 +19,25 @@ Go to Application and run the main method. Intellij should pick it up.
 
 # Initializr
 
-## Adapt this project
+### Features
 
-_(Note: You need Python installed)_
+- [x] Standard GitHub Actions Workflow
+- [x] Web services
+- [x] Optional database support (JDBC or JPA)
+- [x] Flyway
+- [x] Configuration & dependencies for producing Kafka messages using Avro schemas
+- [x] Logging & APM
+- [x] System tests
+- [ ] Kafka consumer
+- [ ] SonarCloud integration
+- [ ] Contract-first development (with OpenApi/Swagger)
 
-1. Get the source code onto your machine or repo.
-2. Run `pip install requests`.
-3. In the root folder of this project execute `python init.py`. This script will essentially rename the application,
-   namespaces, packages and so forth. It will change the initializr to a usable general project.
-4. Delete init.py - it is no longer necessary.
-5. Verify the application builds with `gradle clean build -PsystemTest`.
+### Getting started
 
-## Project Overview
+[Step-by-step guide can be found here](https://github.com/protectorinsurance/protector-initializr-java/wiki/Getting-started)
 
-### Web
+### Documentation
 
-The web packages are specifically for web functionality. There are 2 web packages:
-
-- web: Contains the SpringBoot Application, controllers, configurations and so forth.
-- web-test: Contains system test for the web application
-
-### Domain
-
-The "domain" packages exist to be where the main logic of the application exists. This initializr mainly separates
-packages based on applications (deployments) and domain. This is why we have a web and (in the future) a kafka package.
-
-The reason we have different domain packages is to allow for different persistence frameworks:
-
-- domain: Contains Spring Data JDBC
-- Domain-no-database: Contains no persistence framework
-- domain-jpa: Contains Spring Data JPA
-
-The reason we have to do it this way is because there's some strong opinions regarding which framework is more usable,
-efficient, etc. At a later point we will also add the ability to select whether Kafka should be included as well.
-
-People can pick which persistence framework they want when executing the `init.py`.
-
-### Flyway
-
-Flyway holds the SQL files when migrating. The reason it is a separate folder is in the scenario that people want to
-write applications that consume both kafka and hosts web services. These applications will share a database, and
-therefore both should have access to SQL files.
+[Documentation can be found here](https://github.com/protectorinsurance/protector-initializr-java/wiki)
 
 [comment]: # (INITIALIZR:INITIALIZR-DEMO)

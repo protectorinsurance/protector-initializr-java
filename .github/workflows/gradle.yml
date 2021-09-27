@@ -18,6 +18,14 @@ jobs:
         with:
           java-version: '16'
           distribution: 'zulu'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build & Unit tests
@@ -25,7 +33,7 @@ jobs:
       - name: System tests
         run: ./gradlew :web-test:test -PsystemTest --info
 
-# INITIALIZR:INITIALIZR-DEMO
+  # INITIALIZR:INITIALIZR-DEMO
   init_script_sanity_checks:
     name: Init script sanity checks
     runs-on: ubuntu-latest
@@ -38,9 +46,7 @@ jobs:
         run: pip install requests
 
       - name: Execute python script
-        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf jpa
-      - name: Verifying that initializr related words has been remove
-        uses: mattsb42/not-grep@master
+        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf jpa --kafka_producer "true"
 
   verify_persistence_framework_options:
     name: Verify persistence framework
@@ -48,7 +54,31 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        run: [ 'none', 'jdbc', 'jpa' ]
+        include:
+          - database: 'none'
+            clean: 'false'
+            kafka: 'true'
+            systemTestArgument: -PsystemTest
+          - database: 'jdbc'
+            clean: 'false'
+            kafka: 'true'
+            systemTestArgument: -PsystemTest
+          - database: 'jpa'
+            clean: 'false'
+            kafka: 'true'
+            systemTestArgument: -PsystemTest
+          - database: 'none'
+            clean: 'true'
+            kafka: 'true'
+            systemTestArgument: ''
+          - database: 'jdbc'
+            clean: 'true'
+            kafka: 'true'
+            systemTestArgument: ''
+          - database: 'jpa'
+            clean: 'true'
+            kafka: 'true'
+            systemTestArgument: ''
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-buildx-action@v1
@@ -57,15 +87,23 @@ jobs:
         with:
           java-version: '16'
           distribution: 'zulu'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - uses: actions/setup-python@v2
         with:
           python-version: '3.x'
       - name: Installing dependencies
         run: pip install requests
       - name: Execute python script
-        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf ${{ matrix.run }}
+        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "${{ matrix.clean }}" --pf "${{ matrix.database }}" --kafka_producer "${{ matrix.kafka }}"
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Verify that applicaton still builds
-        run: gradle clean build -PsystemTest
+        run: ./gradlew build ${{ matrix.systemTestArgument }}
 # INITIALIZR:INITIALIZR-DEMO

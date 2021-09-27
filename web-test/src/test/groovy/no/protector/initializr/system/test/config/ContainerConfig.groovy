@@ -5,10 +5,7 @@ import org.mockserver.client.MockServerClient
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
-import org.testcontainers.containers.GenericContainer
-import org.testcontainers.containers.MSSQLServerContainer
-import org.testcontainers.containers.MockServerContainer
-import org.testcontainers.containers.Network
+import org.testcontainers.containers.*
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.images.builder.ImageFromDockerfile
 import org.testcontainers.utility.DockerImageName
@@ -26,9 +23,21 @@ class ContainerConfig {
     //INITIALIZR:DATABASE
     private static MSSQLServerContainer mssqlServerContainer
     //INITIALIZR:DATABASE
+    //INITIALIZR:KAFKA-PRODUCER
+    private static KafkaContainer kafkaContainer
+    private static GenericContainer schemaRegistryContainer
+    //INITIALIZR:KAFKA-PRODUCER
 
-    @Bean
+    @Bean(name = "protectorInitializrContainer")
     GenericContainer protectorInitializrContainer() { protectorInitializrContainer }
+
+    //INITIALIZR:KAFKA-PRODUCER
+    @Bean("schemaRegistryContainer")
+    GenericContainer schemaRegistryContainer() { schemaRegistryContainer }
+
+    @Bean("kafkaContainer")
+    KafkaContainer kafkaContainer() { kafkaContainer }
+    //INITIALIZR:KAFKA-PRODUCER
 
     @Bean
     MockServerClient mockServerClient() {
@@ -39,18 +48,27 @@ class ContainerConfig {
     @Bean
     MSSQLServerContainer mssqlServerContainer() { mssqlServerContainer }
     //INITIALIZR:DATABASE
+
     static {
         network = Network.newNetwork()
         protectorInitializrContainer = createProtectorInitializrContainer(network)
         //INITIALIZR:DATABASE
         mssqlServerContainer = createMSSQLServerContainer(network)
         //INITIALIZR:DATABASE
+        //INITIALIZR:KAFKA-PRODUCER
+        kafkaContainer = createKafkaContainer(network)
+        schemaRegistryContainer = createSchemaRegistryContainer(network)
+        //INITIALIZR:KAFKA-PRODUCER
         mockServer = createMockServer(network)
         startContainers()
     }
 
     private static startContainers() {
         mockServer.start()
+        //INITIALIZR:KAFKA-PRODUCER
+        kafkaContainer.start()
+        schemaRegistryContainer.start()
+        //INITIALIZR:KAFKA-PRODUCER
         //INITIALIZR:DATABASE
         mssqlServerContainer.start()
         def flyway = FlywayProvider.build(mssqlServerContainer)
@@ -59,6 +77,25 @@ class ContainerConfig {
         //INITIALIZR:DATABASE
         protectorInitializrContainer.start()
     }
+
+    //INITIALIZR:KAFKA-PRODUCER
+    private static KafkaContainer createKafkaContainer(Network network) {
+        new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"))
+                .withNetwork(network)
+                .withNetworkAliases("kafka")
+    }
+
+    private static GenericContainer createSchemaRegistryContainer(Network network) {
+        new GenericContainer(DockerImageName.parse("confluentinc/cp-schema-registry:latest"))
+                .withNetwork(network)
+                .withNetworkAliases("schema-registry")
+                .withEnv("SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS", "kafka:9092")
+                .withEnv("SCHEMA_REGISTRY_HOST_NAME", "localhost")
+                .withEnv("SCHEMA_REGISTRY_DEBUG", "true")
+                .waitingFor(Wait.forHttp("/subjects").forPort(8081).forStatusCode(200))
+                .withExposedPorts(8081)
+    }
+    //INITIALIZR:KAFKA-PRODUCER
 
     //INITIALIZR:DATABASE
     private static MSSQLServerContainer createMSSQLServerContainer(Network network) {
@@ -101,9 +138,5 @@ class ContainerConfig {
     private static GenericContainer createBaseProtectorInitializrContainer() {
         new GenericContainer(new ImageFromDockerfile()
                 .withDockerfile(Path.of("../Web.SystemTest.Dockerfile")))
-    }
-
-    static GenericContainer getProtectorInitializerContainer() {
-        protectorInitializrContainer
     }
 }

@@ -5,12 +5,16 @@ dependencies {
     // Managed by spring-dependencies
     testImplementation "org.springframework.boot:spring-boot-starter-web"
     testImplementation('org.springframework.boot:spring-boot-starter-test')
+    //INITIALIZR:KAFKA-PRODUCER
+    testImplementation 'org.springframework.kafka:spring-kafka'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+    //INITIALIZR:KAFKA-PRODUCER
     //INITIALIZR:DATABASE
     testImplementation 'org.flywaydb:flyway-core'
     runtimeOnly "com.microsoft.sqlserver:mssql-jdbc"
     //INITIALIZR:DATABASE
 
-    // Sef-managed dependencies
+    // Self-managed dependencies
     testImplementation 'org.testcontainers:spock:1.16.0'
     testImplementation "org.testcontainers:mockserver:1.16.0"
     testImplementation 'org.mock-server:mockserver-client-java:5.11.2'
@@ -18,6 +22,10 @@ dependencies {
     testImplementation 'org.testcontainers:mssqlserver:1.16.0'
     testImplementation 'org.dbunit:dbunit:2.7.2'
     //INITIALIZR:DATABASE
+    //INITIALIZR:KAFKA-PRODUCER
+    testImplementation "org.testcontainers:kafka:1.16.0"
+    testImplementation 'io.confluent:kafka-avro-serializer:6.2.0'
+    //INITIALIZR:KAFKA-PRODUCER
 }
 
 test {
