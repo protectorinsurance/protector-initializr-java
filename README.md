@@ -19,6 +19,8 @@ Go to Application and run the main method. Intellij should pick it up.
 
 # Initializr
 
+![](initializr-script-demo.gif)
+
 ### Features
 
 - [x] Standard GitHub Actions Workflow
