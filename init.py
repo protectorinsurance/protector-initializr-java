@@ -162,7 +162,10 @@ def delete_empty_files():
     files_to_delete = []
     for _file in _files:
         content = read(_file)
-        if re.search('[a-zA-Z]', content):
+        try:
+            if re.search('[a-zA-Z]', content):
+                continue
+        except:
             continue
         files_to_delete.append(_file)
     [os.remove(f) for f in files_to_delete]
@@ -351,11 +354,21 @@ def run_sanity_checks():
             raise Exception(f"Files contain the word 'kafka': \n{name_of_files_with_words}")
 
 
+def update_elastic_apm_namespace():
+    first, second, *_ = namespace.split('.')
+    find_and_replace_in_files(["application_packages=no.protector"],
+                              f"application_packages={first}.{second}",
+                              ["elasticapm.properties"])
+
+
 def validate():
     if ' ' in project_name:
         raise Exception("Project name cannot contain spaces")
     if ' ' in namespace:
         raise Exception("Namespace cannot contain spaces")
+    if 'initializr' in namespace.lower() or 'initializr' in project_name:
+        raise Exception("Namespace and project name does not support the word /'initializr/'. That causes issues with"
+                        "the cleanup procedure of this script.")
     if persistence_framework not in ["none", "jdbc", "jpa"]:
         raise Exception("You can only pick between none, jdbc and jpa")
     if not kafka_producer and not clean_initializr:
@@ -403,6 +416,8 @@ underscore_project_name = project_name.replace('-', '_')
 find_and_replace_in_files(["initializr_kafka_client"], f"{underscore_project_name}_kafka_client", files)
 
 find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.SystemTest.Dockerfile"])
+
+update_elastic_apm_namespace()
 
 print("Doing some house cleaning...")
 remove_unused_imports()
