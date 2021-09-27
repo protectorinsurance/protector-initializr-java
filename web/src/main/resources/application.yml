@@ -30,7 +30,6 @@ kafka:
   bootstrap-servers: pfsvnocont01:9095,pfsvnocont02:9095,pfsvnocont03:9095
   client-id: ${spring.application.name}
   schema-registry-url: http://pfsvnocont01:8081,http://pfsvnocont02:8081,http://pfsvnocont03:8081
-  acks-config: all
 
 management:
   server.port: 8391

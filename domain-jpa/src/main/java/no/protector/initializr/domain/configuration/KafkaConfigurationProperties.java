@@ -17,13 +17,11 @@ public class KafkaConfigurationProperties {
     private String bootstrapServers;
     private String clientId;
     private String schemaRegistryUrl;
-    private String acksConfig;
 
     public Map<String, Object> toProducerConfig() {
         return Map.of(
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
                 ProducerConfig.CLIENT_ID_CONFIG, clientId,
-                ProducerConfig.ACKS_CONFIG, acksConfig,
                 ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class,
                 ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class,
                 SCHEMA_REGISTRY_URL, schemaRegistryUrl);
@@ -39,10 +37,6 @@ public class KafkaConfigurationProperties {
 
     public void setSchemaRegistryUrl(String schemaRegistryUrl) {
         this.schemaRegistryUrl = schemaRegistryUrl;
-    }
-
-    public void setAcksConfig(String acksConfig) {
-        this.acksConfig = acksConfig;
     }
 }
 //INITIALIZR:KAFKA-PRODUCER
