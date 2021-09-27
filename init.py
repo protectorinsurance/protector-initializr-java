@@ -419,6 +419,8 @@ find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.SystemTest
 
 update_elastic_apm_namespace()
 
+os.remove("initializr-script-demo.gif")
+
 print("Doing some house cleaning...")
 remove_unused_imports()
 clean_initializr_tags()
