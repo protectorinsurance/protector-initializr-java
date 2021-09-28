@@ -9,6 +9,7 @@ on:
         default: latest
 
 env:
+  # Set deploy information for the service
   image_name: protector-initializr-java
   service_name: protector-initializr-java
   version: ${{ github.event.inputs.version }}
