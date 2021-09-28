@@ -9,8 +9,8 @@ on:
         default: latest
 
 env:
-  image_name: initializr
-  service_name: initializr
+  image_name: protector-initializr-java
+  service_name: protector-initializr-java
   version: ${{ github.event.inputs.version }}
 
 jobs:
