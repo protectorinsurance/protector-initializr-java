@@ -2,10 +2,13 @@ package no.protector.initializr.system.test.config
 
 import no.protector.initializr.system.test.provider.FlywayProvider
 import org.mockserver.client.MockServerClient
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.testcontainers.containers.*
+import org.testcontainers.containers.output.Slf4jLogConsumer
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.images.builder.ImageFromDockerfile
 import org.testcontainers.utility.DockerImageName
@@ -16,6 +19,8 @@ import java.nio.file.Path
 @Configuration
 @ComponentScan(value = "no.protector.initializr.system.test")
 class ContainerConfig {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ContainerConfig.class)
 
     private static Network network
     private static GenericContainer protectorInitializrContainer
@@ -76,6 +81,7 @@ class ContainerConfig {
         flyway.migrate()
         //INITIALIZR:DATABASE
         protectorInitializrContainer.start()
+        protectorInitializrContainer.followOutput(new Slf4jLogConsumer(LOG))
     }
 
     //INITIALIZR:KAFKA-PRODUCER
@@ -137,6 +143,6 @@ class ContainerConfig {
 
     private static GenericContainer createBaseProtectorInitializrContainer() {
         new GenericContainer(new ImageFromDockerfile()
-                .withDockerfile(Path.of("../Web.SystemTest.Dockerfile")))
+                .withDockerfile(Path.of("../Dockerfile")))
     }
 }
