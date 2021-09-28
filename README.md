@@ -1,4 +1,4 @@
-[![Java CI with Gradle](https://github.com/protectorinsurance/protector-initializr-java/actions/workflows/gradle.yml/badge.svg)](https://github.com/protectorinsurance/protector-initializr-java/actions/workflows/gradle.yml)
+[![Build Main](https://github.com/protectorinsurance/protector-initializr-java/actions/workflows/gradle-main.yml/badge.svg)](https://github.com/protectorinsurance/protector-initializr-java/actions/workflows/gradle-main.yml)
 
 # protector-initializr-java
 
