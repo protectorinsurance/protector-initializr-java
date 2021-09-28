@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.test.context.ContextConfiguration
-import org.testcontainers.spock.Testcontainers
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -22,7 +21,6 @@ import java.sql.Connection
 //INITIALIZR:KAFKA-PRODUCER
 @EnableKafka
 //INITIALIZR:KAFKA-PRODUCER
-@Testcontainers
 @SpringBootTest
 @EnableSharedInjection
 @ContextConfiguration(classes = [ContainerConfig, EndpointConfig, PersistenceConfig])

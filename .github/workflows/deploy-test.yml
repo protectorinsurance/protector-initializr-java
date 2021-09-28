@@ -1,0 +1,32 @@
+name: Deploy to test
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Image version
+        required: true
+        default: latest
+
+env:
+  image_name: initializr
+  service_name: initializr
+  version: ${{ github.event.inputs.version }}
+
+jobs:
+  deploy_test:
+    name: Deploy to test
+    runs-on: self-hosted
+    steps:
+      - name: Deploy to test
+        uses: protectorinsurance/swarm-ssh-deployer@v1
+        with:
+          service-name: ${{ env.service_name }}
+          image: ghcr.io/protectorinsurance/${{ env.image_name }}
+          image-tag: ${{ env.version }}
+          private-key: ${{ secrets.DEPLOY_PRIVATE_KEY_FILENAME }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          hostname: ${{ secrets.TEST_DEPLOY_HOSTNAME }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          ghcr-username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
+          ghcr-token: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}

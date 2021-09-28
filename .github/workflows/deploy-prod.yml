@@ -1,0 +1,38 @@
+name: Deploy to prod
+
+
+on:
+  # TODO: Uncomment this when application is set up in UCP
+  # schedule:
+    # - cron: '34 3 * * 1-5'
+
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Image version
+        required: true
+        default: latest
+
+env:
+  # Set deploy information for the service
+  image_name: initializr
+  service_name: initializr
+  version: ${{ github.event.inputs.version || 'latest' }}
+
+jobs:
+  deploy_prod:
+    name: Deploy to prod
+    runs-on: self-hosted
+    steps:
+      - name: Deploy to prod
+        uses: protectorinsurance/swarm-ssh-deployer@v1
+        with:
+          service-name: ${{ env.service_name }}
+          image: ghcr.io/protectorinsurance/${{ env.image_name }}
+          image-tag: ${{ env.version }}
+          private-key: ${{ secrets.DEPLOY_PRIVATE_KEY_FILENAME }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          hostname: ${{ secrets.PROD_DEPLOY_HOSTNAME }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          ghcr-username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
+          ghcr-token: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}

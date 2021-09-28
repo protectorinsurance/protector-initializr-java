@@ -1,17 +1,19 @@
-# INITIALIZR:INITIALIZR-DEMO
 version: 2
 updates:
   - package-ecosystem: "gradle"
     directory: "/"
     target-branch: "main"
+    # INITIALIZR:INITIALIZR-DEMO
     reviewers:
       - "atomfinger"
+    # INITIALIZR:INITIALIZR-DEMO
     schedule:
       interval: "daily"
   - package-ecosystem: "github-actions"
     directory: "/"
+    # INITIALIZR:INITIALIZR-DEMO
     reviewers:
       - "atomfinger"
+    # INITIALIZR:INITIALIZR-DEMO
     schedule:
       interval: "daily"
-# INITIALIZR:INITIALIZR-DEMO
