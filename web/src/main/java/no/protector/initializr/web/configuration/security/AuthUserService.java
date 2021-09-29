@@ -26,7 +26,6 @@ public class AuthUserService {
     public AuthUserService(IntegrationEndpoints integrationEndpoints) {
         this.userServiceBaseUrl = integrationEndpoints.getUserServiceUrl() + "/api/users";
         this.restTemplate = new RestTemplate();
-        this.restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
     }
 
     public Optional<AuthUser> getAuthUser(String token) {
