@@ -13,7 +13,7 @@ jobs:
       - name: Update Gradle Wrapper
         uses: gradle-update/update-gradle-wrapper-action@v1
         with:
-          repo-token: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
+         # repo-token: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
 # INITIALIZR:INITIALIZR-DEMO
           reviewers: atomfinger
 # INITIALIZR:INITIALIZR-DEMO
