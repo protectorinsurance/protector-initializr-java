@@ -30,8 +30,8 @@ Go to Application and run the main method. Intellij should pick it up.
 - [x] Configuration & dependencies for producing Kafka messages using Avro schemas
 - [x] Logging & APM
 - [x] System tests
-- [x] Automatic pull requests for new dependency versions.
-- [x] Automatic pull requests for new gradle versions.
+- [x] Automatic pull requests for new dependency versions
+- [x] Automatic pull requests for new gradle versions
 - [ ] Kafka consumer
 - [ ] SonarCloud integration
 - [ ] Contract-first development (with OpenApi/Swagger)
