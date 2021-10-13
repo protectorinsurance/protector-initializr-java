@@ -1,0 +1,31 @@
+dependencies {
+    testImplementation project(':kafka')
+    testImplementation project(':domain')
+
+    // Managed by spring-dependencies
+    testImplementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.kafka:spring-kafka'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+    //INITIALIZR:DATABASE
+    testImplementation 'org.flywaydb:flyway-core'
+    runtimeOnly "com.microsoft.sqlserver:mssql-jdbc"
+    //INITIALIZR:DATABASE
+
+    // Self-managed dependencies
+    testImplementation 'org.testcontainers:spock:1.16.0'
+    testImplementation 'org.testcontainers:mockserver:1.16.0'
+    testImplementation 'org.mock-server:mockserver-client-java:5.11.2'
+    testImplementation 'org.testcontainers:kafka:1.16.0'
+    testImplementation 'io.confluent:kafka-avro-serializer:6.2.1'
+    //INITIALIZR:DATABASE
+    testImplementation 'org.testcontainers:mssqlserver:1.16.0'
+    testImplementation 'org.dbunit:dbunit:2.7.2'
+    //INITIALIZR:DATABASE
+}
+
+test {
+    onlyIf {
+        project.hasProperty('systemTest')
+    }
+}

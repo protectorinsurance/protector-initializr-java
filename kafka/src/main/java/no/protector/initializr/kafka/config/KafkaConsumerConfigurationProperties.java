@@ -1,8 +1,8 @@
 //INITIALIZR:KAFKA-PRODUCER
 package no.protector.initializr.kafka.config;
 
-import io.confluent.kafka.serializers.KafkaAvroSerializer;
-import org.apache.kafka.clients.producer.ProducerConfig;
+import io.confluent.kafka.serializers.KafkaAvroDeserializer;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -18,12 +18,12 @@ public class KafkaConsumerConfigurationProperties {
     private String clientId;
     private String schemaRegistryUrl;
 
-    public Map<String, Object> toProducerConfig() {
+    public Map<String, Object> toConsumerConfig() {
         return Map.of(
-                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
-                ProducerConfig.CLIENT_ID_CONFIG, clientId,
-                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class,
-                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class,
+                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
+                ConsumerConfig.CLIENT_ID_CONFIG, clientId,
+                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class,
+                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class,
                 SCHEMA_REGISTRY_URL, schemaRegistryUrl);
     }
 

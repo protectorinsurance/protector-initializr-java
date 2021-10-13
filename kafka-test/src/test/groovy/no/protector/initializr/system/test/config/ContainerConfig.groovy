@@ -1,6 +1,10 @@
 package no.protector.initializr.system.test.config
 
+import java.nio.file.Path
+import java.time.Duration
+
 import no.protector.initializr.system.test.provider.FlywayProvider
+
 import org.mockserver.client.MockServerClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -14,8 +18,6 @@ import org.testcontainers.images.builder.ImageFromDockerfile
 import org.testcontainers.utility.DockerImageName
 import org.testcontainers.utility.MountableFile
 
-import java.nio.file.Path
-
 @Configuration
 @ComponentScan(value = "no.protector.initializr.system.test")
 class ContainerConfig {
@@ -23,26 +25,22 @@ class ContainerConfig {
     private static final Logger LOG = LoggerFactory.getLogger(ContainerConfig.class)
 
     private static Network network
-    private static GenericContainer protectorInitializrContainer
+    private static GenericContainer protectorKafkaInitializrContainer
     private static MockServerContainer mockServer
     //INITIALIZR:DATABASE
     private static MSSQLServerContainer mssqlServerContainer
     //INITIALIZR:DATABASE
-    //INITIALIZR:KAFKA-PRODUCER
     private static KafkaContainer kafkaContainer
     private static GenericContainer schemaRegistryContainer
-    //INITIALIZR:KAFKA-PRODUCER
 
     @Bean(name = "protectorInitializrContainer")
-    GenericContainer protectorInitializrContainer() { protectorInitializrContainer }
+    GenericContainer protectorInitializrContainer() { protectorKafkaInitializrContainer }
 
-    //INITIALIZR:KAFKA-PRODUCER
     @Bean("schemaRegistryContainer")
     GenericContainer schemaRegistryContainer() { schemaRegistryContainer }
 
     @Bean("kafkaContainer")
     KafkaContainer kafkaContainer() { kafkaContainer }
-    //INITIALIZR:KAFKA-PRODUCER
 
     @Bean
     MockServerClient mockServerClient() {
@@ -56,35 +54,40 @@ class ContainerConfig {
 
     static {
         network = Network.newNetwork()
-        protectorInitializrContainer = createProtectorInitializrContainer(network)
+        protectorKafkaInitializrContainer = createKafkaProtectorInitializrContainer(network)
         //INITIALIZR:DATABASE
         mssqlServerContainer = createMSSQLServerContainer(network)
         //INITIALIZR:DATABASE
-        //INITIALIZR:KAFKA-PRODUCER
         kafkaContainer = createKafkaContainer(network)
         schemaRegistryContainer = createSchemaRegistryContainer(network)
-        //INITIALIZR:KAFKA-PRODUCER
         mockServer = createMockServer(network)
         startContainers()
     }
 
     private static startContainers() {
         mockServer.start()
-        //INITIALIZR:KAFKA-PRODUCER
         kafkaContainer.start()
         schemaRegistryContainer.start()
-        //INITIALIZR:KAFKA-PRODUCER
         //INITIALIZR:DATABASE
         mssqlServerContainer.start()
         def flyway = FlywayProvider.build(mssqlServerContainer)
         flyway.clean()
         flyway.migrate()
         //INITIALIZR:DATABASE
-        protectorInitializrContainer.start()
-        protectorInitializrContainer.followOutput(new Slf4jLogConsumer(LOG))
+
+        try {
+            protectorKafkaInitializrContainer.start()
+        } catch (Exception e) {
+            println("***********************************")
+            println("LOGS FROM CONTAINER:")
+            println("***********************************")
+            println(protectorKafkaInitializrContainer.logs)
+            println("***********************************")
+            throw e
+        }
+        protectorKafkaInitializrContainer.followOutput(new Slf4jLogConsumer(LOG))
     }
 
-    //INITIALIZR:KAFKA-PRODUCER
     private static KafkaContainer createKafkaContainer(Network network) {
         new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"))
                 .withNetwork(network)
@@ -101,7 +104,6 @@ class ContainerConfig {
                 .waitingFor(Wait.forHttp("/subjects").forPort(8081).forStatusCode(200))
                 .withExposedPorts(8081)
     }
-    //INITIALIZR:KAFKA-PRODUCER
 
     //INITIALIZR:DATABASE
     private static MSSQLServerContainer createMSSQLServerContainer(Network network) {
@@ -127,13 +129,15 @@ class ContainerConfig {
                 .withNetworkAliases("mockserver")
     }
 
-    private static GenericContainer createProtectorInitializrContainer(Network network) {
-        createBaseProtectorInitializrContainer()
-                .withExposedPorts(8080, 8391)
+    private static GenericContainer createKafkaProtectorInitializrContainer(Network network) {
+        createBaseKafkaProtectorInitializrContainer()
+                .withExposedPorts(8391)
                 .withNetwork(network)
                 .withNetworkAliases("protector-initializr")
                 .withEnv("spring_profiles_active", "system-test")
-                .waitingFor(Wait.forHttp("/actuator/health").forPort(8391).forStatusCode(200))
+                .waitingFor(Wait.forHttp("/actuator/health")
+                    .forPort(8391)
+                    .forStatusCode(200))
         //INITIALIZR:DATABASE
                 .withCopyFileToContainer(
                         MountableFile.forClasspathResource("db_write.properties"),
@@ -141,8 +145,8 @@ class ContainerConfig {
         //INITIALIZR:DATABASE
     }
 
-    private static GenericContainer createBaseProtectorInitializrContainer() {
+    private static GenericContainer createBaseKafkaProtectorInitializrContainer() {
         new GenericContainer(new ImageFromDockerfile()
-                .withDockerfile(Path.of("../Web.Dockerfile")))
+                .withDockerfile(Path.of("../Kafka.Dockerfile")))
     }
 }

@@ -15,4 +15,5 @@ include 'domain-no-database'
 include 'web'
 include 'web-test'
 include 'kafka'
+include 'kafka-test'
 

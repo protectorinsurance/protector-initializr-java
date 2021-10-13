@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EmployeeConsumer {
-
     private final EmployeeService employeeService;
 
     public EmployeeConsumer(EmployeeService employeeService) {
@@ -18,7 +17,11 @@ public class EmployeeConsumer {
     }
 
     //Pretend call that we're creating an employee
-    @KafkaListener(id = "read-employee-consumer", topics = "#{__listener.topic}", clientIdPrefix = "initializr")
+    @KafkaListener(
+            topics = "read-employee-consumer",
+            groupId = "initializr-employee-consumer",
+            containerFactory = "employeeListenerContainerFactory",
+            clientIdPrefix = "initializr")
     void createEmployee(@Payload int employeeId,
                         @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
                         Acknowledgment ack) {
