@@ -23,7 +23,7 @@ class ContainerConfig {
     private static final Logger LOG = LoggerFactory.getLogger(ContainerConfig.class)
 
     private static Network network
-    private static GenericContainer protectorKafkaInitializrContainer
+    private static GenericContainer protectorInitializrContainer
     private static MockServerContainer mockServer
     //INITIALIZR:DATABASE
     private static MSSQLServerContainer mssqlServerContainer
@@ -31,8 +31,8 @@ class ContainerConfig {
     private static KafkaContainer kafkaContainer
     private static GenericContainer schemaRegistryContainer
 
-    @Bean(name = "protectorKafkaInitializrContainer")
-    GenericContainer protectorKafkaInitializrContainer() { protectorKafkaInitializrContainer }
+    @Bean(name = "protectorInitializrContainer")
+    GenericContainer protectorKafkaInitializrContainer() { protectorInitializrContainer }
 
     @Bean("schemaRegistryContainer")
     GenericContainer schemaRegistryContainer() { schemaRegistryContainer }
@@ -52,7 +52,7 @@ class ContainerConfig {
 
     static {
         network = Network.newNetwork()
-        protectorKafkaInitializrContainer = createKafkaProtectorInitializrContainer(network)
+        protectorInitializrContainer = createProtectorInitializrContainer(network)
         //INITIALIZR:DATABASE
         mssqlServerContainer = createMSSQLServerContainer(network)
         //INITIALIZR:DATABASE
@@ -72,8 +72,8 @@ class ContainerConfig {
         flyway.clean()
         flyway.migrate()
         //INITIALIZR:DATABASE
-        protectorKafkaInitializrContainer.start()
-        protectorKafkaInitializrContainer.followOutput(new Slf4jLogConsumer(LOG))
+        protectorInitializrContainer.start()
+        protectorInitializrContainer.followOutput(new Slf4jLogConsumer(LOG))
     }
 
     private static KafkaContainer createKafkaContainer(Network network) {
@@ -117,8 +117,8 @@ class ContainerConfig {
                 .withNetworkAliases("mockserver")
     }
 
-    private static GenericContainer createKafkaProtectorInitializrContainer(Network network) {
-        createBaseKafkaProtectorInitializrContainer()
+    private static GenericContainer createProtectorInitializrContainer(Network network) {
+        createBaseProtectorInitializrContainer()
                 .withExposedPorts(8391)
                 .withNetwork(network)
                 .withNetworkAliases("protector-initializr-kafka")
@@ -131,7 +131,7 @@ class ContainerConfig {
         //INITIALIZR:DATABASE
     }
 
-    private static GenericContainer createBaseKafkaProtectorInitializrContainer() {
+    private static GenericContainer createBaseProtectorInitializrContainer() {
         new GenericContainer(new ImageFromDockerfile()
                 .withDockerfile(Path.of("../Kafka.Dockerfile")))
     }
