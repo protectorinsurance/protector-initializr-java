@@ -1,3 +1,4 @@
+//INITIALIZR:KAFKA-PRODUCER
 package no.protector.initializr.kafka.consumer;
 
 import no.protector.initializr.domain.model.Employee;
@@ -31,3 +32,5 @@ public class EmployeeConsumer {
         ack.acknowledge();
     }
 }
+//INITIALIZR:KAFKA-PRODUCER
+

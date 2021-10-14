@@ -13,6 +13,7 @@ import static org.springframework.kafka.listener.ContainerProperties.AckMode.MAN
 @Configuration
 public class KafkaConsumerConfiguration {
 
+    //INITIALIZR:INITIALIZR-DEMO
     @Bean
     ConcurrentKafkaListenerContainerFactory<Integer, String> employeeListenerContainerFactory(
             ConsumerFactory<Integer, String> employeeConsumerFactory) {
@@ -28,4 +29,5 @@ public class KafkaConsumerConfiguration {
             KafkaConsumerConfigurationProperties kafkaConsumerConfigurationProperties) {
         return new DefaultKafkaConsumerFactory<>(kafkaConsumerConfigurationProperties.toConsumerConfig());
     }
+    //INITIALIZR:INITIALIZR-DEMO
 }
