@@ -37,8 +37,8 @@ if not args.kafka_consumer:
 if not persistence_framework:
     persistence_framework = input("What persistence framework do you want? (none, jpa, jdbc)\n")
 
-if not args.has_kafka_producer:
-    args.has_kafka_producer = input("Will the application produce Kafka messages? (y/n)\n")
+if not args.kafka_producer:
+    args.kafka_producer = input("Will the application produce Kafka messages? (y/n)\n")
 
 if not args.clean:
     args.clean = input("Do you want to remove demo/initializr files?(y/n - y recommended)\n")
@@ -388,7 +388,7 @@ def validate():
 
 
 clean_initializr = parse_boolean_response(args.clean)
-has_kafka_producer = parse_boolean_response(args.has_kafka_producer)
+has_kafka_producer = parse_boolean_response(args.kafka_producer)
 has_web = parse_boolean_response(args.web)
 has_kafka_consumer = parse_boolean_response(args.kafka_consumer)
 
