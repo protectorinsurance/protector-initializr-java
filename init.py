@@ -444,8 +444,6 @@ find_and_replace_in_files(["initializr_kafka_client"], f"{underscore_project_nam
 
 find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.Dockerfile", "Kafka.Dockerfile"])
 
-find_and_replace_in_files(["initializr"], project_name.lower(), files)
-
 update_elastic_apm_namespace()
 
 os.remove("initializr-script-demo.gif")
@@ -453,6 +451,7 @@ os.remove("initializr-script-demo.gif")
 print("Doing some house cleaning...")
 remove_unused_imports()
 clean_initializr_tags()
+find_and_replace_in_files(["initializr"], project_name.lower(), files)
 delete_empty_files()
 delete_empty_dirs('./')
 clean_all_double_empty_lines()
