@@ -1,5 +1,6 @@
+//INITIALIZR:INITIALIZR-DEMO
+//INITIALIZR:KAFKA-PRODUCER
 package no.protector.initializr.system.test.kafka
-
 
 import no.protector.initializr.system.test.AbstractSystemSpec
 import no.protector.initializr.system.test.consumer.KafkaTestConsumer
@@ -29,3 +30,5 @@ class EmployeeConsumerProducerSpec extends AbstractSystemSpec {
         consumer.value == "2,Yolo Swaggins,Lord Of The Bling"
     }
 }
+//INITIALIZR:KAFKA-PRODUCER
+//INITIALIZR:INITIALIZR-DEMO

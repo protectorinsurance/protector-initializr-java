@@ -1,4 +1,3 @@
-//INITIALIZR:KAFKA-PRODUCER
 package no.protector.initializr.system.test.config
 
 import io.confluent.kafka.serializers.KafkaAvroDeserializer
@@ -30,11 +29,12 @@ class KafkaConfig {
     private KafkaContainer kafkaContainer
 
     /***
-     * TODO: This is where you put kafka consumer factories
+     * TODO: This is where you put kafka consumer and producer factories
      * An example can be found here:
      * https://github.com/protectorinsurance/protector-initializr-java/blob/main/web-test/src/test/groovy/no/protector/initializr/system/test/config/KafkaConfig.groovy
      */
 
+    //INITIALIZR:INITIALIZR-DEMO
     @Bean
     ProducerFactory<Integer, String> kafkaProducer() {
         new DefaultKafkaProducerFactory<Integer, String>(producerConfigs())
@@ -59,7 +59,7 @@ class KafkaConfig {
         new DefaultKafkaConsumerFactory<Integer, String>(consumerConfigs())
     }
     //INITIALIZR:KAFKA-PRODUCER
-
+    //INITIALIZR:INITIALIZR-DEMO
 
     @Bean
     Map<String, Object> producerConfigs() {
@@ -87,4 +87,3 @@ class KafkaConfig {
         )
     }
 }
-//INITIALIZR:KAFKA-PRODUCER

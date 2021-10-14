@@ -56,6 +56,4 @@ class AsyncTestUtils {
             return !((Iterable) value).isEmpty()
         return true
     }
-
-
 }

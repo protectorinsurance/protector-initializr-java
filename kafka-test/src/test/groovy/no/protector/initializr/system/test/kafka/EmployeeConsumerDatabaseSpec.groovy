@@ -1,3 +1,5 @@
+//INITIALIZR:INITIALIZR-DEMO
+//INITIALIZR:DATABASE
 package no.protector.initializr.system.test.kafka
 
 import groovy.sql.Sql
@@ -33,3 +35,5 @@ class EmployeeConsumerDatabaseSpec extends AbstractSystemSpec {
         result.Last_Name == "Lord Of The Bling"
     }
 }
+//INITIALIZR:DATABASE
+//INITIALIZR:INITIALIZR-DEMO

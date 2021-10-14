@@ -36,7 +36,7 @@ jobs:
         run: pip install requests
 
       - name: Execute python script
-        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf jpa --kafka_producer "true"
+        run: python init.py --web "true" --kafka_consumer "true" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf jpa --kafka_producer "true"
 
   verify_persistence_framework_options:
     name: Verify persistence framework
@@ -47,27 +47,39 @@ jobs:
         include:
           - database: 'none'
             clean: 'false'
-            kafka: 'true'
+            kafka_producer: 'true'
+            web: 'true'
+            kafka_consumer: 'true'
             systemTestArgument: -PsystemTest
           - database: 'jdbc'
             clean: 'false'
-            kafka: 'true'
+            kafka_producer: 'true'
+            web: 'true'
+            kafka_consumer: 'true'
             systemTestArgument: -PsystemTest
           - database: 'jpa'
             clean: 'false'
-            kafka: 'true'
+            kafka_producer: 'true'
+            web: 'true'
+            kafka_consumer: 'true'
             systemTestArgument: -PsystemTest
           - database: 'none'
             clean: 'true'
-            kafka: 'true'
+            kafka_producer: 'true'
+            web: 'true'
+            kafka_consumer: 'true'
             systemTestArgument: ''
           - database: 'jdbc'
             clean: 'true'
-            kafka: 'true'
+            kafka_producer: 'true'
+            web: 'true'
+            kafka_consumer: 'true'
             systemTestArgument: ''
           - database: 'jpa'
             clean: 'true'
-            kafka: 'true'
+            kafka_producer: 'true'
+            web: 'true'
+            kafka_consumer: 'true'
             systemTestArgument: ''
     steps:
       - uses: actions/checkout@v2
@@ -91,7 +103,7 @@ jobs:
       - name: Installing dependencies
         run: pip install requests
       - name: Execute python script
-        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "${{ matrix.clean }}" --pf "${{ matrix.database }}" --kafka_producer "${{ matrix.kafka }}"
+        run: python init.py --web "${{ matrix.web }}" --kafka_consumer "${{ matrix.kafka_consumer }}" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "${{ matrix.clean }}" --pf "${{ matrix.database }}" --kafka_producer "${{ matrix.kafka_producer }}"
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Verify that applicaton still builds

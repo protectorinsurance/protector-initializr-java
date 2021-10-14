@@ -7,6 +7,9 @@ from pathlib import Path
 
 parser = argparse.ArgumentParser()
 
+parser.add_argument('--web', help='Decides whether the application needs web services', default=None)
+parser.add_argument('--kafka_consumer', help='Decides whether the application needs to consume kafka messages',
+                    default=None)
 parser.add_argument('--p', help='Project name (my-awesome-application)', default=None)
 parser.add_argument('--n', help='Namespace (no.protector.my.awesome.application)', default=None)
 parser.add_argument('--pf', help='Persistence framework (none, jpa, jdbc)', default=None)
@@ -14,7 +17,6 @@ parser.add_argument('--clean', help='Removes all initializr demo implementations
 parser.add_argument('--kafka_producer', help='Do you want Kafka Producer?', default=None)
 
 args = parser.parse_args()
-
 project_name = args.p
 namespace = args.n
 persistence_framework = args.pf
@@ -26,11 +28,17 @@ if not project_name:
 if not namespace:
     namespace = input("What namespace should the application use? (no.protector.my.awesome.application)\n").lower()
 
+if not args.web:
+    args.web = input("Will the application host web services? (y/n)\n")
+
+if not args.kafka_consumer:
+    args.kafka_consumer = input("will the application consume Kafka messages? (y/n)\n")
+
 if not persistence_framework:
     persistence_framework = input("What persistence framework do you want? (none, jpa, jdbc)\n")
 
-if not args.kafka_producer:
-    args.kafka_producer = input("Do you want Kafka producers? (y/n)\n")
+if not args.has_kafka_producer:
+    args.has_kafka_producer = input("Will the application produce Kafka messages? (y/n)\n")
 
 if not args.clean:
     args.clean = input("Do you want to remove demo/initializr files?(y/n - y recommended)\n")
@@ -48,10 +56,12 @@ def parse_boolean_response(response):
     raise argparse.ArgumentTypeError('Boolean value expected.')
 
 
-def update_banner():
+def update_banners():
     banner_text = project_name.replace('-', '++++').title()
     new_banner = requests.get("https://artii.herokuapp.com/make?text=" + banner_text).text
     with open('web/src/main/resources/banner.txt', 'w') as file:
+        file.write(new_banner)
+    with open('kafka/src/main/resources/banner.txt', 'w') as file:
         file.write(new_banner)
 
 
@@ -347,11 +357,11 @@ def run_sanity_checks():
     files_with_word = get_files_that_contain_word('initializr', _files)
     name_of_files_with_words = '\n'.join(files_with_word)
     if files_with_word:
-        raise Exception(f"Files contain the word 'Initializr': \n{name_of_files_with_words}")
-    if not kafka_producer:
+        raise Exception(f"Files contain the word 'Initializr': \n {name_of_files_with_words}")
+    if not has_kafka_producer:
         files_with_word = get_files_that_contain_word('kafka', _files)
         if files_with_word:
-            raise Exception(f"Files contain the word 'kafka': \n{name_of_files_with_words}")
+            raise Exception(f"Files contain the word 'kafka': \n {name_of_files_with_words}")
 
 
 def update_elastic_apm_namespace():
@@ -368,26 +378,43 @@ def validate():
         raise Exception("Namespace cannot contain spaces")
     if 'initializr' in namespace.lower() or 'initializr' in project_name:
         raise Exception("Namespace and project name does not support the word /'initializr/'. That causes issues with"
-                        "the cleanup procedure of this script.")
+                        "the cleanup procedure of this script")
+    if not has_web and not has_kafka_consumer:
+        raise Exception("You must have either web services, kafka consumer or both")
     if persistence_framework not in ["none", "jdbc", "jpa"]:
         raise Exception("You can only pick between none, jdbc and jpa")
-    if not kafka_producer and not clean_initializr:
+    if not has_kafka_producer and not clean_initializr:
         raise Exception("Having demo code without kafka is currently too finicky. Not supported")
 
 
 clean_initializr = parse_boolean_response(args.clean)
-kafka_producer = parse_boolean_response(args.kafka_producer)
+has_kafka_producer = parse_boolean_response(args.has_kafka_producer)
+has_web = parse_boolean_response(args.web)
+has_kafka_consumer = parse_boolean_response(args.kafka_consumer)
 
 validate()
 
 if clean_initializr:
     tags_to_clean.append("INITIALIZR-DEMO")
 
-if not kafka_producer:
+if not has_kafka_producer:
     tags_to_clean.append("KAFKA-PRODUCER")
 
 print("Updating banner...")
-update_banner()
+update_banners()
+
+
+if not has_web:
+    print("Removing Web...")
+    delete_dir("web")
+    delete_dir("web-test")
+    find_and_remove_lines_containing('web', ['./settings.gradle'])
+
+if not has_kafka_consumer:
+    print("Removing Kafka consumer...")
+    delete_dir("kafka")
+    delete_dir("kafka-test")
+    find_and_remove_lines_containing('kafka', ['./settings.gradle'])
 
 print("Setting persistence framework...")
 set_persistence_framework()
