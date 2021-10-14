@@ -16,5 +16,11 @@ public record EmployeeServiceImpl(EmployeeRepository employeeRepository, Employe
         employeeKafkaProducer.employeeRead(employee);
         return employee;
     }
+
+    @Override
+    public void saveEmployee(Employee employee) {
+        employeeRepository.save(employee);
+        employeeKafkaProducer.employeeCreated(employee);
+    }
 }
 //INITIALIZR:INITIALIZR-DEMO

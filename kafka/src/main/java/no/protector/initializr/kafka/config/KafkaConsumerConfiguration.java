@@ -7,6 +7,8 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
+import static org.springframework.kafka.listener.ContainerProperties.AckMode.MANUAL_IMMEDIATE;
+
 @EnableKafka
 @Configuration
 public class KafkaConsumerConfiguration {
@@ -17,6 +19,7 @@ public class KafkaConsumerConfiguration {
         ConcurrentKafkaListenerContainerFactory<Integer, String> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(employeeConsumerFactory);
+        factory.getContainerProperties().setAckMode(MANUAL_IMMEDIATE);
         return factory;
     }
 

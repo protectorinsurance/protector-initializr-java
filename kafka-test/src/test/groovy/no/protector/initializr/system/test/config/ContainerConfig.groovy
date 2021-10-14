@@ -1,10 +1,6 @@
 package no.protector.initializr.system.test.config
 
-import java.nio.file.Path
-import java.time.Duration
-
 import no.protector.initializr.system.test.provider.FlywayProvider
-
 import org.mockserver.client.MockServerClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -17,6 +13,8 @@ import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.images.builder.ImageFromDockerfile
 import org.testcontainers.utility.DockerImageName
 import org.testcontainers.utility.MountableFile
+
+import java.nio.file.Path
 
 @Configuration
 @ComponentScan(value = "no.protector.initializr.system.test")
@@ -33,8 +31,8 @@ class ContainerConfig {
     private static KafkaContainer kafkaContainer
     private static GenericContainer schemaRegistryContainer
 
-    @Bean(name = "protectorInitializrContainer")
-    GenericContainer protectorInitializrContainer() { protectorKafkaInitializrContainer }
+    @Bean(name = "protectorKafkaInitializrContainer")
+    GenericContainer protectorKafkaInitializrContainer() { protectorKafkaInitializrContainer }
 
     @Bean("schemaRegistryContainer")
     GenericContainer schemaRegistryContainer() { schemaRegistryContainer }
@@ -74,17 +72,7 @@ class ContainerConfig {
         flyway.clean()
         flyway.migrate()
         //INITIALIZR:DATABASE
-
-        try {
-            protectorKafkaInitializrContainer.start()
-        } catch (Exception e) {
-            println("***********************************")
-            println("LOGS FROM CONTAINER:")
-            println("***********************************")
-            println(protectorKafkaInitializrContainer.logs)
-            println("***********************************")
-            throw e
-        }
+        protectorKafkaInitializrContainer.start()
         protectorKafkaInitializrContainer.followOutput(new Slf4jLogConsumer(LOG))
     }
 
@@ -133,11 +121,9 @@ class ContainerConfig {
         createBaseKafkaProtectorInitializrContainer()
                 .withExposedPorts(8391)
                 .withNetwork(network)
-                .withNetworkAliases("protector-initializr")
+                .withNetworkAliases("protector-initializr-kafka")
                 .withEnv("spring_profiles_active", "system-test")
-                .waitingFor(Wait.forHttp("/actuator/health")
-                    .forPort(8391)
-                    .forStatusCode(200))
+                .waitingFor(Wait.forHttp("/actuator/health").forPort(8391).forStatusCode(200))
         //INITIALIZR:DATABASE
                 .withCopyFileToContainer(
                         MountableFile.forClasspathResource("db_write.properties"),

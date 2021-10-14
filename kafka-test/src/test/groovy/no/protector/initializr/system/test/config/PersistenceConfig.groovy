@@ -1,6 +1,7 @@
 //INITIALIZR:DATABASE
 package no.protector.initializr.system.test.config
 
+import groovy.sql.Sql
 import org.dbunit.JdbcDatabaseTester
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
@@ -37,6 +38,16 @@ class PersistenceConfig {
                 mssqlServerContainer.username,
                 mssqlServerContainer.password)
 
+    }
+
+    @Bean
+    Sql datasource() {
+        Sql.newInstance(
+                mssqlServerContainer.getJdbcUrl(),
+                'SA',
+                'A_Str0ng_Required_Password',
+                mssqlDriver
+        )
     }
 }
 //INITIALIZR:DATABASE

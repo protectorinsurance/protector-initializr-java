@@ -51,7 +51,7 @@ abstract class AbstractSystemSpec extends Specification {
             datasets
                     .collect {
                         new FlatXmlDataSetBuilder().build(
-                                RequestService.class.getResourceAsStream("/dataset/$it"))
+                                AsyncTestUtils.class.getResourceAsStream("/dataset/$it"))
                     }
                     .each {
                         new CompositeOperation(

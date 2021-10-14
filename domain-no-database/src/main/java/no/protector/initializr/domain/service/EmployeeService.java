@@ -5,5 +5,6 @@ import no.protector.initializr.domain.model.Employee;
 
 public interface EmployeeService {
     Employee getEmployee(int employeeId);
+    void saveEmployee(Employee employee);
 }
 //INITIALIZR:INITIALIZR-DEMO

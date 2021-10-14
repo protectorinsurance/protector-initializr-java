@@ -8,7 +8,7 @@ import no.protector.initializr.domain.producer.EmployeeKafkaProducer
 import no.protector.initializr.domain.repository.EmployeeRepository
 import spock.lang.Specification
 
-class EmployeeServiceImpSpec extends Specification {
+class EmployeeServiceImplSpec extends Specification {
 
     def repository = Mock(EmployeeRepository)
     def producer = Mock(EmployeeKafkaProducer)
