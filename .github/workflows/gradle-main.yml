@@ -138,7 +138,21 @@ jobs:
           ghcr-token: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
       # INITIALIZR:KAFKA-CONSUMER
 
-  # INITIALIZR:INITIALIZR-DEMO
+# INITIALIZR:INITIALIZR-DEMO
+  init_script_sanity_checks:
+    name: Init script sanity checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Installing dependencies
+        run: pip install requests
+
+      - name: Execute python script
+        run: python init.py --web "true" --kafka_consumer "true" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf jpa --kafka_producer "true"
+
   verify_clean_builds:
     name: Verify builds w/o demo files
     needs: [ build, init_script_sanity_checks ]

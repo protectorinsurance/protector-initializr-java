@@ -426,6 +426,13 @@ create_namespace()
 clean_tag_content(tags_to_clean)
 
 files = get_available_files()
+
+if not has_web:
+    find_and_replace_in_files(['needs: [build_web_image, build_kafka_image]'], 'needs: build_kafka_image', files)
+
+if not has_kafka_consumer:
+    find_and_replace_in_files(['needs: [build_web_image, build_kafka_image]'], 'needs: build_web_image', files)
+
 print("Replacing references to initializr...")
 find_and_replace_in_files(["protector-initializr-java", "protector-initializr"], project_name.lower(), files)
 find_and_replace_in_files(["no.protector.initializr"], namespace, files)
