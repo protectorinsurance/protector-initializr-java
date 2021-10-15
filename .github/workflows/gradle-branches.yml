@@ -38,49 +38,22 @@ jobs:
       - name: Execute python script
         run: python init.py --web "true" --kafka_consumer "true" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf jpa --kafka_producer "true"
 
-  verify_persistence_framework_options:
-    name: Verify persistence framework
+  verify_clean_builds:
+    name: Verify builds w/o demo files
     needs: [ build, init_script_sanity_checks ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
-          - database: 'none'
-            clean: 'false'
-            kafka_producer: 'true'
-            web: 'true'
+          - web: 'true'
+            kafka_consumer: 'false'
+            database: 'none'
+          - web: 'false'
             kafka_consumer: 'true'
-            systemTestArgument: -PsystemTest
-          - database: 'jdbc'
-            clean: 'false'
-            kafka_producer: 'true'
-            web: 'true'
+            database: 'jpa'
+          - web: 'true'
             kafka_consumer: 'true'
-            systemTestArgument: -PsystemTest
-          - database: 'jpa'
-            clean: 'false'
-            kafka_producer: 'true'
-            web: 'true'
-            kafka_consumer: 'true'
-            systemTestArgument: -PsystemTest
-          - database: 'none'
-            clean: 'true'
-            kafka_producer: 'true'
-            web: 'true'
-            kafka_consumer: 'true'
-            systemTestArgument: ''
-          - database: 'jdbc'
-            clean: 'true'
-            kafka_producer: 'true'
-            web: 'true'
-            kafka_consumer: 'true'
-            systemTestArgument: ''
-          - database: 'jpa'
-            clean: 'true'
-            kafka_producer: 'true'
-            web: 'true'
-            kafka_consumer: 'true'
-            systemTestArgument: ''
+            database: 'jdbc'
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-buildx-action@v1
@@ -103,9 +76,85 @@ jobs:
       - name: Installing dependencies
         run: pip install requests
       - name: Execute python script
-        run: python init.py --web "${{ matrix.web }}" --kafka_consumer "${{ matrix.kafka_consumer }}" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "${{ matrix.clean }}" --pf "${{ matrix.database }}" --kafka_producer "${{ matrix.kafka_producer }}"
+        run: python init.py --web "${{ matrix.web }}" --kafka_consumer "${{ matrix.kafka_consumer }}" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf "jdbc" --kafka_producer "true"
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Verify that applicaton still builds
-        run: ./gradlew build ${{ matrix.systemTestArgument }}
+        run: ./gradlew build -PsystemTest --info
+
+  verify_deployment_variations:
+    name: Verify deployment variations
+    needs: [ build, init_script_sanity_checks ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - web: 'true'
+            kafka_consumer: 'false'
+          - web: 'false'
+            kafka_consumer: 'true'
+          - web: 'true'
+            kafka_consumer: 'true'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/setup-buildx-action@v1
+      - name: Set up JDK 16
+        uses: actions/setup-java@v2
+        with:
+          java-version: '16'
+          distribution: 'zulu'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Installing dependencies
+        run: pip install requests
+      - name: Execute python script
+        run: python init.py --web "${{ matrix.web }}" --kafka_consumer "${{ matrix.kafka_consumer }}" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "true" --pf "jdbc" --kafka_producer "true"
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Verify that applicaton still builds
+        run: ./gradlew build -PsystemTest --info
+
+  verify_persistence_framework_options:
+    name: Verify persistence framework
+    needs: [ build, init_script_sanity_checks ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        database: ['none', 'jdbc', 'jpa']
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/setup-buildx-action@v1
+      - name: Set up JDK 16
+        uses: actions/setup-java@v2
+        with:
+          java-version: '16'
+          distribution: 'zulu'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Installing dependencies
+        run: pip install requests
+      - name: Execute python script
+        run: python init.py --web "true" --kafka_consumer "true" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf "${{ matrix.database }}" --kafka_producer "true"
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Verify that applicaton still builds
+        run: ./gradlew build -PsystemTest --info
 # INITIALIZR:INITIALIZR-DEMO
