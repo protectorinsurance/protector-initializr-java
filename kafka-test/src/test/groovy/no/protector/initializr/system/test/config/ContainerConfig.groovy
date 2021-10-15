@@ -32,7 +32,7 @@ class ContainerConfig {
     private static GenericContainer schemaRegistryContainer
 
     @Bean(name = "protectorInitializrContainer")
-    GenericContainer protectorKafkaInitializrContainer() { protectorInitializrContainer }
+    GenericContainer protectorInitializrContainer() { protectorInitializrContainer }
 
     @Bean("schemaRegistryContainer")
     GenericContainer schemaRegistryContainer() { schemaRegistryContainer }

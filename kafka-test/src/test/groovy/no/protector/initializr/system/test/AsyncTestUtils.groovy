@@ -10,7 +10,7 @@ import java.util.concurrent.TimeoutException
 class AsyncTestUtils {
 
     @Autowired
-    GenericContainer protectorKafkaInitializrContainer
+    GenericContainer protectorInitializrContainer
 
     /**
      * Repeats some operations for a number of seconds until it has a list with
