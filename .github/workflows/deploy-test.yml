@@ -18,7 +18,6 @@ env:
   kafka_image_name: protector-initializr-java-async
   kafka_service_name: protector-initializr-java-async
   # INITIALIZR:KAFKA-CONSUMER
-  service_name: protector-initializr-java
   version: ${{ github.event.inputs.version }}
 
 jobs:
