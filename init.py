@@ -452,6 +452,11 @@ find_and_replace_in_files(["initializr_kafka_client"], f"{underscore_project_nam
 
 find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.Dockerfile", "Kafka.Dockerfile"])
 
+if not has_web:
+    os.remove("Web.Dockerfile")
+if not has_kafka_consumer:
+    os.remove("Kafka.Dockerfile")
+
 update_elastic_apm_namespace()
 
 os.remove("initializr-script-demo.gif")
