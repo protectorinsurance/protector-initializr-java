@@ -21,8 +21,10 @@ class EmployeeConsumerProducerSpec extends AbstractSystemSpec {
     private KafkaTestConsumer consumer
 
     def "When employee created it send out a message"() {
+        //INITIALIZR:DATABASE
         given:
         cleanAndInsertDataset("EmployeeDataset.xml")
+        //INITIALIZR:DATABASE
         when:
         employeeKafkaTemplate.send("create-employee-consumer", "Yolo Swaggins,Lord Of The Bling")
         consumer.latch.await(1000, TimeUnit.MILLISECONDS)
