@@ -1,6 +1,5 @@
 dependencies {
     testImplementation project(':kafka')
-    testImplementation project(':web')
     testImplementation project(':domain')
 
     // Managed by spring-dependencies
