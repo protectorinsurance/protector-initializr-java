@@ -27,7 +27,7 @@ class EmployeeConsumerProducerSpec extends AbstractSystemSpec {
         //INITIALIZR:DATABASE
         when:
         employeeKafkaTemplate.send("create-employee-consumer", "Yolo Swaggins,Lord Of The Bling")
-        consumer.latch.await(1000, TimeUnit.MILLISECONDS)
+        consumer.latch.await(5, TimeUnit.SECONDS)
         then:
         consumer.value == "2,Yolo Swaggins,Lord Of The Bling"
     }
