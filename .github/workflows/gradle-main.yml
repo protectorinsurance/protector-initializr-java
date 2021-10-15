@@ -107,7 +107,7 @@ jobs:
     name: Deploy to test
     if: ${{ false }} # TODO: Delete me when application is set up in ICP
     runs-on: self-hosted
-    needs: [build_web_image, build_kafka_image]
+    needs: [ build_web_image, build_kafka_image ]
     steps:
       # INITIALIZR:WEB
       - name: Deploy web to test
@@ -138,7 +138,7 @@ jobs:
           ghcr-token: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
       # INITIALIZR:KAFKA-CONSUMER
 
-# INITIALIZR:INITIALIZR-DEMO
+  # INITIALIZR:INITIALIZR-DEMO
   init_script_sanity_checks:
     name: Init script sanity checks
     runs-on: ubuntu-latest
@@ -272,4 +272,4 @@ jobs:
         run: chmod +x gradlew
       - name: Verify that applicaton still builds
         run: ./gradlew build -PsystemTest --info
-# INITIALIZR:INITIALIZR-DEMO
+  # INITIALIZR:INITIALIZR-DEMO
