@@ -124,7 +124,7 @@ jobs:
         run: ./gradlew build -PsystemTest --info
 
   verify_persistence_framework_options:
-    name: Verify persistence framework
+    name: Verify persistence framework variations
     needs: [ build, init_script_sanity_checks ]
     runs-on: ubuntu-latest
     strategy:

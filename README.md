@@ -32,7 +32,7 @@ Go to Application and run the main method. Intellij should pick it up.
 - [x] System tests
 - [x] Automatic pull requests for new dependency versions
 - [x] Automatic pull requests for new gradle versions
-- [ ] Kafka consumer
+- [x] Kafka consumer
 - [ ] SonarCloud integration
 - [ ] Contract-first development (with OpenApi/Swagger)
 
