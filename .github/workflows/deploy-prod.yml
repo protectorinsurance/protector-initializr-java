@@ -15,8 +15,14 @@ on:
 
 env:
   # Set deploy information for the service
-  image_name: protector-initializr-java
-  service_name: protector-initializr-java
+  # INITIALIZR:WEB
+  web_image_name: protector-initializr-java-web
+  web_service_name: protector-initializr-java-web
+  # INITIALIZR:WEB
+  # INITIALIZR:KAFKA-CONSUMER
+  kafka_image_name: protector-initializr-java-async
+  kafka_service_name: protector-initializr-java-async
+  # INITIALIZR:KAFKA-CONSUMER
   version: ${{ github.event.inputs.version || 'latest' }}
 
 jobs:
@@ -24,11 +30,12 @@ jobs:
     name: Deploy to prod
     runs-on: self-hosted
     steps:
-      - name: Deploy to prod
+      # INITIALIZR:WEB
+      - name: Deploy web to prod
         uses: protectorinsurance/swarm-ssh-deployer@v1
         with:
-          service-name: ${{ env.service_name }}
-          image: ghcr.io/protectorinsurance/${{ env.image_name }}
+          service-name: ${{ env.web_service_name }}
+          image: ghcr.io/protectorinsurance/${{ env.web_image_name }}
           image-tag: ${{ env.version }}
           private-key: ${{ secrets.DEPLOY_PRIVATE_KEY_FILENAME }}
           username: ${{ secrets.DEPLOY_USERNAME }}
@@ -36,3 +43,18 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           ghcr-username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
           ghcr-token: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
+      # INITIALIZR:WEB
+      # INITIALIZR:KAFKA-CONSUMER
+      - name: Deploy async to prod
+        uses: protectorinsurance/swarm-ssh-deployer@v1
+        with:
+          service-name: ${{ env.kafka_service_name }}
+          image: ghcr.io/protectorinsurance/${{ env.kafka_image_name }}
+          image-tag: ${{ env.version }}
+          private-key: ${{ secrets.DEPLOY_PRIVATE_KEY_FILENAME }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          hostname: ${{ secrets.PROD_DEPLOY_HOSTNAME }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          ghcr-username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
+          ghcr-token: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
+      # INITIALIZR:KAFKA-CONSUMER

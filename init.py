@@ -403,18 +403,19 @@ if not has_kafka_producer:
 print("Updating banner...")
 update_banners()
 
-
 if not has_web:
     print("Removing Web...")
     delete_dir("web")
     delete_dir("web-test")
     find_and_remove_lines_containing('web', ['./settings.gradle'])
+    tags_to_clean.append("WEB")
 
 if not has_kafka_consumer:
     print("Removing Kafka consumer...")
     delete_dir("kafka")
     delete_dir("kafka-test")
     find_and_remove_lines_containing('kafka', ['./settings.gradle'])
+    tags_to_clean.append("KAFKA-CONSUMER")
 
 print("Setting persistence framework...")
 set_persistence_framework()
