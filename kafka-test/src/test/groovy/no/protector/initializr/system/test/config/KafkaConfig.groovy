@@ -46,7 +46,7 @@ class KafkaConfig {
         return new KafkaTemplate<>(employeeProducerFactory)
     }
 
-    //INITIALIZR:KAFKA-PRODUCER
+    //INITIALIZR:KAFKA-CONSUMER
     @Bean
     ConcurrentKafkaListenerContainerFactory<Integer, String> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<Integer, String> factory = new ConcurrentKafkaListenerContainerFactory<>()
@@ -58,7 +58,7 @@ class KafkaConfig {
     ConsumerFactory<Integer, String> kafkaConsumer() {
         new DefaultKafkaConsumerFactory<Integer, String>(consumerConfigs())
     }
-    //INITIALIZR:KAFKA-PRODUCER
+    //INITIALIZR:KAFKA-CONSUMER
     //INITIALIZR:INITIALIZR-DEMO
 
     @Bean

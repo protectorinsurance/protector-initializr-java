@@ -1,10 +1,10 @@
 -- INITIALIZR:INITIALIZR-DEMO
 -- INITIALIZR:DATABASE
-create table Employee
+CREATE TABLE Employee
 (
-    Id         int          not null IDENTITY primary key,
-    First_Name varchar(128) not null,
-    Last_Name  varchar(128) not null
+    Id         INT PRIMARY KEY IDENTITY NOT NULL,
+    First_Name VARCHAR(128)             NOT NULL,
+    Last_Name  VARCHAR(128)             NOT NULL
 )
 -- INITIALIZR:DATABASE
 -- INITIALIZR:INITIALIZR-DEMO
