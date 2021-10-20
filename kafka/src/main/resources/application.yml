@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: protector-initializr
+  # INITIALIZR:DATABASE
+  datasource:
+    url: jdbc:sqlserver://${db.host_port};databaseName=${db.database_name};applicationName=${spring.application.name};sendStringParametersAsUnicode=false;lockTimeout=15000
+    username: ${db.username}
+    password: ${db.password}
+  flyway:
+    enabled: true
+    outOfOrder: false
+    validateOnMigrate: true
+    cleanDisabled: true
+    locations: classpath:./migrations
+    baseline-on-migrate: true
+    # INITIALIZR:DATABASE
+  kafka:
+    admin:
+      fail-fast: true
+    properties:
+      sasl:
+        mechanism: PLAIN
+        jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username=${kafka.username} password=${kafka.password};
+      security:
+        protocol: SASL_PLAINTEXT
+
+kafka:
+  bootstrap-servers: pfsvnocont01:9095,pfsvnocont02:9095,pfsvnocont03:9095
+  client-id: ${spring.application.name}
+  schema-registry-url: http://pfsvnocont01:8081,http://pfsvnocont02:8081,http://pfsvnocont03:8081
+
+management:
+  server.port: 8391
+  endpoints.web.exposure.include: health,beans
+  endpoint:
+    health:
+      show-details: always
+      group:
+        kafka:
+          include: kafkaConsumer
+          show-components: always
+          show-details: always
+
+
+integration:
+  userServiceUrl: http://userservice:5002
+
+server:
+  port: 8080

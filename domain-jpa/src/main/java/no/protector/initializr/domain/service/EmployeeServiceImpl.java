@@ -18,5 +18,11 @@ public record EmployeeServiceImpl(EmployeeRepository employeeRepository, Employe
         }
         return employee;
     }
+
+    @Override
+    public void saveEmployee(Employee employee) {
+        employeeRepository.save(employee);
+        kafkaProducer.employeeCreated(employee);
+    }
 }
 //INITIALIZR:INITIALIZR-DEMO

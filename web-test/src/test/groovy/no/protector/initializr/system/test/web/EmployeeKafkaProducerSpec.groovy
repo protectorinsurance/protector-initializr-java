@@ -37,7 +37,6 @@ class EmployeeKafkaProducerSpec extends AbstractSystemSpec {
         requestService.exchange(new URI("$employeeUri/1"), HttpMethod.GET, Employee)
         consumer.latch.await(1000, TimeUnit.MILLISECONDS)
         then:
-        //.replaceAll("[^a-zA-Z0-9 ]+","")
         consumer.value == 'Wall'
     }
 }

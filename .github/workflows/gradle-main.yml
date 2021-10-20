@@ -7,8 +7,15 @@ on:
 
 env:
   # Set deploy information for the service
-  image_name: protector-initializr-java
-  service_name: protector-initializr-java
+  # INITIALIZR:WEB
+  web_image_name: protector-initializr-java-web
+  web_service_name: protector-initializr-java-web
+  # INITIALIZR:WEB
+  # INITIALIZR:KAFKA-CONSUMER
+  kafka_image_name: protector-initializr-java-async
+  kafka_service_name: protector-initializr-java-async
+  # INITIALIZR:KAFKA-CONSUMER
+
   version: ${{ github.run_number }}
 
 jobs:
@@ -31,20 +38,28 @@ jobs:
         run: ./gradlew :web-test:test -PsystemTest --info
       - uses: actions/upload-artifact@v2
         with:
-          name: artifact
+          name: web-artifact
           path: |
             web/build/libs/*
             elasticapm.properties
-            Dockerfile
+            Web.Dockerfile
+      - uses: actions/upload-artifact@v2
+        with:
+          name: kafka-artifact
+          path: |
+            kafka/build/libs/*
+            elasticapm.properties
+            Kafka.Dockerfile
 
-  docker:
-    name: Build docker image
+  # INITIALIZR:WEB
+  build_web_image:
+    name: Build web docker image
     runs-on: ubuntu-latest
     needs: build
     steps:
       - uses: actions/download-artifact@v2
         with:
-          name: artifact
+          name: web-artifact
       - uses: docker/login-action@v1
         with:
           registry: ghcr.io
@@ -52,25 +67,54 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v2
         with:
+          file: Web.Dockerfile
           context: .
           platforms: linux/amd64
           pull: true
           push: true
           tags: |
-            ghcr.io/protectorinsurance/${{ env.image_name }}:${{ env.version }}
-            ghcr.io/protectorinsurance/${{ env.image_name }}:latest
+            ghcr.io/protectorinsurance/${{ env.web_image_name }}:${{ env.version }}
+            ghcr.io/protectorinsurance/${{ env.web_image_name }}:latest
+  # INITIALIZR:WEB
+
+  # INITIALIZR:KAFKA-CONSUMER
+  build_async_image:
+    name: Build async docker image
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: kafka-artifact
+      - uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v2
+        with:
+          file: Kafka.Dockerfile
+          context: .
+          platforms: linux/amd64
+          pull: true
+          push: true
+          tags: |
+            ghcr.io/protectorinsurance/${{ env.kafka_image_name }}:${{ env.version }}
+            ghcr.io/protectorinsurance/${{ env.kafka_image_name }}:latest
+  # INITIALIZR:KAFKA-CONSUMER
 
   deploy_test:
     name: Deploy to test
     if: ${{ false }} # TODO: Delete me when application is set up in ICP
     runs-on: self-hosted
-    needs: docker
+    needs: [ build_web_image, build_kafka_image ]
     steps:
-      - name: Deploy to test
+      # INITIALIZR:WEB
+      - name: Deploy web to test
         uses: protectorinsurance/swarm-ssh-deployer@v1
         with:
-          service-name: ${{ env.service_name }}
-          image: ghcr.io/protectorinsurance/${{ env.image_name }}
+          service-name: ${{ env.web_service_name }}
+          image: ghcr.io/protectorinsurance/${{ env.web_image_name }}
           image-tag: ${{ env.version }}
           private-key: ${{ secrets.DEPLOY_PRIVATE_KEY_FILENAME }}
           username: ${{ secrets.DEPLOY_USERNAME }}
@@ -78,6 +122,21 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           ghcr-username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
           ghcr-token: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
+      # INITIALIZR:WEB
+      # INITIALIZR:KAFKA-CONSUMER
+      - name: Deploy async to test
+        uses: protectorinsurance/swarm-ssh-deployer@v1
+        with:
+          service-name: ${{ env.kafka_service_name }}
+          image: ghcr.io/protectorinsurance/${{ env.kafka_image_name }}
+          image-tag: ${{ env.version }}
+          private-key: ${{ secrets.DEPLOY_PRIVATE_KEY_FILENAME }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          hostname: ${{ secrets.TEST_DEPLOY_HOSTNAME }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          ghcr-username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
+          ghcr-token: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
+      # INITIALIZR:KAFKA-CONSUMER
 
   # INITIALIZR:INITIALIZR-DEMO
   init_script_sanity_checks:
@@ -92,39 +151,24 @@ jobs:
         run: pip install requests
 
       - name: Execute python script
-        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf jpa --kafka_producer "true"
+        run: python init.py --web "true" --kafka_consumer "true" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf jpa --kafka_producer "true"
 
-  verify_persistence_framework_options:
-    name: Verify persistence framework
+  verify_clean_builds:
+    name: Verify builds w/o demo files
     needs: [ build, init_script_sanity_checks ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
-          - database: 'none'
-            clean: 'false'
-            kafka: 'true'
-            systemTestArgument: -PsystemTest
-          - database: 'jdbc'
-            clean: 'false'
-            kafka: 'true'
-            systemTestArgument: -PsystemTest
-          - database: 'jpa'
-            clean: 'false'
-            kafka: 'true'
-            systemTestArgument: -PsystemTest
-          - database: 'none'
-            clean: 'true'
-            kafka: 'true'
-            systemTestArgument: ''
-          - database: 'jdbc'
-            clean: 'true'
-            kafka: 'true'
-            systemTestArgument: ''
-          - database: 'jpa'
-            clean: 'true'
-            kafka: 'true'
-            systemTestArgument: ''
+          - web: 'true'
+            kafka_consumer: 'false'
+            database: 'none'
+          - web: 'false'
+            kafka_consumer: 'true'
+            database: 'jpa'
+          - web: 'true'
+            kafka_consumer: 'true'
+            database: 'jdbc'
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-buildx-action@v1
@@ -147,9 +191,85 @@ jobs:
       - name: Installing dependencies
         run: pip install requests
       - name: Execute python script
-        run: python init.py --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "${{ matrix.clean }}" --pf "${{ matrix.database }}" --kafka_producer "${{ matrix.kafka }}"
+        run: python init.py --web "${{ matrix.web }}" --kafka_consumer "${{ matrix.kafka_consumer }}" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "true" --pf "${{ matrix.database }}" --kafka_producer "true"
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Verify that applicaton still builds
-        run: ./gradlew build ${{ matrix.systemTestArgument }}
-# INITIALIZR:INITIALIZR-DEMO
+        run: ./gradlew build -PsystemTest --info
+
+  verify_deployment_variations:
+    name: Verify deployment variations
+    needs: [ build, init_script_sanity_checks ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - web: 'true'
+            kafka_consumer: 'false'
+          - web: 'false'
+            kafka_consumer: 'true'
+          - web: 'true'
+            kafka_consumer: 'true'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/setup-buildx-action@v1
+      - name: Set up JDK 16
+        uses: actions/setup-java@v2
+        with:
+          java-version: '16'
+          distribution: 'zulu'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Installing dependencies
+        run: pip install requests
+      - name: Execute python script
+        run: python init.py --web "${{ matrix.web }}" --kafka_consumer "${{ matrix.kafka_consumer }}" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf "jdbc" --kafka_producer "true"
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Verify that applicaton still builds
+        run: ./gradlew build -PsystemTest --info
+
+  verify_persistence_framework_options:
+    name: Verify persistence framework variations
+    needs: [ build, init_script_sanity_checks ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        database: [ 'none', 'jdbc', 'jpa' ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/setup-buildx-action@v1
+      - name: Set up JDK 16
+        uses: actions/setup-java@v2
+        with:
+          java-version: '16'
+          distribution: 'zulu'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Installing dependencies
+        run: pip install requests
+      - name: Execute python script
+        run: python init.py --web "true" --kafka_consumer "true" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf "${{ matrix.database }}" --kafka_producer "true"
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Verify that applicaton still builds
+        run: ./gradlew build -PsystemTest --info
+  # INITIALIZR:INITIALIZR-DEMO

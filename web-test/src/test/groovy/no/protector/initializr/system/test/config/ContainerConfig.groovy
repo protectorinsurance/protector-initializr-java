@@ -143,6 +143,6 @@ class ContainerConfig {
 
     private static GenericContainer createBaseProtectorInitializrContainer() {
         new GenericContainer(new ImageFromDockerfile()
-                .withDockerfile(Path.of("../Dockerfile")))
+                .withDockerfile(Path.of("../Web.Dockerfile")))
     }
 }

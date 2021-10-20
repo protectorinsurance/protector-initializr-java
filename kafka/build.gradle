@@ -1,0 +1,45 @@
+plugins {
+    id 'org.springframework.boot'
+}
+
+dependencies {
+    implementation project(':domain')
+
+    // Managed by spring-dependencies
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation 'org.springframework.kafka:spring-kafka'
+    // Self-managed dependencies
+    implementation 'org.apache.avro:avro:1.10.2'
+    implementation 'io.confluent:kafka-avro-serializer:6.2.1'
+}
+
+//INITIALIZR:DATABASE
+sourceSets {
+    main {
+        resources {
+            srcDirs += ["$rootDir/flyway"]
+        }
+    }
+}
+//INITIALIZR:DATABASE
+
+// APM config start
+configurations {
+    dockerExtras
+}
+
+dependencies {
+    dockerExtras "co.elastic.apm:elastic-apm-agent:${apmVersion}"
+}
+
+assemble.dependsOn "copyDockerExtras"
+task copyDockerExtras(type: Copy) {
+    from configurations.dockerExtras {
+        rename {
+            filename -> filename.replaceAll('-[0-9]+\\.[0-9]+\\.[0-9]+', '')
+        }
+    }
+    into "$buildDir/libs"
+}
+// APM config end

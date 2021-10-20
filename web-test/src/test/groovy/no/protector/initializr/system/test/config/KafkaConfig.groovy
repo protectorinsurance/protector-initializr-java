@@ -22,7 +22,7 @@ class KafkaConfig {
 
     @Autowired
     @Qualifier("kafkaContainer")
-    private KafkaContainer KafkaContainer
+    private KafkaContainer kafkaContainer
 
     /***
      * TODO: This is where you put kafka consumer factories
@@ -48,7 +48,7 @@ class KafkaConfig {
     Map<String, Object> consumerConfigs() {
         String schemaRegistryUrl = "http://${schemaRegistryContainer.host}:${schemaRegistryContainer.getMappedPort(8081)}"
         Map.of(
-                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaContainer.getBootstrapServers(),
+                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaContainer.getBootstrapServers(),
                 ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest",
                 ConsumerConfig.GROUP_ID_CONFIG, "group-id",
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class,

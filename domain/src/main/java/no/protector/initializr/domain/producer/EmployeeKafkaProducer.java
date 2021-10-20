@@ -22,7 +22,19 @@ public class EmployeeKafkaProducer {
     public void employeeRead(Employee employee) {
         try {
             employeeKafkaTemplate.send("employee-read", employee.getId(), employee.getLastName()).get();
+        } catch (ExecutionException e) {
+            LOG.error("Could not send message", e);
+        } catch (InterruptedException e) {
+            LOG.error("Sending was interrupted", e);
+            Thread.currentThread().interrupt();
+        }
+    }
 
+    public void employeeCreated(Employee employee) {
+        try {
+            String message =
+                    String.format("%1$s,%2$s,%3$s", employee.getId(), employee.getFirstName(), employee.getLastName());
+            employeeKafkaTemplate.send("employee-created", employee.getId(), message).get();
         } catch (ExecutionException e) {
             LOG.error("Could not send message", e);
         } catch (InterruptedException e) {

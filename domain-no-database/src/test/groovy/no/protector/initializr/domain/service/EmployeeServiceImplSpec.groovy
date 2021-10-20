@@ -8,7 +8,7 @@ import no.protector.initializr.domain.model.Employee
 import no.protector.initializr.domain.producer.EmployeeKafkaProducer
 import spock.lang.Specification
 
-class EmployeeServiceImpSpec extends Specification {
+class EmployeeServiceImplSpec extends Specification {
 
     def producer = Mock(EmployeeKafkaProducer)
     def service = new EmployeeServiceImpl(producer)
@@ -27,19 +27,6 @@ class EmployeeServiceImpSpec extends Specification {
         def result = JsonOutput.toJson(service.getEmployee(1))
         then:
         result == employee
-    }
-
-    def "Calling with id not 1 will result in exception"(int id) {
-        when:
-        service.getEmployee(id)
-        then:
-        thrown IllegalArgumentException
-        where:
-        id  | _
-        0   | _
-        -1  | _
-        3   | _
-        100 | _
     }
 }
 //INITIALIZR:INITIALIZR-DEMO
