@@ -107,7 +107,7 @@ jobs:
     name: Deploy to test
     if: ${{ false }} # TODO: Delete me when application is set up in ICP
     runs-on: self-hosted
-    needs: [ build_web_image, build_kafka_image ]
+    needs: [ build_web_image, build_async_image ]
     steps:
       # INITIALIZR:WEB
       - name: Deploy web to test
