@@ -23,7 +23,7 @@ dependencies {
     testImplementation 'org.dbunit:dbunit:2.7.2'
     //INITIALIZR:DATABASE
     //INITIALIZR:KAFKA-PRODUCER
-    testImplementation "org.testcontainers:kafka:1.16.0"
+    testImplementation "org.testcontainers:kafka:1.16.1"
     testImplementation 'io.confluent:kafka-avro-serializer:6.2.1'
     //INITIALIZR:KAFKA-PRODUCER
 }
