@@ -2,6 +2,10 @@
 
 # protector-initializr-java
 
+Protector Initializr is a template and project configurator for new Java applications at Protector.
+
+The goal is to provide a sensible and opinionated default on which new systems can be built upon while removing a lot of yak shaving. 
+
 ### Build
 
 **Normal Build**:  
