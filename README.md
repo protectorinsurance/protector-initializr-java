@@ -49,4 +49,3 @@ Go to Application and run the main method. Intellij should pick it up.
 [Documentation can be found here](https://github.com/protectorinsurance/protector-initializr-java/wiki)
 
 [comment]: # (INITIALIZR:INITIALIZR-DEMO)
-
