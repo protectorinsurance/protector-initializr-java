@@ -37,7 +37,7 @@ Go to Application and run the main method. Intellij should pick it up.
 - [x] Automatic pull requests for new dependency versions
 - [x] Automatic pull requests for new gradle versions
 - [x] Kafka consumer
-- [ ] SonarCloud integration
+- [x] SonarCloud integration
 - [ ] Contract-first development (with OpenApi/Swagger)
 
 ### Getting started

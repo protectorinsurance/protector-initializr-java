@@ -18,8 +18,11 @@ jobs:
           java-version: '16'
           distribution: 'zulu'
           cache: 'gradle'
-      - name: Build & Unit tests
-        run: ./gradlew build
+      - name: Build, Test and Analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build sonarqube
       - name: System tests
         run: ./gradlew :web-test:test -PsystemTest --info
 

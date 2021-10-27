@@ -3,6 +3,7 @@ plugins {
     id 'groovy'
     id 'org.springframework.boot' version '2.5.6'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id "org.sonarqube" version "3.3"
 }
 
 group = 'no.protectorforsikring'
@@ -54,6 +55,14 @@ subprojects {
 
     test {
         useJUnitPlatform()
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "protectorinsurance_protector-initializr-java"
+        property "sonar.organization", "protectorinsurance"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
 
