@@ -78,6 +78,9 @@ task jacocoRootReport(type: JacocoReport, group: 'verification') {
     sourceDirectories.from = subprojects.sourceSets.main.allSource.srcDirs
     classDirectories.from = subprojects.sourceSets.main.output
     executionData.from = subprojects.jacocoTestReport.executionData
+    reports{
+        xml.getRequired().set(true)
+    }
 }
 
 tasks["sonarqube"].dependsOn "jacocoRootReport"
