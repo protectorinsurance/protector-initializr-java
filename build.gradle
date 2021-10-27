@@ -61,30 +61,23 @@ subprojects {
     }
 
     def jacocoExecutionDataFiles = fileTree(buildDir).include("/jacoco/*.exec")
-    jacocoTestReport{
-        reports{
-            xml.required = true
+    jacocoTestReport {
+        additionalSourceDirs.from = sourceSets.main.allSource.srcDirs
+        sourceDirectories.from = sourceSets.main.allSource.srcDirs
+        classDirectories.from = sourceSets.main.output
+        reports {
+            xml.enabled true
         }
-        executionData.setFrom(jacocoExecutionDataFiles)
+        executionData.from = jacocoExecutionDataFiles
     }
-}
-
-private Set<Project> validJacocoSubProjects() {
-    subprojects.findAll { project -> project.name != 'client' }
 }
 
 task jacocoRootReport(type: JacocoReport, group: 'verification') {
     dependsOn = subprojects.check
-    additionalSourceDirs.setFrom(validJacocoSubProjects().sourceSets.main.allSource.srcDirs)
-    sourceDirectories.setFrom(validJacocoSubProjects().sourceSets.main.allSource.srcDirs)
-    classDirectories.setFrom(validJacocoSubProjects().sourceSets.main.output)
-    executionData.setFrom(validJacocoSubProjects().jacocoTestReport.executionData)
-    reports {
-        xml.required = true
-    }
-    onlyIf = {
-        true
-    }
+    additionalSourceDirs.from = subprojects.sourceSets.main.allSource.srcDirs
+    sourceDirectories.from = subprojects.sourceSets.main.allSource.srcDirs
+    classDirectories.from = subprojects.sourceSets.main.output
+    executionData.from = subprojects.jacocoTestReport.executionData
 }
 
 tasks["sonarqube"].dependsOn "jacocoRootReport"
