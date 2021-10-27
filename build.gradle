@@ -24,6 +24,8 @@ allprojects {
         maven { url "https://packages.confluent.io/maven/" }
         //INITIALIZR:KAFKA-PRODUCER
     }
+
+    apply plugin: 'jacoco'
 }
 
 subprojects {
@@ -56,13 +58,41 @@ subprojects {
     test {
         useJUnitPlatform()
     }
+
+    def jacocoExecutionDataFiles = fileTree(buildDir).include("/jacoco/*.exec")
+    jacocoTestReport{
+        reports{
+            xml.required = true
+        }
+        executionData.setFrom(jacocoExecutionDataFiles)
+    }
 }
 
+private Set<Project> validJacocoSubProjects() {
+    subprojects.findAll { project -> project.name != 'client' }
+}
+
+task jacocoRootReport(type: JacocoReport, group: 'verification') {
+    dependsOn = subprojects.check
+    additionalSourceDirs.setFrom(validJacocoSubProjects().sourceSets.main.allSource.srcDirs)
+    sourceDirectories.setFrom(validJacocoSubProjects().sourceSets.main.allSource.srcDirs)
+    classDirectories.setFrom(validJacocoSubProjects().sourceSets.main.output)
+    executionData.setFrom(validJacocoSubProjects().jacocoTestReport.executionData)
+    reports {
+        xml.required = true
+    }
+    onlyIf = {
+        true
+    }
+}
+
+tasks["sonarqube"].dependsOn "jacocoRootReport"
 sonarqube {
     properties {
         property "sonar.projectKey", "protectorinsurance_protector-initializr-java"
         property "sonar.organization", "protectorinsurance"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
     }
 }
 
