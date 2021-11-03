@@ -19,10 +19,10 @@ jobs:
           distribution: 'zulu'
           cache: 'gradle'
       - name: Build, Test and Analyze
+        run: ./gradlew build sonarqube --info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build sonarqube --info
       - name: System tests
         run: ./gradlew :web-test:test -PsystemTest --info
 
