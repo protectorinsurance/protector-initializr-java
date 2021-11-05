@@ -11,8 +11,6 @@ import java.util.concurrent.TimeoutException
 @Component
 class AsyncTestUtils {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AsyncTestUtils.class)
-
     @Autowired
     GenericContainer protectorInitializrContainer
 
@@ -44,7 +42,6 @@ class AsyncTestUtils {
             if ((System.currentTimeSeconds() - startTime) > timeoutSeconds)
                 throw new TimeoutException(getExceptionMessage())
             result = operation()
-            LOG.info("Got some result: $result")
         }
         result
     }
