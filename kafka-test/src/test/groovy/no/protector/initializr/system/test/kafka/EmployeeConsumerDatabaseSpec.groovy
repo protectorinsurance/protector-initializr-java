@@ -23,16 +23,16 @@ class EmployeeConsumerDatabaseSpec extends AbstractSystemSpec {
     AsyncTestUtils asyncTestUtils
 
     def "When employee created it should be stored in database"() {
-        //given:
-        //cleanAndInsertDataset("EmployeeDataset.xml")
-        //when:
-        //employeeKafkaTemplate.send("create-employee-consumer", "Yolo Swaggins,Lord Of The Bling")
-        //def result = asyncTestUtils.execute(10, {
-        //    datasource.firstRow("SELECT * FROM Employee WHERE Id = 2")
-        //})
-        //then:
-        //result.First_Name == "Yolo Swaggins"
-        //result.Last_Name == "Lord Of The Bling"
+        given:
+        cleanAndInsertDataset("EmployeeDataset.xml")
+        when:
+        employeeKafkaTemplate.send("create-employee-consumer", "Yolo Swaggins,Lord Of The Bling")
+        def result = asyncTestUtils.execute(10, {
+            datasource.firstRow("SELECT * FROM Employee WHERE Id = 2")
+        })
+        then:
+        result.First_Name == "Yolo Swaggins"
+        result.Last_Name == "Lord Of The Bling"
     }
 }
 //INITIALIZR:DATABASE
