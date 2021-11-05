@@ -1,5 +1,7 @@
 package no.protector.initializr.system.test
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.testcontainers.containers.GenericContainer
@@ -8,6 +10,8 @@ import java.util.concurrent.TimeoutException
 
 @Component
 class AsyncTestUtils {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AsyncTestUtils.class)
 
     @Autowired
     GenericContainer protectorInitializrContainer
@@ -24,10 +28,9 @@ class AsyncTestUtils {
      * Here's an example usage that will time out after 10 seconds:
      * <pre>
      * {@code
-     * def result = asyncTestUtils.execute(10, {
-     *  datasource.firstRow("SELECT * FROM Employee WHERE Id = 1")
-     * })
-     * }
+     * def result = asyncTestUtils.execute(10, {*  datasource.firstRow("SELECT * FROM Employee WHERE Id = 1")
+     *})
+     *}
      * </pre>
      *
      * @param timeoutSeconds - Number of seconds before an exception is thrown
@@ -41,6 +44,7 @@ class AsyncTestUtils {
             if ((System.currentTimeSeconds() - startTime) > timeoutSeconds)
                 throw new TimeoutException(getExceptionMessage())
             result = operation()
+            print("Got some result: $result")
         }
         result
     }
