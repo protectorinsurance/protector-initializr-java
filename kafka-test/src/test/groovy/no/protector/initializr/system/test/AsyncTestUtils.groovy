@@ -44,7 +44,7 @@ class AsyncTestUtils {
             if ((System.currentTimeSeconds() - startTime) > timeoutSeconds)
                 throw new TimeoutException(getExceptionMessage())
             result = operation()
-            print("Got some result: $result")
+            LOG.info("Got some result: $result")
         }
         result
     }

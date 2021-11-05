@@ -127,7 +127,7 @@ jobs:
       - name: Do regular build
         run: ./gradlew build --stacktrace
       - name: Run system tests
-        run: ./gradlew build -PsystemTest --stacktrace
+        run: ./gradlew build -PsystemTest --info
 
   verify_persistence_framework_options:
     name: Verify persistence framework variations
