@@ -125,7 +125,7 @@ jobs:
           name: source-artifact-${{ matrix.web }}-${{ matrix.kafka_consumer }}
           path: ./
       - name: Verify that applicaton still builds
-        run: ./gradlew build -PsystemTest --stacktrace
+        run: ./gradlew build --stacktrace
 
   verify_persistence_framework_options:
     name: Verify persistence framework variations
