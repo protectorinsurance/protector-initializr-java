@@ -122,7 +122,7 @@ jobs:
         run: chmod +x gradlew
       - uses: actions/upload-artifact@v2
         with:
-          name: source-artifact
+          name: source-artifact-${{ matrix.web }}-${{ matrix.kafka_consumer }}
           path: ./
       - name: Verify that applicaton still builds
         run: ./gradlew build -PsystemTest --stacktrace
