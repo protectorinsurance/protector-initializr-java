@@ -27,7 +27,7 @@ class EmployeeConsumerDatabaseSpec extends AbstractSystemSpec {
         cleanAndInsertDataset("EmployeeDataset.xml")
         when:
         employeeKafkaTemplate.send("create-employee-consumer", "Yolo Swaggins,Lord Of The Bling")
-        def result = asyncTestUtils.execute(10, {
+        def result = asyncTestUtils.execute(100, {
             datasource.firstRow("SELECT * FROM Employee WHERE Id = 2")
         })
         then:
