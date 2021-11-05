@@ -120,6 +120,10 @@ jobs:
         run: python init.py --web "${{ matrix.web }}" --kafka_consumer "${{ matrix.kafka_consumer }}" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf "jdbc" --kafka_producer "true"
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - uses: actions/upload-artifact@v2
+        with:
+          name: source-artifact
+          path: ./
       - name: Verify that applicaton still builds
         run: ./gradlew build -PsystemTest --stacktrace
 
@@ -129,7 +133,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        database: ['none', 'jdbc', 'jpa']
+        database: [ 'none', 'jdbc', 'jpa' ]
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-buildx-action@v1
