@@ -8,6 +8,8 @@ import no.protector.initializr.system.test.AsyncTestUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.core.KafkaTemplate
 
+import java.util.concurrent.TimeUnit
+
 /**
  * Verifies functionality when Kafka consumer and databases is selected
  */
@@ -26,7 +28,8 @@ class EmployeeConsumerDatabaseSpec extends AbstractSystemSpec {
         given:
         cleanAndInsertDataset("EmployeeDataset.xml")
         when:
-        employeeKafkaTemplate.send("create-employee-consumer", "Yolo Swaggins,Lord Of The Bling")
+        def future = employeeKafkaTemplate.send("create-employee-consumer", "Yolo Swaggins,Lord Of The Bling")
+        future.get(10, TimeUnit.SECONDS)
         def result = asyncTestUtils.execute(10, {
             datasource.firstRow("SELECT * FROM Employee WHERE Id = 2")
         })
