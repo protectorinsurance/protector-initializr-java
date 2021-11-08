@@ -291,6 +291,7 @@ def clean_tag_content(tags):
         if not content:
             continue
         for tag in tags:
+            print(f"Removing {tag} from {fpath}")
             content = remove_between_strings(content, tag)
         with open(fpath, "w", encoding="utf-8") as f:
             f.write(content)
@@ -409,7 +410,7 @@ set_persistence_framework()
 print("Creating new namespace...")
 create_namespace()
 
-clean_tag_content(tags_to_clean)
+clean_tag_content([f"INITIALIZR:{tag}" for tag in tags_to_clean])
 
 files = get_available_files()
 
