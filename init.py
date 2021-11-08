@@ -288,6 +288,8 @@ def clean_tag_content(tags):
     _files = get_available_files()
     for fpath in _files:
         content = read(fpath)
+        if not content:
+            continue
         for tag in tags:
             content = remove_between_strings(content, tag)
         with open(fpath, "w", encoding="utf-8") as f:
