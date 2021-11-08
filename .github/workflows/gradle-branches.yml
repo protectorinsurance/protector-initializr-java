@@ -129,7 +129,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        database: ['none', 'jdbc', 'jpa']
+        database: [ 'none', 'jdbc', 'jpa' ]
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-buildx-action@v1
