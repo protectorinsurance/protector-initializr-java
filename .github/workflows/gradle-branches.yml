@@ -48,12 +48,19 @@ jobs:
           - web: 'true'
             kafka_consumer: 'false'
             database: 'none'
+            kafka_producer: 'true'
           - web: 'false'
             kafka_consumer: 'true'
             database: 'jpa'
+            kafka_producer: 'true'
           - web: 'true'
             kafka_consumer: 'true'
             database: 'jdbc'
+            kafka_producer: 'true'
+          - web: 'true'
+            kafka_consumer: 'false'
+            database: 'none'
+            kafka_producer: 'false'
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-buildx-action@v1
@@ -76,7 +83,7 @@ jobs:
       - name: Installing dependencies
         run: pip install requests
       - name: Execute python script
-        run: python init.py --web "${{ matrix.web }}" --kafka_consumer "${{ matrix.kafka_consumer }}" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "true" --pf "${{ matrix.database }}" --kafka_producer "true"
+        run: python init.py --web "${{ matrix.web }}" --kafka_consumer "${{ matrix.kafka_consumer }}" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "true" --pf "${{ matrix.database }}" --kafka_producer "${{ matrix.kafka_producer }}"
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Verify that applicaton still builds
