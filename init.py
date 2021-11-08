@@ -280,36 +280,18 @@ def should_write_xml(lines_to_write):
     return len(lines_that_are_not_initializr_comments) > 1
 
 
+def remove_between_strings(string, tag):
+    return re.sub(r'%s.*?%s' % (tag, tag), '', string)
+
+
 def clean_tag_content(tags):
     _files = get_available_files()
     for fpath in _files:
-        lines = read_lines(fpath)
-        if not lines:
-            continue
+        content = read(fpath)
+        for tag in tags:
+            content = remove_between_strings(content, tag)
         with open(fpath, "w", encoding="utf-8") as f:
-            is_xml = fpath.endswith(".xml")
-            write = True
-            lines_to_write = []
-            last_initializr_comment_line = None
-            for line in lines:
-                if is_one_of_tags_in_initializr_comment(tags, line):
-                    if not last_initializr_comment_line:
-                        last_initializr_comment_line = line
-                    is_same = last_initializr_comment_line.strip() == line.strip()
-                    if not is_same:
-                        continue
-                    last_initializr_comment_line = line
-                    write = not write
-                    continue
-                if write:
-                    lines_to_write.append(line)
-            if is_xml and not should_write_xml(lines_to_write):
-                f.truncate(0)
-                continue
-            if len(lines_to_write) > 0:
-                [f.write(line) for line in lines_to_write]
-            else:
-                f.truncate(0)
+            f.write(content)
 
 
 def clean_initializr_tags():
