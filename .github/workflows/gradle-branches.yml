@@ -120,10 +120,6 @@ jobs:
         run: python init.py --web "${{ matrix.web }}" --kafka_consumer "${{ matrix.kafka_consumer }}" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf "jdbc" --kafka_producer "true"
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - uses: actions/upload-artifact@v2
-        with:
-          name: source-artifact-${{ matrix.web }}-${{ matrix.kafka_consumer }}
-          path: ./
       - name: Do regular build
         run: ./gradlew build --stacktrace
       - name: Run system tests
