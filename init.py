@@ -355,13 +355,14 @@ def get_files_that_contain_word(word, _files):
 def run_sanity_checks():
     _files = get_available_files()
     files_with_word = get_files_that_contain_word('initializr', _files)
-    name_of_files_with_words = '\n'.join(files_with_word)
     if files_with_word:
-        raise Exception(f"Files contain the word 'Initializr': \n {name_of_files_with_words}")
+        print(f"Found {','.join(files_with_word)} files that contain 'initializr'")
+        raise Exception(f"Files contain the word 'Initializr': \n {','.join(files_with_word)}")
     if not has_kafka_producer and not has_kafka_consumer:
         files_with_word = get_files_that_contain_word('kafka', _files)
         if files_with_word:
-            raise Exception(f"Files contain the word 'kafka': \n {name_of_files_with_words}")
+            print(f"Found {','.join(files_with_word)} files that contain 'kafka'")
+            raise Exception(f"Files contain the word 'kafka': \n {','.join(files_with_word)}")
 
 
 def update_elastic_apm_namespace():
