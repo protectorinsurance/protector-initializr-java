@@ -5,8 +5,6 @@ package no.protector.initializr.system.test.kafka
 import groovy.sql.Sql
 import no.protector.initializr.system.test.AbstractSystemSpec
 import no.protector.initializr.system.test.AsyncTestUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.core.KafkaTemplate
 

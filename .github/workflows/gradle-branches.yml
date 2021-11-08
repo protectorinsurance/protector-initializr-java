@@ -21,7 +21,7 @@ jobs:
       - name: Build & Unit tests
         run: ./gradlew build
       - name: System tests
-        run: ./gradlew :web-test:test -PsystemTest --stacktrace
+        run: ./gradlew :web-test:test -PsystemTest --info
 
   # INITIALIZR:INITIALIZR-DEMO
   init_script_sanity_checks:
@@ -80,7 +80,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Verify that applicaton still builds
-        run: ./gradlew build -PsystemTest --stacktrace
+        run: ./gradlew build -PsystemTest --info
 
   verify_deployment_variations:
     name: Verify deployment variations
@@ -120,9 +120,7 @@ jobs:
         run: python init.py --web "${{ matrix.web }}" --kafka_consumer "${{ matrix.kafka_consumer }}" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf "jdbc" --kafka_producer "true"
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Do regular build
-        run: ./gradlew build --stacktrace
-      - name: Run system tests
+      - name: Verify that applicaton still builds
         run: ./gradlew build -PsystemTest --info
 
   verify_persistence_framework_options:
@@ -158,5 +156,5 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Verify that applicaton still builds
-        run: ./gradlew build -PsystemTest --stacktrace
+        run: ./gradlew build -PsystemTest --info
 # INITIALIZR:INITIALIZR-DEMO
