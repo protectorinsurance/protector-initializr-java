@@ -399,6 +399,7 @@ if clean_initializr:
     tags_to_clean.append("INITIALIZR-DEMO")
 
 if not has_kafka_producer:
+    print("Removing kafka producer")
     tags_to_clean.append("KAFKA-PRODUCER")
 
 print("Updating banner...")

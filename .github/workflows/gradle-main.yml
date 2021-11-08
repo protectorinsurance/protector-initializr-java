@@ -36,6 +36,7 @@ jobs:
         run: ./gradlew build
       - name: System tests
         run: ./gradlew :web-test:test -PsystemTest --info
+      # INITIALIZR:WEB
       - uses: actions/upload-artifact@v2
         with:
           name: web-artifact
@@ -43,6 +44,8 @@ jobs:
             web/build/libs/*
             elasticapm.properties
             Web.Dockerfile
+      # INITIALIZR:WEB
+      # INITIALIZR:KAFKA-CONSUMER
       - uses: actions/upload-artifact@v2
         with:
           name: kafka-artifact
@@ -50,6 +53,7 @@ jobs:
             kafka/build/libs/*
             elasticapm.properties
             Kafka.Dockerfile
+      # INITIALIZR:KAFKA-CONSUMER
 
   # INITIALIZR:WEB
   build_web_image:
