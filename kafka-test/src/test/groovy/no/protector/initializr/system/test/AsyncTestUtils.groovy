@@ -54,7 +54,7 @@ class AsyncTestUtils {
         if (value == null)
             return false
         if (value instanceof Iterable)
-            return !((Iterable) value).isEmpty()
+            return ((Iterable) value).size() > 1
         return true
     }
 }

@@ -5,6 +5,8 @@ package no.protector.initializr.system.test.kafka
 import groovy.sql.Sql
 import no.protector.initializr.system.test.AbstractSystemSpec
 import no.protector.initializr.system.test.AsyncTestUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.core.KafkaTemplate
 
@@ -33,11 +35,10 @@ class EmployeeConsumerDatabaseSpec extends AbstractSystemSpec {
                 .get(5, TimeUnit.SECONDS)
         then:
         def result = asyncTestUtils.execute(10, {
-            datasource.firstRow("SELECT * FROM Employee WHERE First_name = 'Yolo Swaggins' ")
+            datasource.rows("SELECT * FROM Employee")
         })
         then:
-        result.First_Name == "Yolo Swaggins"
-        result.Last_Name == "Lord Of The Bling"
+        result == null
     }
 }
 //INITIALIZR:DATABASE
