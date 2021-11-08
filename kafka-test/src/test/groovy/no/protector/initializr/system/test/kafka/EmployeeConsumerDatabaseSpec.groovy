@@ -36,8 +36,7 @@ class EmployeeConsumerDatabaseSpec extends AbstractSystemSpec {
                 .send("create-employee-consumer", "Yolo Swaggins,Lord Of The Bling")
                 .get(5, TimeUnit.SECONDS)
         then:
-        def sendResult = future.get(10, TimeUnit.SECONDS)
-        LOG.info("The thing: $sendResult")
+        Thread.sleep(10000)
         def result = asyncTestUtils.execute(10, {
             datasource.firstRow("SELECT * FROM Employee WHERE Id = 2")
         })
