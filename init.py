@@ -281,7 +281,7 @@ def should_write_xml(lines_to_write):
 
 
 def remove_between_strings(string, tag):
-    return re.sub(r'%s.*?%s' % (tag, tag), '', string, flags=re.MULTILINE)
+    return re.sub(r'*# %s([\S\s]*?)\n *# %s' % (tag, tag), '', string, flags=re.MULTILINE|re.IGNORECASE)
 
 
 def clean_tag_content(tags):
@@ -293,6 +293,8 @@ def clean_tag_content(tags):
         for tag in tags:
             print(f"Removing {tag} from {fpath}")
             content = remove_between_strings(content, tag)
+        if fpath.endswith("gradle-main.yml"):
+            print(f"{content}")
         with open(fpath, "w", encoding="utf-8") as f:
             f.write(content)
 
