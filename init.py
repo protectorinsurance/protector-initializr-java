@@ -281,7 +281,7 @@ def should_write_xml(lines_to_write):
 
 
 def remove_between_strings(string, tag):
-    return re.sub(r'%s.*?%s' % (tag, tag), '', string)
+    return re.sub(r'%s.*?%s' % (tag, tag), '', string, flags=re.MULTILINE)
 
 
 def clean_tag_content(tags):
