@@ -38,7 +38,7 @@ class EmployeeConsumerDatabaseSpec extends AbstractSystemSpec {
         then:
         Thread.sleep(10000)
         def result = asyncTestUtils.execute(10, {
-            datasource.firstRow("SELECT * FROM Employee WHERE Id = 2")
+            datasource.firstRow("SELECT * FROM Employee WHERE First_name = 'Yolo Swaggins'")
         })
         then:
         result.First_Name == "Yolo Swaggins"
