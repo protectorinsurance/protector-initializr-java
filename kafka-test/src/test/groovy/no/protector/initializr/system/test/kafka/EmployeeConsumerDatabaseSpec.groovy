@@ -17,8 +17,6 @@ import java.util.concurrent.TimeUnit
  */
 class EmployeeConsumerDatabaseSpec extends AbstractSystemSpec {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EmployeeConsumerDatabaseSpec.class)
-
     @Autowired
     KafkaTemplate employeeKafkaTemplate
 
