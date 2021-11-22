@@ -53,7 +53,7 @@ abstract class AbstractSystemSpec extends Specification {
             System.out.println(datasets.toString())
             datasets
                     .collect {
-                        new FlatXmlDataSetBuilder().build(
+                        new FlatXmlDataSetBuilder().setColumnSensing(true).build(
                                 RequestService.class.getResourceAsStream("/dataset/$it"))
                     }
                     .each {
