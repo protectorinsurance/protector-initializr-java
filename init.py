@@ -258,7 +258,7 @@ def get_comment_prefixes():
 
 
 def is_initializr_comment(line):
-    return is_comment_line(line) and "initializr" in line.lower()
+    return is_comment_line(line) and "initializr:" in line.lower()
 
 
 def get_initializer_prefix():
