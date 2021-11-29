@@ -107,9 +107,12 @@ def create_namespace():
         for base_path in base_paths:
             if not os.path.isdir(base_path):
                 continue
+            if not os.listdir(base_path):
+                continue
             destination = f"{base_path}/{namespace_path}"
             create_folders(destination)
             source = f"{base_path}/no/protector/initializr"
+
             move_all(source, destination)
 
 
@@ -254,30 +257,48 @@ def get_comment_prefixes():
     return ["//", "-- ", "<!-- ", "# ", "[comment]: # ("]
 
 
+def is_initializr_comment(line):
+    return is_comment_line(line) and "initializr:" in line.lower()
+
+
 def get_initializer_prefix():
     return [f"{prefix}INITIALIZR:" for prefix in get_comment_prefixes()]
 
 
 def is_one_of_tags_in_initializr_comment(tags, line):
-    initializer_prefixes = get_initializer_prefix()
-    if not line_is_initializr_comment(initializer_prefixes, line):
+    if not is_initializr_comment(line):
         return False
-    for prefix in initializer_prefixes:
-        line = line.replace(prefix, "").replace("-->", "").replace(")", "")
-    for tag in tags:
-        if tag in line:
-            return True
-    return False
-
-
-def line_is_initializr_comment(initializer_prefixes, line):
-    return len([i for i in initializer_prefixes if i in line]) > 0
+    return any([tag.lower() in line.lower() for tag in tags])
 
 
 def should_write_xml(lines_to_write):
     lines_that_are_not_initializr_comments = [
-        line for line in lines_to_write if not line_is_initializr_comment(get_initializer_prefix(), line)]
+        line for line in lines_to_write if not is_initializr_comment(line)]
     return len(lines_that_are_not_initializr_comments) > 1
+
+
+def is_same_line(line1, line2):
+    line1 = line1.replace("INITIALIZR:", "").replace("\n", "").replace(" ", "").lower()
+    line2 = line2.replace("INITIALIZR:", "").replace("\n", "").replace(" ", "").lower()
+    return line1 == line2
+
+
+def get_scope(current_scope, line, tags):
+    initializr_comment = is_one_of_tags_in_initializr_comment(tags, line)
+    if not initializr_comment:
+        return current_scope  # Keep same scope, even if it is the same
+    if current_scope and is_same_line(current_scope, line):
+        return None  # Moving out of scope
+    if not current_scope and initializr_comment:
+        return line  # Adding new scope
+    return current_scope  # Keeping hte previous scope
+
+
+def can_write_line(previous_scope, new_scope):
+    entering_scope = new_scope and not previous_scope
+    leaving_scope = not new_scope and previous_scope
+    in_scope = previous_scope is not None
+    return not entering_scope and not leaving_scope and not in_scope
 
 
 def clean_tag_content(tags):
@@ -288,24 +309,18 @@ def clean_tag_content(tags):
             continue
         with open(fpath, "w", encoding="utf-8") as f:
             is_xml = fpath.endswith(".xml")
-            write = True
             lines_to_write = []
-            last_initializr_comment_line = None
+            scope = None
             for line in lines:
-                if is_one_of_tags_in_initializr_comment(tags, line):
-                    if not last_initializr_comment_line:
-                        last_initializr_comment_line = line
-                    is_same = last_initializr_comment_line.strip() == line.strip()
-                    if not is_same:
-                        continue
-                    last_initializr_comment_line = line
-                    write = not write
-                    continue
-                if write:
+                new_scope = get_scope(scope, line, tags)
+                if can_write_line(scope, new_scope):
                     lines_to_write.append(line)
+                scope = new_scope
+            if scope:
+                print(f"Did not resolve last scope {scope} for {fpath}")
+                raise Exception("Did not resolve last scope")
             if is_xml and not should_write_xml(lines_to_write):
-                f.truncate(0)
-                continue
+                lines_to_write = []  # RESET
             if len(lines_to_write) > 0:
                 [f.write(line) for line in lines_to_write]
             else:
@@ -355,13 +370,16 @@ def get_files_that_contain_word(word, _files):
 def run_sanity_checks():
     _files = get_available_files()
     files_with_word = get_files_that_contain_word('initializr', _files)
-    name_of_files_with_words = '\n'.join(files_with_word)
     if files_with_word:
-        raise Exception(f"Files contain the word 'Initializr': \n {name_of_files_with_words}")
+        print(f"Found {','.join(files_with_word)} files that contain 'initializr'")
+        raise Exception(f"Files contain the word 'Initializr': \n {','.join(files_with_word)}")
     if not has_kafka_producer and not has_kafka_consumer:
         files_with_word = get_files_that_contain_word('kafka', _files)
         if files_with_word:
-            raise Exception(f"Files contain the word 'kafka': \n {name_of_files_with_words}")
+            # remove duplicates from files_with_word
+            for file in list(set(files_with_word)):
+                print(f"File {file} contains 'kafka'")
+            raise Exception(f"Files contain the word 'kafka'")
 
 
 def update_elastic_apm_namespace():
@@ -398,6 +416,7 @@ if clean_initializr:
     tags_to_clean.append("INITIALIZR-DEMO")
 
 if not has_kafka_producer:
+    print("Removing kafka producer")
     tags_to_clean.append("KAFKA-PRODUCER")
 
 print("Updating banner...")
