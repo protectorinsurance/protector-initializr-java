@@ -50,7 +50,7 @@ abstract class AbstractSystemSpec extends Specification {
             System.out.println(datasets.toString())
             datasets
                     .collect {
-                        new FlatXmlDataSetBuilder().build(
+                        new FlatXmlDataSetBuilder().setColumnSensing(true).build(
                                 AsyncTestUtils.class.getResourceAsStream("/dataset/$it"))
                     }
                     .each {
