@@ -68,7 +68,6 @@ subprojects {
     }
 }
 
-
 task jacocoRootReport(type: JacocoReport, group: 'verification') {
     dependsOn = subprojects.check
     additionalSourceDirs.from = subprojects.sourceSets.main.allSource.srcDirs
