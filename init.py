@@ -1,8 +1,10 @@
 import argparse
+import json
 import os
 import re
 import requests
 import shutil
+from datetime import date
 from pathlib import Path
 
 parser = argparse.ArgumentParser()
@@ -34,14 +36,14 @@ if not args.web:
 if not args.kafka_consumer:
     args.kafka_consumer = input("will the application consume Kafka messages? (y/n)\n")
 
-if not persistence_framework:
-    persistence_framework = input("What persistence framework do you want? (none, jpa, jdbc)\n")
-
 if not args.kafka_producer:
     args.kafka_producer = input("Will the application produce Kafka messages? (y/n)\n")
 
+if not persistence_framework:
+    persistence_framework = input("What persistence framework do you want? (none, jpa, jdbc)\n")
+
 if not args.clean:
-    args.clean = input("Do you want to remove demo/initializr files?(y/n - y recommended)\n")
+    args.clean = input("Do you want to remove demo files? (y/n - y recommended)\n")
 
 tags_to_clean = []
 
@@ -489,5 +491,24 @@ delete_empty_dirs('./')
 clean_all_double_empty_lines()
 
 run_sanity_checks()
+
+configuration = {
+    "project_name": project_name,
+    "namespace": namespace,
+    "web": has_web,
+    "kafka_consumer": has_kafka_consumer,
+    "kafka_producer": has_kafka_producer,
+    "persistence_framework": persistence_framework,
+    "clean_demo_implementations": clean_initializr
+}
+
+configuration_lines = [
+    "___\n",
+    f"_This project was generated using the protector Initializr ({date.today()}) with the following settings:_\n",
+    f"```json\n{json.dumps(configuration, indent=2)}\n```\n",
+    "___\n"]
+
+with open("readme.md", "a") as file:
+    file.writelines(configuration_lines)
 
 print("Done! Remember to go through the edits and verify the changes :)")

@@ -1,4 +1,8 @@
+[comment]: # (INITIALIZR:INITIALIZR-DEMO)
+
 [![Build Main](https://github.com/protectorinsurance/protector-initializr-java/actions/workflows/gradle-main.yml/badge.svg)](https://github.com/protectorinsurance/protector-initializr-java/actions/workflows/gradle-main.yml)
+
+[comment]: # (INITIALIZR:INITIALIZR-DEMO)
 
 # protector-initializr-java
 
