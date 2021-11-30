@@ -46,7 +46,7 @@ class AsyncTestUtils {
     }
 
     private String getExceptionMessage() {
-        """Could not find valid value \n Here's the application logs: \n ${protectorKafkaInitializrContainer.logs}"""
+        """Could not find valid value \n Here's the application logs: \n ${protectorInitializrContainer.logs}"""
     }
 
     private static <T> boolean isValidValue(T value) {
