@@ -88,7 +88,7 @@ task jacocoRootReport(type: JacocoReport, group: 'verification') {
 tasks["sonarqube"].dependsOn "jacocoRootReport"
 sonarqube {
     properties {
-        property "sonar.projectKey", "protectorinsurance_bob-integration"
+        property "sonar.projectKey", "protectorinsurance_protector-initializr"
         property "sonar.organization", "protectorinsurance"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.coverage.jacoco.xmlReportPaths",
