@@ -473,6 +473,9 @@ find_and_replace_in_files(["initializr_kafka_client"], f"{underscore_project_nam
 
 find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.Dockerfile", "Kafka.Dockerfile"])
 
+group = f"{namespace.split('.')[0]}.{namespace.split('.')[1]}"
+find_and_replace_in_files(["group = 'no.protector'"], f"group = '{group}'", ["build.gradle"])
+
 if not has_web:
     os.remove("Web.Dockerfile")
 if not has_kafka_consumer:

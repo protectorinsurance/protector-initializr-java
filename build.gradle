@@ -6,7 +6,7 @@ plugins {
     id "org.sonarqube" version "3.3"
 }
 
-group = 'no.protectorforsikring'
+group = 'no.protector'
 description = 'protector-initializr-java'
 
 bootJar {
