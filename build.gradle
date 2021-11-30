@@ -3,6 +3,7 @@ plugins {
     id 'groovy'
     id 'org.springframework.boot' version '2.5.6'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id "org.sonarqube" version "3.3"
 }
 
 group = 'no.protectorforsikring'
@@ -19,6 +20,7 @@ allprojects {
         maven { url "https://packages.confluent.io/maven/" }
         //INITIALIZR:KAFKA-PRODUCER
     }
+    apply plugin: 'jacoco'
 }
 
 subprojects {
@@ -51,5 +53,45 @@ subprojects {
     test {
         useJUnitPlatform()
     }
+
+    def jacocoExecutionDataFiles = fileTree(buildDir).include("/jacoco/*.exec")
+    jacocoTestReport {
+        additionalSourceDirs.from = sourceSets.main.allSource.srcDirs
+        sourceDirectories.from = sourceSets.main.allSource.srcDirs
+        classDirectories.from = sourceSets.main.output
+        reports {
+            html.required = true
+            xml.required = true
+            csv.required = false
+        }
+        executionData.from = jacocoExecutionDataFiles
+    }
 }
 
+
+task jacocoRootReport(type: JacocoReport, group: 'verification') {
+    dependsOn = subprojects.check
+    additionalSourceDirs.from = subprojects.sourceSets.main.allSource.srcDirs
+    sourceDirectories.from = subprojects.sourceSets.main.allSource.srcDirs
+    classDirectories.from = subprojects.sourceSets.main.output
+    executionData.from = subprojects.jacocoTestReport.executionData
+    reports {
+        html.required = true
+        xml.required = true
+        csv.required = false
+    }
+    onlyIf = {
+        true
+    }
+}
+
+tasks["sonarqube"].dependsOn "jacocoRootReport"
+sonarqube {
+    properties {
+        property "sonar.projectKey", "protectorinsurance_bob-integration"
+        property "sonar.organization", "protectorinsurance"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths",
+                "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+    }
+}
