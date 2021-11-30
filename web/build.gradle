@@ -12,10 +12,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.apache.commons:commons-lang3'
 
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 
     // Self-managed dependencies
-    implementation "co.elastic.apm:apm-agent-api:${apmVersion}"
+    implementation "co.elastic.apm:apm-agent-api:1.27.0"
     implementation 'net.logstash.logback:logstash-logback-encoder:6.6'
 }
 
@@ -35,7 +37,7 @@ configurations {
 }
 
 dependencies {
-    dockerExtras "co.elastic.apm:elastic-apm-agent:${apmVersion}"
+    dockerExtras "co.elastic.apm:elastic-apm-agent:1.27.0"
 }
 
 assemble.dependsOn "copyDockerExtras"

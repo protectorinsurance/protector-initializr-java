@@ -8,10 +8,6 @@ plugins {
 group = 'no.protectorforsikring'
 description = 'protector-initializr-java'
 
-ext {
-    set('apmVersion', "1.25.0")
-}
-
 bootJar {
     enabled = false
 }
