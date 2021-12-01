@@ -27,6 +27,8 @@ _Note: systems tests do not execute without the `systemTest` parameter. This is 
 
 Go to Application and run the main method. Intellij should pick it up.
 
+[comment]: # (INITIALIZR:INITIALIZR-DEMO)
+
 # Initializr
 
 ![](initializr-script-demo.gif)
@@ -71,8 +73,6 @@ information.
 * External URL:
   * __[TODO]__
 * Health checks:
-  * Defined in Dockerfile `curl --fail http://localhost:8391/actuator/health || exit 1`
+  * Defined in Dockerfile: `curl --fail http://localhost:8391/actuator/health || exit 1`
 * Environment variables: `SPRING_PROFILES_ACTIVE=prod`
 * Replicas: 2 or more
-
-[comment]: # (INITIALIZR:INITIALIZR-DEMO)
