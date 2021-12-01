@@ -58,7 +58,7 @@ Go to Application and run the main method. Intellij should pick it up.
 
 [comment]: # (INITIALIZR:INITIALIZR-DEMO)
 
-## Operational information
+### Operational information
 
 __[TODO]__: Once the system has been put in to production, make sure to
 include information about where to reach the service and other relevant
