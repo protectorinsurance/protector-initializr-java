@@ -13,3 +13,6 @@ spring:
 kafka:
   bootstrap-servers: "kafka:9092"
   schema-registry-url: http://schema-registry:8081
+
+logging:
+  config: classpath:log-config-system-test.xml

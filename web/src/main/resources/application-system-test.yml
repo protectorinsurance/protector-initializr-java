@@ -15,3 +15,6 @@ kafka:
   bootstrap-servers: "kafka:9092"
   schema-registry-url: http://schema-registry:8081
 # INITIALIZR:KAFKA-PRODUCER
+
+logging:
+  config: classpath:log-config-system-test.xml

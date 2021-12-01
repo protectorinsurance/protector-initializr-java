@@ -73,7 +73,7 @@ public class MdcFilter extends OncePerRequestFilter {
         }
     }
 
-    private void insertIntoMDC(ServletRequest request) {
+    private static void insertIntoMDC(ServletRequest request) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
         if (LOG.isDebugEnabled()) {

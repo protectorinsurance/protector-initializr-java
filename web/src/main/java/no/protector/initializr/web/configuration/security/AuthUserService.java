@@ -50,23 +50,23 @@ public class AuthUserService {
         }
     }
 
-    private URI getUri(String url) {
+    private static URI getUri(String url) {
         return getUri(url, new HashMap<>());
     }
 
-    private URI getUri(String url, Map<String, String> queryParams) {
+    private static URI getUri(String url, Map<String, String> queryParams) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         queryParams.forEach(builder::queryParam);
         return builder.build().encode().toUri();
     }
 
-    private HttpEntity<?> getHttpEntity(String token) {
+    private static HttpEntity<?> getHttpEntity(String token) {
         HttpHeaders httpHeaders = getHttpHeaders();
         httpHeaders.set("Authorization", "Bearer " + token);
         return new HttpEntity<>(httpHeaders);
     }
 
-    private HttpHeaders getHttpHeaders() {
+    private static HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Request-Id", MDC.get("req.requestID"));
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);

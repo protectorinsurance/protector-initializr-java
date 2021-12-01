@@ -30,7 +30,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '16'
-          distribution: 'zulu'
+          distribution: 'temurin'
           cache: 'gradle'
       - name: Build & Unit tests
         run: ./gradlew build
@@ -187,7 +187,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '16'
-          distribution: 'zulu'
+          distribution: 'temurin'
+          cache: 'gradle'
       - uses: actions/cache@v2
         with:
           path: |
@@ -228,7 +229,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '16'
-          distribution: 'zulu'
+          distribution: 'temurin'
+          cache: 'gradle'
       - uses: actions/cache@v2
         with:
           path: |
@@ -263,7 +265,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '16'
-          distribution: 'zulu'
+          distribution: 'temurin'
+          cache: 'gradle'
       - uses: actions/cache@v2
         with:
           path: |
