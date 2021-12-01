@@ -26,7 +26,7 @@ Go to Application and run the main method. Intellij should pick it up.
 ## Operational information
 
 __[TODO]__: Once the system has been put in to production, make sure to
-include information about where to reach teh service and other relevant
+include information about where to reach the service and other relevant
 information.
 
 * Service name: `protector-initializr`
