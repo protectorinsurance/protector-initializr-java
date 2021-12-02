@@ -8,9 +8,12 @@ on:
 jobs:
   build:
     name: Build & Test
+    # Use 'self-hosted' if the build requires any internal resources
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: docker/setup-buildx-action@v1
       - name: Set up JDK
         uses: actions/setup-java@v2
