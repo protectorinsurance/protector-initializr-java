@@ -21,15 +21,18 @@ allprojects {
         //INITIALIZR:KAFKA-PRODUCER
     }
     apply plugin: 'jacoco'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
 }
 
 subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'java-library'
     apply plugin: 'groovy'
-
-    sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_16
 
     dependencyManagement {
         imports {
