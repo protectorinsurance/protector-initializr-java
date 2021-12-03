@@ -51,11 +51,12 @@ tags_to_clean = []
 def parse_boolean_response(response):
     if isinstance(response, bool):
         return response
-    if response.lower() in ('yes', 'true', 't', 'y', '1'):
+    response = response.lower().strip().replace('/n', '')
+    if response in ('yes', 'true', 't', 'y', '1'):
         return True
-    if response.lower() in ('no', 'false', 'f', 'n', '0'):
+    if response in ('no', 'false', 'f', 'n', '0'):
         return False
-    raise argparse.ArgumentTypeError('Boolean value expected.')
+    raise argparse.ArgumentTypeError(f'Boolean value expected, got "{response}"')
 
 
 def update_banners():
