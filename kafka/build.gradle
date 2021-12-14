@@ -9,6 +9,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation 'org.springframework.kafka:spring-kafka'
+    //INITIALIZR:DATABASE
+    implementation 'org.flywaydb:flyway-core'
+    //INITIALIZR:DATABASE
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
