@@ -257,7 +257,7 @@ def remove_unused_imports():
 
 
 def get_comment_prefixes():
-    return ["//", "-- ", "<!-- ", "# ", "[comment]: # ("]
+    return ["//", "--", "<!--", '# ', "[comment]: # (", "*", '/*']
 
 
 def is_initializr_comment(line):
@@ -347,7 +347,7 @@ def clean_all_double_empty_lines():
 
 
 def is_comment_line(line):
-    comment_symbols = ['*', "#", '//', '/*']
+    comment_symbols = get_comment_prefixes()
     return any(comment_symbol in line for comment_symbol in comment_symbols)
 
 
