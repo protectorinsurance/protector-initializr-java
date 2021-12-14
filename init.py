@@ -449,12 +449,6 @@ clean_tag_content(tags_to_clean)
 
 files = get_available_files()
 
-if not has_web:
-    find_and_replace_in_files(['needs: [build_web_image, build_kafka_image]'], 'needs: build_kafka_image', files)
-
-if not has_kafka_consumer:
-    find_and_replace_in_files(['needs: [build_web_image, build_kafka_image]'], 'needs: build_web_image', files)
-
 print("Replacing references to initializr...")
 find_and_replace_in_files(["protector-initializr-java", "protector-initializr"], project_name.lower(), files)
 find_and_replace_in_files(["no.protector.initializr"], namespace, files)
@@ -473,6 +467,12 @@ underscore_project_name = project_name.replace('-', '_')
 find_and_replace_in_files(["initializr_kafka_client"], f"{underscore_project_name}_kafka_client", files)
 
 find_and_replace_in_files(["initializr"], project_name.lower(), ["Web.Dockerfile", "Kafka.Dockerfile"])
+
+if has_web and not has_kafka_consumer:
+    find_and_replace_in_files(["\\[ build_web_image, build_async_image \\]"], "build_web_image", files)
+
+if has_kafka_consumer and not has_web:
+    find_and_replace_in_files(["\\[ build_web_image, build_async_image \\]"], "build_async_image", files)
 
 group = f"{namespace.split('.')[0]}.{namespace.split('.')[1]}"
 find_and_replace_in_files(["group = 'no.protector'"], f"group = '{group}'", ["build.gradle"])
