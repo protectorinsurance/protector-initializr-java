@@ -11,6 +11,9 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.apache.commons:commons-lang3'
+    //INITIALIZR:DATABASE
+    implementation 'org.flywaydb:flyway-core'
+    //INITIALIZR:DATABASE
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
