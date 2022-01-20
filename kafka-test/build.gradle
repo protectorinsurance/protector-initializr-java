@@ -19,7 +19,7 @@ dependencies {
     testImplementation 'org.testcontainers:kafka:1.16.2'
     testImplementation 'io.confluent:kafka-avro-serializer:7.0.1'
     //INITIALIZR:DATABASE
-    testImplementation 'org.testcontainers:mssqlserver:1.16.2'
+    testImplementation 'org.testcontainers:mssqlserver:1.16.3'
     testImplementation 'org.dbunit:dbunit:2.7.2'
     //INITIALIZR:DATABASE
 }
