@@ -39,7 +39,7 @@ jobs:
       - name: System tests
         run: ./gradlew :web-test:test -PsystemTest --info
       # INITIALIZR:WEB
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: web-artifact
           path: |
@@ -48,7 +48,7 @@ jobs:
             Web.Dockerfile
       # INITIALIZR:WEB
       # INITIALIZR:KAFKA-CONSUMER
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: kafka-artifact
           path: |
