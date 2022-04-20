@@ -46,6 +46,7 @@ jobs:
     needs: [ build, init_script_sanity_checks ]
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         include:
           - web: 'true'
@@ -98,6 +99,7 @@ jobs:
     needs: [ build, init_script_sanity_checks ]
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         include:
           - web: 'true'
@@ -140,6 +142,7 @@ jobs:
     needs: [ build, init_script_sanity_checks ]
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         database: [ 'none', 'jdbc', 'jpa' ]
     steps:
@@ -170,4 +173,21 @@ jobs:
         run: chmod +x gradlew
       - name: Verify that applicaton still builds
         run: ./gradlew build -PsystemTest --info
+
+  verify_matrix_jobs:
+    name: Verify the outcome of all matrix jobs
+    if: ${{ always() }}
+    needs: [ verify_persistence_framework_options, verify_deployment_variations, verify_clean_builds ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check verify_persistence_framework_options status
+        if: ${{ needs.verify_persistence_framework_options.result != 'success' }}
+        run: exit 1
+      - name: Check verify_deployment_variations status
+        if: ${{ needs.verify_deployment_variations.result != 'success' }}
+        run: exit 1
+      - name: Check verify_clean_builds status
+        if: ${{ needs.verify_clean_builds.result != 'success' }}
+        run: exit 1
+
 # INITIALIZR:INITIALIZR-DEMO
