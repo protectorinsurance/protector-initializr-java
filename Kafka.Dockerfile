@@ -1,4 +1,4 @@
-FROM openjdk:17-buster
+FROM eclipse-temurin:17
 COPY /kafka/build/libs/kafka.jar .
 COPY /kafka/build/libs/elastic-apm-agent.jar /elasticapm.properties /
 HEALTHCHECK CMD curl --fail http://localhost:8391/actuator/health || exit 1
