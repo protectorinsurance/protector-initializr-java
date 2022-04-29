@@ -1,4 +1,4 @@
-FROM openjdk:17-buster
+FROM eclipse-temurin:17
 COPY /web/build/libs/web.jar .
 COPY /web/build/libs/elastic-apm-agent.jar /elasticapm.properties /
 HEALTHCHECK CMD curl --fail http://localhost:8391/actuator/health || exit 1
