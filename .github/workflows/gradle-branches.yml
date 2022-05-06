@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: docker/setup-buildx-action@v1
+      - uses: docker/setup-buildx-action@v2
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -67,7 +67,7 @@ jobs:
             kafka_producer: 'false'
     steps:
       - uses: actions/checkout@v3
-      - uses: docker/setup-buildx-action@v1
+      - uses: docker/setup-buildx-action@v2
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -110,7 +110,7 @@ jobs:
             kafka_consumer: 'true'
     steps:
       - uses: actions/checkout@v3
-      - uses: docker/setup-buildx-action@v1
+      - uses: docker/setup-buildx-action@v2
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -147,7 +147,7 @@ jobs:
         database: [ 'none', 'jdbc', 'jpa' ]
     steps:
       - uses: actions/checkout@v3
-      - uses: docker/setup-buildx-action@v1
+      - uses: docker/setup-buildx-action@v2
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
