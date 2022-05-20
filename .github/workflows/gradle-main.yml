@@ -113,7 +113,7 @@ jobs:
   deploy_test:
     name: Deploy to test
     if: ${{ false }} # TODO: Delete me when application is set up in ICP
-    runs-on: self-hosted
+    runs-on: [ self-hosted, test ]
     needs: [ build_web_image, build_async_image ]
     steps:
       # INITIALIZR:WEB

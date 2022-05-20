@@ -23,7 +23,7 @@ env:
 jobs:
   deploy_test:
     name: Deploy to test
-    runs-on: self-hosted
+    runs-on: [ self-hosted, test ]
     steps:
       # INITIALIZR:WEB
       - name: Deploy web to test
