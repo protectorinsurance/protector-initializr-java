@@ -19,7 +19,7 @@ dependencies {
     testImplementation "org.testcontainers:mockserver:1.17.1"
     testImplementation 'org.mock-server:mockserver-client-java:5.11.2'
     //INITIALIZR:DATABASE
-    testImplementation 'org.testcontainers:mssqlserver:1.17.1'
+    testImplementation 'org.testcontainers:mssqlserver:1.17.2'
     testImplementation 'org.dbunit:dbunit:2.7.3'
     //INITIALIZR:DATABASE
     //INITIALIZR:KAFKA-PRODUCER
