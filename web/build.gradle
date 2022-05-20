@@ -21,7 +21,7 @@ dependencies {
 
     // Self-managed dependencies
     implementation "co.elastic.apm:apm-agent-api:1.31.0"
-    implementation 'net.logstash.logback:logstash-logback-encoder:7.1.1'
+    implementation 'net.logstash.logback:logstash-logback-encoder:7.2'
 }
 
 //INITIALIZR:DATABASE
