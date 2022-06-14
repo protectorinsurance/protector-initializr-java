@@ -37,7 +37,7 @@ configurations {
 }
 
 dependencies {
-    dockerExtras "co.elastic.apm:elastic-apm-agent:1.31.0"
+    dockerExtras "co.elastic.apm:elastic-apm-agent:1.32.0"
 }
 
 assemble.dependsOn "copyDockerExtras"
