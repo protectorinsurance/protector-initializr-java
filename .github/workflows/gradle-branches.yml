@@ -21,6 +21,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: 'gradle'
+      - uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
+          password: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
       - name: Build & Unit tests
         run: ./gradlew build
       - name: System tests
