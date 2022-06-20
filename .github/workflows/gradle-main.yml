@@ -70,8 +70,8 @@ jobs:
       - uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
+          password: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
       - uses: docker/build-push-action@v3
         with:
           file: Web.Dockerfile
@@ -96,8 +96,8 @@ jobs:
       - uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
+          password: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
       - uses: docker/build-push-action@v3
         with:
           file: Kafka.Dockerfile

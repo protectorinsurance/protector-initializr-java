@@ -28,7 +28,7 @@ env:
 jobs:
   deploy_prod:
     name: Deploy to prod
-    runs-on: [self-hosted, prod]
+    runs-on: [ self-hosted, prod ]
     steps:
       # INITIALIZR:WEB
       - name: Deploy web to prod
