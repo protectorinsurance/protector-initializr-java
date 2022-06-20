@@ -17,10 +17,10 @@ The goal is to provide a sensible and opinionated default on which new systems c
 ### Build
 
 **Normal Build**:  
-`gradle clean build`
+`gradlew clean build`
 
 **Build with system tests**: (Requires Docker)  
-`gradle clean build -PsystemTest`  
+`gradlew clean build -PsystemTest`  
 _Note: systems tests do not execute without the `systemTest` parameter. This is done to cut down on build time_
 
 ### Run
