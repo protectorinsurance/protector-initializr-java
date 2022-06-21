@@ -21,7 +21,8 @@ The goal is to provide a sensible and opinionated default on which new systems c
 
 **Build with system tests**: (Requires Docker)  
 `gradlew clean build -PsystemTest`  
-_Note: systems tests do not execute without the `systemTest` parameter. This is done to cut down on build time_
+_Note 1: System tests do not execute without the `systemTest` parameter. This is done to cut down on build time._  
+_Note 2: Before running system tests you must log in to ghcr.io using `docker login ghcr.io` with a valid authentication token. [More details can be found here](https://github.com/protectorinsurance/protector-initializr-java/wiki/Docker-authentication)._
 
 ### Run
 
