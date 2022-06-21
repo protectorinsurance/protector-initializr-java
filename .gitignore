@@ -132,3 +132,7 @@ modules.xml
 
 # Sonarlint plugin
 .idea/sonarlint
+
+# Visual Studio Code
+.vscode/
+bin/

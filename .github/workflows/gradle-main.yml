@@ -29,6 +29,11 @@ jobs:
         with:
           fetch-depth: 0
       - uses: docker/setup-buildx-action@v2
+      - uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
+          password: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -70,8 +75,8 @@ jobs:
       - uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
+          password: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
       - uses: docker/build-push-action@v3
         with:
           file: Web.Dockerfile
@@ -96,8 +101,8 @@ jobs:
       - uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
+          password: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
       - uses: docker/build-push-action@v3
         with:
           file: Kafka.Dockerfile
@@ -186,6 +191,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: docker/setup-buildx-action@v2
+      - uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
+          password: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -207,8 +217,6 @@ jobs:
         run: pip install requests
       - name: Execute python script
         run: python init.py --web "${{ matrix.web }}" --kafka_consumer "${{ matrix.kafka_consumer }}" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "true" --pf "${{ matrix.database }}" --kafka_producer "${{ matrix.kafka_producer }}"
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Verify that applicaton still builds
         run: ./gradlew build -PsystemTest --info
 
@@ -228,6 +236,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: docker/setup-buildx-action@v2
+      - uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
+          password: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -249,8 +262,6 @@ jobs:
         run: pip install requests
       - name: Execute python script
         run: python init.py --web "${{ matrix.web }}" --kafka_consumer "${{ matrix.kafka_consumer }}" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf "jdbc" --kafka_producer "true"
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Verify that applicaton still builds
         run: ./gradlew build -PsystemTest --info
 
@@ -264,6 +275,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: docker/setup-buildx-action@v2
+      - uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.PROTECTOR_GITHUB_MACHINE_USER }}
+          password: ${{ secrets.PROTECTOR_GITHUB_MACHINE_TOKEN }}
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -285,8 +301,6 @@ jobs:
         run: pip install requests
       - name: Execute python script
         run: python init.py --web "true" --kafka_consumer "true" --p "my-awesome-app" --n "no.protector.my.awesome.app" --clean "false" --pf "${{ matrix.database }}" --kafka_producer "true"
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Verify that applicaton still builds
         run: ./gradlew build -PsystemTest --info
   # INITIALIZR:INITIALIZR-DEMO
