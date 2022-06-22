@@ -122,7 +122,7 @@ class ContainerConfig {
 
     private static MockServerContainer createMockServer(Network network) {
         new MockServerContainer(DockerImageName.parse("jamesdbloom/mockserver")
-                .withTag("mockserver-5.11.2"))
+                .withTag("mockserver-5.13.2"))
                 .withNetwork(network)
                 .withNetworkAliases("mockserver")
     }
