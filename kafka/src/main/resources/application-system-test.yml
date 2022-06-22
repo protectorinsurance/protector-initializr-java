@@ -2,6 +2,10 @@ integration:
   userServiceUrl: http://mockserver:1080
 
 spring:
+  # INITIALIZR:DATABASE
+  datasource:
+    url: jdbc:sqlserver://${db.host_port};databaseName=${db.database_name};applicationName=${spring.application.name};sendStringParametersAsUnicode=false;lockTimeout=15000;encrypt=false
+  # INITIALIZR:DATABASE
   kafka:
     properties:
       sasl:
