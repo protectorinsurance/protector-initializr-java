@@ -9,6 +9,7 @@ dependencies {
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     //INITIALIZR:DATABASE
     testImplementation 'org.flywaydb:flyway-core'
+    testImplementation 'org.flywaydb:flyway-sqlserver'
     runtimeOnly "com.microsoft.sqlserver:mssql-jdbc"
     //INITIALIZR:DATABASE
 

@@ -13,6 +13,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3'
     //INITIALIZR:DATABASE
     implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-sqlserver'
     //INITIALIZR:DATABASE
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

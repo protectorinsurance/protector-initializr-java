@@ -5,6 +5,7 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     //INITIALIZR:KAFKA-PRODUCER
     implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-sqlserver'
     runtimeOnly "com.microsoft.sqlserver:mssql-jdbc"
 
     //INITIALIZR:KAFKA-PRODUCER

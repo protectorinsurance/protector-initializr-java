@@ -11,6 +11,7 @@ dependencies {
     //INITIALIZR:KAFKA-PRODUCER
     //INITIALIZR:DATABASE
     testImplementation 'org.flywaydb:flyway-core'
+    testImplementation 'org.flywaydb:flyway-sqlserver'
     runtimeOnly "com.microsoft.sqlserver:mssql-jdbc"
     //INITIALIZR:DATABASE
 
