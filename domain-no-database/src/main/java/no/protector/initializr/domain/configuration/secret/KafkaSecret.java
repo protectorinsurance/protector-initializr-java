@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource(value = "file:/var/run/secrets/initializr_kafka_client", ignoreResourceNotFound = true)
+@PropertySource(value = "file:/run/secrets/initializr_kafka_client", ignoreResourceNotFound = true)
 @PropertySource(value = "classpath:/secrets/initializr_kafka_client", ignoreResourceNotFound = true)
 public class KafkaSecret {
 

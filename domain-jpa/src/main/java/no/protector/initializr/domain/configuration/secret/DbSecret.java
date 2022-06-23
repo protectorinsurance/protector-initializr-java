@@ -8,7 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 @Primary
 @Configuration
 @ConfigurationProperties(prefix = "db")
-@PropertySource(value = "file:/var/run/secrets/db_write", ignoreResourceNotFound = true)
+@PropertySource(value = "file:/run/secrets/db_write", ignoreResourceNotFound = true)
 @PropertySource(value = "classpath:secrets/db_write.properties", ignoreResourceNotFound = true)
 public class DbSecret {
     private String hostPort;

@@ -137,7 +137,7 @@ class ContainerConfig {
         //INITIALIZR:DATABASE
                 .withCopyFileToContainer(
                         MountableFile.forClasspathResource("db_write.properties"),
-                        "/var/run/secrets/db_write")
+                        "/run/secrets/db_write")
         //INITIALIZR:DATABASE
     }
 
