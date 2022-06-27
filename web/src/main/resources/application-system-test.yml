@@ -1,8 +1,12 @@
 integration:
   userServiceUrl: http://mockserver:1080
 
-# INITIALIZR:KAFKA-PRODUCER
 spring:
+  # INITIALIZR:DATABASE
+  datasource:
+    url: jdbc:sqlserver://${db.host_port};databaseName=${db.database_name};applicationName=${spring.application.name};sendStringParametersAsUnicode=false;lockTimeout=15000;encrypt=false
+  # INITIALIZR:DATABASE
+  # INITIALIZR:KAFKA-PRODUCER
   kafka:
     properties:
       sasl:
@@ -10,7 +14,9 @@ spring:
         jaas.config:
       security:
         protocol: PLAINTEXT
+  # INITIALIZR:KAFKA-PRODUCER
 
+# INITIALIZR:KAFKA-PRODUCER
 kafka:
   bootstrap-servers: "kafka:9092"
   schema-registry-url: http://schema-registry:8081

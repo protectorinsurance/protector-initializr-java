@@ -11,6 +11,7 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     //INITIALIZR:DATABASE
     implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-sqlserver'
     //INITIALIZR:DATABASE
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
