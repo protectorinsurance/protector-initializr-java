@@ -25,7 +25,7 @@ dependencies {
     //INITIALIZR:DATABASE
     //INITIALIZR:KAFKA-PRODUCER
     testImplementation "org.testcontainers:kafka:1.17.2"
-    testImplementation 'io.confluent:kafka-avro-serializer:7.1.1'
+    testImplementation 'io.confluent:kafka-avro-serializer:7.1.2'
     //INITIALIZR:KAFKA-PRODUCER
 }
 
